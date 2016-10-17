@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="be.nmct.unitycard">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.AccountActivity">
+        </activity>
+
+        <activity
+            android:label="Winkel toevoegen"
+            android:name=".activities.AddRetailerActivity">
+        </activity><!-- todo: multi language label -->
+
+        <activity
+            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".activities.RetailerActivity">
+        </activity>
+
+        <activity
+            android:label="Instellingen"
+            android:name=".activities.SettingsActivity">
+        </activity><!-- todo: multi language label -->
+    </application>
+
+</manifest>

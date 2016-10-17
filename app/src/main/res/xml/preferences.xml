@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="pref_filter"
+        android:title="Studentenhuizen filteren"
+        android:defaultValue="true" />
+
+    <ListPreference
+        android:dependency="pref_filter"
+        android:key="pref_filterType"
+        android:title="Filter op het aantal studentenkamers"
+        android:dialogTitle="Aantal studentenkamers"
+        android:entries="@array/filterentries"
+        android:entryValues="@array/listvalues"
+        android:defaultValue="3" />
+</PreferenceScreen>

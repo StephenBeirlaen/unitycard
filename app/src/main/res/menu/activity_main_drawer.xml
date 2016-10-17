@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/nav_group_pages" android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_my_loyalty_card"
+            android:icon="@drawable/ic_credit_card_black_24dp"
+            android:title="Mijn klantenkaart" /><!-- todo: vertalen -->
+        <item
+            android:id="@+id/nav_retailers"
+            android:icon="@drawable/ic_local_grocery_store_black_24dp"
+            android:title="Mijn winkels" />
+        <item
+            android:id="@+id/nav_advertising"
+            android:icon="@drawable/ic_announcement_black_24dp"
+            android:title="Aanbiedingen" />
+    </group>
+
+    <group android:id="@+id/nav_group_actions">
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:title="Settings" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_input_black_24dp"
+            android:title="Logout" />
+    </group>
+
+</menu>

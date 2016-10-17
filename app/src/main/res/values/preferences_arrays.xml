@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="filterentries">
+        <item>Minder dan 5 studentenkamers</item>
+        <item>Tussen 5 en 10 studentenkamers</item>
+        <item>Meer dan 10 studentenkamers</item>
+    </string-array>
+    <string-array name="listvalues">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+</resources>
