@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -12,10 +13,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import be.nmct.unitycard.R;
+import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.fragments.AdvertisingFragment;
 import be.nmct.unitycard.fragments.MyLoyaltyCardFragment;
 import be.nmct.unitycard.fragments.RetailerListFragment;
@@ -29,13 +33,13 @@ public class MainActivity extends AppCompatActivity
         RetailerListFragment.RetailerListFragmentListener,
         AdvertisingFragment.AdvertisingFragmentListener {
 
-    @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.drawer_layout) DrawerLayout drawerLayout;
+    @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.nav_view) NavigationView navigationView;
     @Bind(R.id.fab_add_retailer) FloatingActionButton fabAddRetailer;
 
     private final String LOG_TAG = this.getClass().getSimpleName();
-    public static final int LOGIN_REQUEST = 1;
+    public static final int REQUEST_LOGIN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,39 +69,69 @@ public class MainActivity extends AppCompatActivity
         });
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    }
 
-        showFragmentMyLoyaltyCard(); //showAccountActivity();
-        /*if (userStorage.getStoredUser() == null) { // niet ingelogd
-            showAccountActivity();
-            // todo: login logic
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Boolean loggedInResult = AuthHelper.isUserLoggedIn(this); // nullable boolean
+
+        if (loggedInResult != null) { // app has permission to access accounts? If null, no permission
+            if (loggedInResult) {
+                // Logged in
+                showFragmentMyLoyaltyCard();
+                displayUsernameInSidebar();
+            }
+            else {
+                // Not logged in, toon login scherm
+                showAccountActivity();
+            }
         }
         else {
-            gcmTopicsSubscriptionHelper.getDeviceTokenAndSubscribe();
-            displayUsernameInSidebar();
-        }*/
+            // Geen permission, skip het checken voor accounts en ga naar login scherm. Later bij het inloggen om permissie vragen
+            showAccountActivity();
+        }
+    }
+
+    private void displayUsernameInSidebar() {
+        TextView txtSidebarUsername = (TextView)navigationView.getHeaderView(0).findViewById(R.id.txt_sidebar_username);
+
+        txtSidebarUsername.setText(AuthHelper.getUsername(this));
     }
 
     private void showAccountActivity() {
-        Intent intent = new Intent(MainActivity.this, AccountActivity.class);
-        startActivityForResult(intent, LOGIN_REQUEST);
+        Intent intent = new Intent(this, AccountActivity.class);
+        startActivityForResult(intent, REQUEST_LOGIN);
     }
 
     private void showAddRetailerActivity() {
-        Intent intent = new Intent(MainActivity.this, AddRetailerActivity.class);
+        Intent intent = new Intent(this, AddRetailerActivity.class);
         startActivity(intent);
     }
 
     private void showSettingsActivity() {
-        Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+        Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    private void logOut() {
+        AuthHelper.logUserOff(this);
+
+        // clean up backstack
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+        showAccountActivity();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case LOGIN_REQUEST:
+            case REQUEST_LOGIN:
                 switch (resultCode) {
                     case RESULT_OK:
+                        Log.d(LOG_TAG, "User " + AuthHelper.getUsername(this) + " logged in from AccountActivity.");
                         // logged in successfully
                         break;
                     case RESULT_CANCELED:
@@ -167,7 +201,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_settings) {
             showSettingsActivity();
         } else if (id == R.id.nav_logout) {
-            // todo: nav_logout button
+            logOut();
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -186,6 +220,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void handleError(String error) {
-        // todo: handleError
+        Snackbar.make(drawerLayout, error, Snackbar.LENGTH_LONG).show();
     }
 }

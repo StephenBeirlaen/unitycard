@@ -32,7 +32,9 @@ public class RegisterFragment extends Fragment {
     }
 
     public interface RegisterFragmentListener {
-
+        void onRegisterSuccessful();
+        void onRegisterCanceled();
+        void handleError(String error);
     }
 
     @Override
