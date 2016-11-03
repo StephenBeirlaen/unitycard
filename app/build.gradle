@@ -31,14 +31,24 @@ dependencies {
     compile 'com.android.support:support-v4:25.0.0'
     compile 'com.android.support:preference-v14:25.0.0'
     compile 'com.jakewharton:butterknife:7.0.1'
+
+    compile 'com.google.dagger:dagger:2.4'
+    apt 'com.google.dagger:dagger-compiler:2.4'
+    compile 'javax.inject:javax.inject:1'
+
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.google.dagger:dagger:2.4'
-    apt 'com.google.dagger:dagger-compiler:2.4'
+
     compile 'com.facebook.stetho:stetho:1.4.1'
     compile 'com.facebook.stetho:stetho-okhttp3:1.4.1'
+
+    compile 'io.reactivex:rxandroid:1.2.1'
+    // Because RxAndroid releases are few and far between, it is recommended you also
+    // explicitly depend on RxJava's latest version for bug fixes and new features.
+    compile 'io.reactivex:rxjava:1.2.2'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.1.0'
+
     testCompile 'junit:junit:4.12'
-    compile 'javax.inject:javax.inject:1'
 }

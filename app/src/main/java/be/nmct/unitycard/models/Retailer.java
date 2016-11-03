@@ -2,8 +2,6 @@ package be.nmct.unitycard.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 /**
  * Created by lorenzvercoutere on 30/10/16.
  */

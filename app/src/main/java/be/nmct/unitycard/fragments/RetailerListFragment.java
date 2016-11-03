@@ -76,6 +76,9 @@ public class RetailerListFragment extends Fragment {
                         // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
                         AuthHelper.invalidateAccessToken(accessToken, getActivity());
 
+                        // Hide loading indication
+                        mListener.swipeRefreshLayoutRemoveTask(MainActivity.TASK_LOAD_RETAILERS);
+
                         // Try again
                         loadRetailers();
                     }

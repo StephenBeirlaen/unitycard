@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -29,8 +28,6 @@ import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.fragments.AdvertisingFragment;
 import be.nmct.unitycard.fragments.MyLoyaltyCardFragment;
 import be.nmct.unitycard.fragments.RetailerListFragment;
-import be.nmct.unitycard.models.Retailer;
-import be.nmct.unitycard.repositories.RetailerRepository;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 

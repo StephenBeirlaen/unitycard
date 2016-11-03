@@ -11,6 +11,7 @@ import be.nmct.unitycard.services.ApiService;
 import be.nmct.unitycard.services.AuthService;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -36,8 +37,9 @@ public class RestClient {
         OkHttpClient okHttpClient = builder.build();
 
         mRetrofit = new Retrofit.Builder()
-                .baseUrl(ApiContract.API_URL) // mss contracts?
+                .baseUrl(ApiContract.API_URL)
                 .addConverterFactory(GsonConverterFactory.create(gSon))
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) // RxJava
                 .client(okHttpClient)
                 .build();
 

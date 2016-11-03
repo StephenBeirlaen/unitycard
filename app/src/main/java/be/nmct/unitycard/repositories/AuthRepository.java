@@ -9,13 +9,15 @@ import java.lang.annotation.Annotation;
 import javax.inject.Inject;
 
 import be.nmct.unitycard.UnityCardApplication;
-import be.nmct.unitycard.models.GetTokenResponse;
 import be.nmct.unitycard.models.GetTokenErrorResponse;
+import be.nmct.unitycard.models.GetTokenResponse;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Converter;
 import retrofit2.Response;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Stephen on 1/11/2016.
@@ -30,56 +32,64 @@ public class AuthRepository {
     }
 
     public void requestToken(String username, String password, TokenResponseListener callback) {
-        Call<GetTokenResponse> requestTokenCall = mRestClient.getAuthService().getToken("password", username, password);
-        enqueueTokenCall(requestTokenCall, callback);
+        Observable<Response<GetTokenResponse>> requestTokenObservable = mRestClient.getAuthService().getToken("password", username, password);
+        subscribeTokenCall(requestTokenObservable, callback);
     }
 
     public void refreshToken(String refreshToken, TokenResponseListener callback) {
-        Call<GetTokenResponse> refreshTokenCall = mRestClient.getAuthService().refreshToken("refresh_token", refreshToken);
-        enqueueTokenCall(refreshTokenCall, callback);
+        Observable<Response<GetTokenResponse>> refreshTokenObservable = mRestClient.getAuthService().refreshToken("refresh_token", refreshToken);
+        subscribeTokenCall(refreshTokenObservable, callback);
     }
 
-    private void enqueueTokenCall(Call<GetTokenResponse> tokenCall, final TokenResponseListener callback) {
+    private void subscribeTokenCall(Observable<Response<GetTokenResponse>> tokenRequestObservable, final TokenResponseListener callback) {
         // Dit zit in aparte functie omdat de response voor requestToken en refreshToken hetzelfde is
-        tokenCall.enqueue(new Callback<GetTokenResponse>() {
-            @Override
-            public void onResponse(Call<GetTokenResponse> call, Response<GetTokenResponse> response) {
-                if (response.isSuccessful()) {
-                    GetTokenResponse getTokenResponse = response.body();
+        tokenRequestObservable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Response<GetTokenResponse>>() {
+                    @Override
+                    public void onCompleted() {
 
-                    if (TextUtils.isEmpty(getTokenResponse.getAccessToken()) || TextUtils.isEmpty(getTokenResponse.getRefreshToken())) { // Login invalid
-                        callback.tokenRequestError("Invalid login");
                     }
-                    else { // OK
-                        Log.d(LOG_TAG, "Received new access token: " + getTokenResponse.getAccessToken());
-                        callback.tokenReceived(getTokenResponse);
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(LOG_TAG, "Error requesting new access token!");
+                        callback.tokenRequestError("Error requesting new access token!");
                     }
-                }
-                else {
-                    Converter<ResponseBody, GetTokenErrorResponse> converter =
-                            mRestClient.getRetrofit().responseBodyConverter(GetTokenErrorResponse.class, new Annotation[0]);
 
-                    try {
-                        GetTokenErrorResponse errorResponse = converter.convert(response.errorBody());
+                    @Override
+                    public void onNext(Response<GetTokenResponse> response) {
+                        if (response.isSuccessful()) {
+                            GetTokenResponse getTokenResponse = response.body();
 
-                        String error = "Error " + errorResponse.getError()
-                                + " occurred while requesting access token: "
-                                + errorResponse.getErrorDescription();
-                        callback.tokenRequestError(error);
-                        Log.e(LOG_TAG, error);
+                            if (TextUtils.isEmpty(getTokenResponse.getAccessToken()) || TextUtils.isEmpty(getTokenResponse.getRefreshToken())) { // Login invalid
+                                callback.tokenRequestError("Invalid login");
+                            }
+                            else { // OK
+                                Log.d(LOG_TAG, "Received new access token: " + getTokenResponse.getAccessToken());
+                                callback.tokenReceived(getTokenResponse);
+                            }
+                        }
+                        else {
+                            Converter<ResponseBody, GetTokenErrorResponse> converter =
+                                    mRestClient.getRetrofit().responseBodyConverter(GetTokenErrorResponse.class, new Annotation[0]);
 
-                    } catch (Exception e) {
-                        callback.tokenRequestError("Error requesting new access token and couldn't parse error!");
+                            try {
+                                GetTokenErrorResponse errorResponse = converter.convert(response.errorBody());
+
+                                String error = "Error " + errorResponse.getError()
+                                        + " occurred while requesting access token: "
+                                        + errorResponse.getErrorDescription();
+                                callback.tokenRequestError(error);
+                                Log.e(LOG_TAG, error);
+
+                            } catch (Exception e) {
+                                callback.tokenRequestError("Error requesting new access token and couldn't parse error!");
+                            }
+                        }
                     }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<GetTokenResponse> call, Throwable t) {
-                Log.e(LOG_TAG, "Error requesting new access token!");
-                callback.tokenRequestError("Error requesting new access token!");
-            }
-        });
+                });
     }
 
     public interface TokenResponseListener {
