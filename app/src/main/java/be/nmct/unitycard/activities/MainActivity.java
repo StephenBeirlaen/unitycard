@@ -1,14 +1,17 @@
 package be.nmct.unitycard.activities;
 
+import android.accounts.Account;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
@@ -18,11 +21,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.fragments.AdvertisingFragment;
 import be.nmct.unitycard.fragments.MyLoyaltyCardFragment;
 import be.nmct.unitycard.fragments.RetailerListFragment;
+import be.nmct.unitycard.models.Retailer;
+import be.nmct.unitycard.repositories.RetailerRepository;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -37,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     @Bind(R.id.toolbar) Toolbar toolbar;
     @Bind(R.id.nav_view) NavigationView navigationView;
     @Bind(R.id.fab_add_retailer) FloatingActionButton fabAddRetailer;
+    @Bind(R.id.swipeRefreshLayout) SwipeRefreshLayout swipeRefreshLayout;
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     public static final int REQUEST_LOGIN = 1;
@@ -68,6 +77,17 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // De huidige fragment opzoeken
+                // todo
+
+                // Vragen aan die fragment om zijn content te vernieuwen
+                // todo
+            }
+        });
+
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
@@ -77,11 +97,11 @@ public class MainActivity extends AppCompatActivity
 
         Boolean loggedInResult = AuthHelper.isUserLoggedIn(this); // nullable boolean
 
-        if (loggedInResult != null) { // app has permission to access accounts? If null, no permission
+        if (loggedInResult != null) { // app has permission to access accounts? If null -> no permission
             if (loggedInResult) {
                 // Logged in
                 showFragmentMyLoyaltyCard();
-                displayUsernameInSidebar();
+                displayUsernameInSidebar(AuthHelper.getUser(this));
             }
             else {
                 // Not logged in, toon login scherm
@@ -94,10 +114,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void displayUsernameInSidebar() {
+    private void displayUsernameInSidebar(Account user) {
         TextView txtSidebarUsername = (TextView)navigationView.getHeaderView(0).findViewById(R.id.txt_sidebar_username);
 
-        txtSidebarUsername.setText(AuthHelper.getUsername(this));
+        txtSidebarUsername.setText(AuthHelper.getUsername(user));
     }
 
     private void showAccountActivity() {
@@ -118,7 +138,7 @@ public class MainActivity extends AppCompatActivity
     private void logOut() {
         AuthHelper.logUserOff(this);
 
-        // clean up backstack
+        // Clean up backstack
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
@@ -131,7 +151,7 @@ public class MainActivity extends AppCompatActivity
             case REQUEST_LOGIN:
                 switch (resultCode) {
                     case RESULT_OK:
-                        Log.d(LOG_TAG, "User " + AuthHelper.getUsername(this) + " logged in from AccountActivity.");
+                        Log.d(LOG_TAG, "User " + AuthHelper.getUsername(AuthHelper.getUser(this)) + " logged in from AccountActivity.");
                         // logged in successfully
                         break;
                     case RESULT_CANCELED:
@@ -218,8 +238,40 @@ public class MainActivity extends AppCompatActivity
         fabAddRetailer.hide();
     }
 
+    public static final String TASK_LOAD_RETAILERS = "TASK_LOAD_RETAILERS";
+
+    // Lijst die bijhoudt welke taken er in progress zijn, voor parallele taken.
+    private List<String> pendingTasks = new ArrayList<>();
+
+    @Override
+    public void swipeRefreshLayoutAddTask(String task) {
+        // Add task
+        pendingTasks.add(task);
+
+        // Show refreshing indicator
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void swipeRefreshLayoutRemoveTask(String task) {
+        // Remove the task from the list
+        pendingTasks.remove(task);
+
+        // Determine if the refreshing indicator must be hidden
+        if (pendingTasks.isEmpty()) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void requestNewLogin() {
+        // Something went wrong, toon login scherm
+        showAccountActivity();
+    }
+
     @Override
     public void handleError(String error) {
         Snackbar.make(drawerLayout, error, Snackbar.LENGTH_LONG).show();
+        swipeRefreshLayout.setRefreshing(false); // Stop refresh animation
     }
 }

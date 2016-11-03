@@ -1,27 +1,44 @@
 package be.nmct.unitycard.models;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by lorenzvercoutere on 30/10/16.
  */
 
 public class RetailerLocation {
+    @SerializedName("Id")
     private int id;
+
+    @SerializedName("RetailerId")
     private int retailerId;
-    private Retailer retailer;
+
+    @SerializedName("Name")
     private String name;
+
+    @SerializedName("Latitude")
     private double latitude;
+
+    @SerializedName("Longitude")
     private double longitude;
+
+    @SerializedName("Street")
     private String street;
+
+    @SerializedName("Number")
     private String number;
+
+    @SerializedName("ZipCode")
     private int zipcode;
+
+    @SerializedName("City")
     private String city;
+
+    @SerializedName("Country")
     private String country;
 
-
-    public RetailerLocation(){}
-
     public RetailerLocation(int retailerId, String name, double latitude, double longitude,
-                            String street, String number, int zipcode, String city, String country){
+                            String street, String number, int zipcode, String city, String country) {
         this.retailerId = retailerId;
         this.name = name;
         this.latitude = latitude;
@@ -36,7 +53,6 @@ public class RetailerLocation {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -44,7 +60,6 @@ public class RetailerLocation {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -52,7 +67,6 @@ public class RetailerLocation {
     public int getRetailerId() {
         return retailerId;
     }
-
     public void setRetailerId(int retailerId) {
         this.retailerId = retailerId;
     }
@@ -60,7 +74,6 @@ public class RetailerLocation {
     public double getLatitude() {
         return latitude;
     }
-
     public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
@@ -68,7 +81,6 @@ public class RetailerLocation {
     public double getLongitude() {
         return longitude;
     }
-
     public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
@@ -76,7 +88,6 @@ public class RetailerLocation {
     public String getNumber() {
         return number;
     }
-
     public void setNumber(String number) {
         this.number = number;
     }
@@ -84,7 +95,6 @@ public class RetailerLocation {
     public int getZipcode() {
         return zipcode;
     }
-
     public void setZipcode(int zipcode) {
         this.zipcode = zipcode;
     }
@@ -92,7 +102,6 @@ public class RetailerLocation {
     public String getCity() {
         return city;
     }
-
     public void setCity(String city) {
         this.city = city;
     }
@@ -100,7 +109,6 @@ public class RetailerLocation {
     public String getCountry() {
         return country;
     }
-
     public void setCountry(String country) {
         this.country = country;
     }
@@ -108,18 +116,7 @@ public class RetailerLocation {
     public String getStreet() {
         return street;
     }
-
     public void setStreet(String street) {
         this.street = street;
     }
-
-    public Retailer getRetailer() {
-        return retailer;
-    }
-
-    public void setRetailer(Retailer retailer) {
-        this.retailer = retailer;
-    }
-
-
 }

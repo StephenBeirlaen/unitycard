@@ -4,11 +4,18 @@ package be.nmct.unitycard.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import be.nmct.unitycard.R;
+import be.nmct.unitycard.activities.MainActivity;
+import be.nmct.unitycard.auth.AuthHelper;
+import be.nmct.unitycard.models.Retailer;
+import be.nmct.unitycard.repositories.RetailerRepository;
 import butterknife.ButterKnife;
 
 public class RetailerListFragment extends Fragment {
@@ -31,12 +38,56 @@ public class RetailerListFragment extends Fragment {
 
         mListener.showFabAddRetailer();
 
+        loadRetailers();
+
         return view;
     }
 
     public interface RetailerListFragmentListener {
         void showFabAddRetailer();
         void hideFabAddRetailer();
+        void swipeRefreshLayoutAddTask(String task);
+        void swipeRefreshLayoutRemoveTask(String task);
+        void requestNewLogin();
+    }
+
+    private void loadRetailers() {
+        // Show loading indication
+        mListener.swipeRefreshLayoutAddTask(MainActivity.TASK_LOAD_RETAILERS);
+
+        // Get access token
+        AuthHelper.getAccessToken(AuthHelper.getUser(getActivity()), getActivity(), new AuthHelper.GetAccessTokenListener() {
+            @Override
+            public void tokenReceived(final String accessToken) {
+                Log.d(LOG_TAG, "Using access token: " + accessToken);
+
+                final RetailerRepository retailerRepo = new RetailerRepository(getActivity());
+                retailerRepo.getAllRetailers(accessToken, new RetailerRepository.GetAllRetailersListener() {
+                    @Override
+                    public void retailersReceived(List<Retailer> retailers) {
+                        Log.d(LOG_TAG, "Received all retailers: " + retailers);
+
+                        // Hide loading indication
+                        mListener.swipeRefreshLayoutRemoveTask(MainActivity.TASK_LOAD_RETAILERS);
+                    }
+
+                    @Override
+                    public void retailersRequestError(String error) {
+                        // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
+                        AuthHelper.invalidateAccessToken(accessToken, getActivity());
+
+                        // Try again
+                        loadRetailers();
+                    }
+                });
+            }
+
+            @Override
+            public void requestNewLogin() {
+                // Something went wrong, toon login scherm
+                mListener.requestNewLogin();
+            }
+        });
     }
 
     @Override

@@ -1,5 +1,7 @@
 package be.nmct.unitycard.models;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -7,11 +9,11 @@ import java.util.List;
  */
 
 public class RetailerCategory {
+    @SerializedName("Id")
     private int id;
-    private String name;
-    private List<Retailer> retailers;
 
-    public RetailerCategory(){}
+    @SerializedName("Name")
+    private String name;
 
     public RetailerCategory(String name){
         this.name = name;
@@ -20,7 +22,6 @@ public class RetailerCategory {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -28,17 +29,7 @@ public class RetailerCategory {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
-    public List<Retailer> getRetailers() {
-        return retailers;
-    }
-
-    public void setRetailers(List<Retailer> retailers) {
-        this.retailers = retailers;
-    }
-
 }

@@ -4,19 +4,18 @@ package be.nmct.unitycard.fragments;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.auth.AuthHelper;
-import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.helpers.ConnectionChecker;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -29,7 +28,7 @@ public class LoginFragment extends Fragment {
     @Bind(R.id.btn_register) Button btnRegister;
     @Bind(R.id.txt_username) EditText txtUsername;
     @Bind(R.id.txt_password) EditText txtPassword;
-    @Bind(R.id.progress_bar) ProgressBar progressBar;
+    @Bind(R.id.progress_circle_login) ProgressBar progressCircle;
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     private LoginFragmentListener mListener;
@@ -65,9 +64,14 @@ public class LoginFragment extends Fragment {
                     mListener.handleError("Password is empty");
                 }
                 else {
-                    progressBar.setVisibility(View.VISIBLE);
+                    // hide keyboard
+                    InputMethodManager inputManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                    // show progress scroller
+                    progressCircle.setVisibility(View.VISIBLE);
 
-                    signIn("stephenbeirlaen@gmail.com");
+                    signIn("stephen.beirlaen@student.howest.be", "-Password1");
                 }
             }
         });
@@ -90,39 +94,52 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-    private void signIn(String userNameString) {
+    private void signIn(final String userName, String password) {
         if (ConnectionChecker.isInternetAvailable(getActivity())) { // check of er verbinding is
             Account[] accountsByType = AuthHelper.getStoredAccountsByType(getActivity()); // haal alle bestaande accounts op
 
             if (accountsByType != null) {
                 // Permission ok
-                Account account;
-                if (accountsByType.length == 0) {
-                    // nog geen account aanwezig
-                    account = AuthHelper.addAccount(userNameString, mAccountManager);
-                }
-                else if (!userNameString.equals(accountsByType[0].name)) {
-                    // er bestaat reeds een account met andere naam
-                    AuthHelper.removeStoredAccount(accountsByType[0], getActivity()); // verwijder de vorige account
-
-                    account = AuthHelper.addAccount(userNameString, mAccountManager); // voeg een nieuwe toe
-                }
-                else {
-                    // account met de zelfde username terug gevonden
-                    account = accountsByType[0];
+                Account account = null;
+                if (accountsByType.length != 0) {
+                    if (!userName.equals(accountsByType[0].name)) {
+                        // Er bestaat reeds een account met andere naam, verwijder de vorige account
+                        AuthHelper.removeStoredAccount(accountsByType[0], getActivity());
+                    }
+                    else {
+                        // Account met de zelfde username terug gevonden
+                        account = accountsByType[0];
+                    }
                 }
 
-                mListener.onLoginSuccessful(userNameString);
+                if (account != null) { // als er al een account is
+                    // Direct melden dat login OK is
+                    mListener.onLoginSuccessful(userName);
+                }
+                else { // Als er nog geen account is
+                    // Add new account
+                    AuthHelper.addAccount(userName, password, getContext(), mAccountManager, new AuthHelper.AddAccountListener() {
+                        @Override
+                        public void accountAdded(Account account) {
+                            mListener.onLoginSuccessful(userName);
+                        }
+
+                        @Override
+                        public void accountAddError(String error) {
+                            mListener.handleError(error);
+                        }
+                    });
+                }
             }
             else {
                 // No permission = null
                 mListener.handlePermissionRequest(REQUEST_PERMISSION_GET_ACCOUNTS);
-                progressBar.setVisibility(View.INVISIBLE);
+                progressCircle.setVisibility(View.INVISIBLE);
             }
         }
         else {
             mListener.handleError("No internet connection");
-            progressBar.setVisibility(View.INVISIBLE);
+            progressCircle.setVisibility(View.INVISIBLE);
         }
     }
 

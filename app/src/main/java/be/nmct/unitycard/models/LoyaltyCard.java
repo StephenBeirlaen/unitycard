@@ -1,6 +1,6 @@
 package be.nmct.unitycard.models;
 
-import android.database.Observable;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
 import java.util.List;
@@ -10,24 +10,23 @@ import java.util.List;
  */
 
 public class LoyaltyCard {
+    @SerializedName("Id")
     private int id;
+
+    @SerializedName("UserId")
     private String userId;
-    //private Date createdTimeStamp;
-    private List<LoyaltyPoint> loyaltyPoints;
 
+    @SerializedName("CreatedTimestamp")
+    private Date createdTimestamp;
 
-    public LoyaltyCard(){}
-
-    public LoyaltyCard(String userId){
+    public LoyaltyCard(String userId, Date createdTimestamp) {
         this.userId = userId;
-        //datetime nog zoeken
+        this.createdTimestamp = createdTimestamp;
     }
-
 
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -35,20 +34,14 @@ public class LoyaltyCard {
     public String getUserId() {
         return userId;
     }
-
     public void setUserId(String userId) {
         this.userId = userId;
     }
 
-    //datetime nog get en set
-
-
-    public List<LoyaltyPoint> getLoyaltyPoints() {
-        return loyaltyPoints;
+    public Date getCreatedTimestamp() {
+        return createdTimestamp;
     }
-
-    public void setLoyaltyPoints(List<LoyaltyPoint> loyaltyPoints) {
-        this.loyaltyPoints = loyaltyPoints;
+    public void setCreatedTimestamp(Date createdTimestamp) {
+        this.createdTimestamp = createdTimestamp;
     }
-
 }
