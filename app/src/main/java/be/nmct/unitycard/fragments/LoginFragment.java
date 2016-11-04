@@ -58,7 +58,7 @@ public class LoginFragment extends Fragment {
                 String password = txtPassword.getText().toString();
 
                 if (username.length() == 0) { // een basic client side validatie
-                    mListener.handleError("Username is empty");
+                    mListener.handleError("Username is empty"); // todo zelfde controles als op server gebruiken
                 }
                 else if (password.length() == 0) {
                     mListener.handleError("Password is empty");
