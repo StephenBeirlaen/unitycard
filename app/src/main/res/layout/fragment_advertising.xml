@@ -4,9 +4,11 @@
     android:layout_height="match_parent"
     tools:context="be.nmct.unitycard.fragments.AdvertisingFragment">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="hello advertising fragment" />
+        android:id="@+id/recyclerViewAdvertising"
+        android:scrollbars="vertical"
+        />
 
 </android.support.v4.widget.NestedScrollView>

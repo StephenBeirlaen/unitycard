@@ -11,4 +11,23 @@
 
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="YourLoyaltyCard">Your loyalty card:</string>
+    <string name="SpaarpuntenVerdiend">Totaal aantal spaarpunten verdiend:</string>
+    <string name="SpaarpuntenVerdiendValue">0</string>
+    <string name="retailerName">Naam</string>
+    <string name="retailerType">Type</string>
+    <string name="retailerLocatie">Locatie</string>
+    <string name="buttonToevoegen">+</string>
+    <string name="firstName">First name</string>
+    <string name="LastName">Last name</string>
+    <string name="repeatpassword">Repeat password</string>
+    <string name="register">Register</string>
+    <string name="OfferVoorwaarde">Voorwaarde</string>
+    <string name="Offer">Offer</string>
+    <string name="retailerPoints">Points</string>
+    <string name="OfferEnVoorwaarde">Offer en voorwaarde</string>
+    <string name="toonAlleWinkels">Toon alle winkels</string>
+    <string name="retailerDichtsbijzijndeWinkel">Dichtsbijzijnde winkel:</string>
+    <string name="retailerDichtsbijzijndeWinkelValue">Value</string>
+    <string name="OpenKaart">Open kaart</string>
 </resources>

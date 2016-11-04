@@ -4,9 +4,111 @@
     android:layout_height="match_parent"
     tools:context="be.nmct.unitycard.fragments.RegisterFragment">
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="hello register fragment" />
+        android:orientation="vertical"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginRight="64dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppCompatEditText">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_FirstName"
+                android:maxLines="1"
+                android:hint="@string/firstName"
+                style="@style/styleEditText">
+
+            <requestFocus />
+
+            </android.support.v7.widget.AppCompatEditText>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppCompatEditText">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_LastName"
+                android:maxLines="1"
+                android:hint="@string/LastName"
+                style="@style/styleEditText">
+
+            </android.support.v7.widget.AppCompatEditText>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppCompatEditText">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_Username"
+                android:maxLines="1"
+                android:hint="@string/username"
+                style="@style/styleEditText">
+
+            </android.support.v7.widget.AppCompatEditText>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppCompatEditText">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/txt_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:fontFamily="sans-serif"
+                android:maxLines="1"
+                android:hint="@string/password"
+                style="@style/styleEditText">
+
+            </android.support.v7.widget.AppCompatEditText>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/AppCompatEditText">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/txt_repeatpassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:fontFamily="sans-serif"
+                android:maxLines="1"
+                android:hint="@string/repeatpassword"
+                style="@style/styleEditText">
+
+            </android.support.v7.widget.AppCompatEditText>
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonRegister"
+            android:text="@string/register"
+            style="@style/ButtonTheme"/>
+    </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

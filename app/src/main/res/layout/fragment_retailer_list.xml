@@ -4,9 +4,11 @@
     android:layout_height="match_parent"
     tools:context="be.nmct.unitycard.fragments.RetailerListFragment">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="hello retailer list fragment" />
+        android:id="@+id/recyclerViewListRetailer"
+        android:scrollbars="vertical"
+        />
 
 </android.support.v4.widget.NestedScrollView>
