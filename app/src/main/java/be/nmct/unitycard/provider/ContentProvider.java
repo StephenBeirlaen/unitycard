@@ -1,6 +1,5 @@
 package be.nmct.unitycard.provider;
 
-import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -13,13 +12,15 @@ import android.support.annotation.Nullable;
 
 import java.util.HashMap;
 
+import be.nmct.unitycard.contracts.ContentProviderContract;
+import be.nmct.unitycard.contracts.DatabaseContract;
 import be.nmct.unitycard.database.DatabaseHelper;
 
 /**
  * Created by lorenzvercoutere on 6/11/16.
  */
 
-public class Provider extends ContentProvider {
+public class ContentProvider extends android.content.ContentProvider {
 
     private DatabaseHelper dataBaseHelper;
 
@@ -32,20 +33,20 @@ public class Provider extends ContentProvider {
 
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-        uriMatcher.addURI(Contract.AUTHORITY, "retailers", RETAILERS);
-        uriMatcher.addURI(Contract.AUTHORITY, "retailers/#", RETAILERS_ID);
+        uriMatcher.addURI(ContentProviderContract.AUTHORITY, "retailers", RETAILERS);
+        uriMatcher.addURI(ContentProviderContract.AUTHORITY, "retailers/#", RETAILERS_ID);
     }
 
     @Override
     public boolean onCreate() {
         dataBaseHelper = DatabaseHelper.getInstance(getContext());
         RETAILERS_PROJECTION_MAP = new HashMap<>();
-        RETAILERS_PROJECTION_MAP.put(be.nmct.unitycard.database.Contract.RetailerColumns._ID, be.nmct.unitycard.database.Contract.RetailerColumns._ID);
-        RETAILERS_PROJECTION_MAP.put(be.nmct.unitycard.database.Contract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID, be.nmct.unitycard.database.Contract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID);
-        RETAILERS_PROJECTION_MAP.put(be.nmct.unitycard.database.Contract.RetailerColumns.COLUMN_RETAILER_NAME, be.nmct.unitycard.database.Contract.RetailerColumns.COLUMN_RETAILER_NAME);
-        RETAILERS_PROJECTION_MAP.put(be.nmct.unitycard.database.Contract.RetailerColumns.COLUMN_TAGLINE, be.nmct.unitycard.database.Contract.RetailerColumns.COLUMN_TAGLINE);
-        RETAILERS_PROJECTION_MAP.put(be.nmct.unitycard.database.Contract.RetailerColumns.COLUMN_CHAIN, be.nmct.unitycard.database.Contract.RetailerColumns.COLUMN_CHAIN);
-        RETAILERS_PROJECTION_MAP.put(be.nmct.unitycard.database.Contract.RetailerColumns.COLUMN_LOGOURL, be.nmct.unitycard.database.Contract.RetailerColumns.COLUMN_LOGOURL);
+        RETAILERS_PROJECTION_MAP.put(DatabaseContract.RetailerColumns._ID, DatabaseContract.RetailerColumns._ID);
+        RETAILERS_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID, DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID);
+        RETAILERS_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME, DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME);
+        RETAILERS_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_TAGLINE, DatabaseContract.RetailerColumns.COLUMN_TAGLINE);
+        RETAILERS_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, DatabaseContract.RetailerColumns.COLUMN_CHAIN);
+        RETAILERS_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, DatabaseContract.RetailerColumns.COLUMN_LOGOURL);
         return true;
     }
 
@@ -55,17 +56,16 @@ public class Provider extends ContentProvider {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         switch (uriMatcher.match(uri)){
             case RETAILERS:
-                queryBuilder.setTables(be.nmct.unitycard.database.Contract.RetailerColumns.TABLE_NAME);
+                queryBuilder.setTables(DatabaseContract.RetailerColumns.TABLE_NAME);
                 queryBuilder.setProjectionMap(RETAILERS_PROJECTION_MAP);
                 break;
             case RETAILERS_ID:
-                queryBuilder.setTables(be.nmct.unitycard.database.Contract.RetailerColumns.TABLE_NAME);
+                queryBuilder.setTables(DatabaseContract.RetailerColumns.TABLE_NAME);
                 queryBuilder.setProjectionMap(RETAILERS_PROJECTION_MAP);
                 break;
             default:
                 throw new IllegalArgumentException("Uknown Uri: " + uri);
         }
-
 
         SQLiteDatabase db = dataBaseHelper.getReadableDatabase();
 
@@ -91,9 +91,9 @@ public class Provider extends ContentProvider {
     public String getType(Uri uri) {
         switch (uriMatcher.match(uri)){
             case RETAILERS:
-                return Contract.RETAILERS_CONTENT_TYPE;
+                return ContentProviderContract.RETAILERS_CONTENT_TYPE;
             case RETAILERS_ID:
-                return Contract.RETAILERS_ITEM_CONTENT_TYPE;
+                return ContentProviderContract.RETAILERS_ITEM_CONTENT_TYPE;
             default:
                 throw new IllegalArgumentException("Uknown Uri: " + uri);
         }
@@ -106,9 +106,10 @@ public class Provider extends ContentProvider {
         switch (uriMatcher.match(uri)){
             case RETAILERS:
                 long newRowId = db.insert(
-                        be.nmct.unitycard.database.Contract.RetailersDB.TABLE_NAME, null, contentValues);
+                        DatabaseContract.RetailersDB.TABLE_NAME, null, contentValues);
                 if(newRowId > 0){
-                    Uri retailerItemUri = ContentUris.withAppendedId(Contract.RETAILERS_ITEM_URI, newRowId);
+                    Uri retailerItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILERS_ITEM_URI, newRowId);
+                    // Na insert content observers verwittigen dat data mogelijk gewijzigd is
                     getContext().getContentResolver().notifyChange(retailerItemUri, null);
                     return retailerItemUri;
                 }
@@ -129,7 +130,7 @@ public class Provider extends ContentProvider {
         switch (uriMatcher.match(uri)){
             case RETAILERS:
                 count = db.delete(
-                        be.nmct.unitycard.database.Contract.RetailersDB.TABLE_NAME,
+                        DatabaseContract.RetailersDB.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
@@ -142,7 +143,7 @@ public class Provider extends ContentProvider {
                 }
 
                 count = db.delete(
-                        be.nmct.unitycard.database.Contract.RetailersDB.TABLE_NAME,
+                        DatabaseContract.RetailersDB.TABLE_NAME,
                         selection,
                         selectionArgs);
                 break;
@@ -164,7 +165,7 @@ public class Provider extends ContentProvider {
         switch (uriMatcher.match(uri)){
             case RETAILERS:
                 count = db.update(
-                        be.nmct.unitycard.database.Contract.RetailersDB.TABLE_NAME,
+                        DatabaseContract.RetailersDB.TABLE_NAME,
                         contentValues,
                         selection,
                         selectionArgs);
@@ -179,7 +180,7 @@ public class Provider extends ContentProvider {
                 }
 
                 count = db.update(
-                        be.nmct.unitycard.database.Contract.RetailersDB.TABLE_NAME,
+                        DatabaseContract.RetailersDB.TABLE_NAME,
                         contentValues,
                         selection,
                         selectionArgs);

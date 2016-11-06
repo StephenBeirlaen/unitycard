@@ -44,7 +44,7 @@ public class RetailerListFragment extends Fragment {
     }
 
     private void loadRetailers() {
-        // Show loading indication
+        /*// Show loading indication
         mListener.swipeRefreshLayoutAddTask(MainActivity.TASK_LOAD_RETAILERS);
 
         // Get access token
@@ -85,7 +85,7 @@ public class RetailerListFragment extends Fragment {
                 // Something went wrong, toon login scherm
                 mListener.requestNewLogin();
             }
-        });
+        });*/
     }
 
     public interface RetailerListFragmentListener {

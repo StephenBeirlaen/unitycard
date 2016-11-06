@@ -4,12 +4,15 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import be.nmct.unitycard.contracts.DatabaseContract;
+
 /**
  * Created by lorenzvercoutere on 6/11/16.
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    // todo: move this file?
 
     private static DatabaseHelper INSTANCE;
     private static Object object = new Object();
@@ -26,9 +29,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private DatabaseHelper(Context context) {
         //opm: hier wordt database-versienummer doorgegeven
-        super(context, Contract.DATABASE_NAME, null, Contract.DATABASE_VERSION);
+        super(context, DatabaseContract.DATABASE_NAME, null, DatabaseContract.DATABASE_VERSION);
     }
-
 
     //zie ook onderaan voor versie bestemd tijdens de ontwikkeling van app
     @Override
@@ -59,6 +61,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void upgradeTo1(SQLiteDatabase db) {
-        db.execSQL(Contract.ProductsDB.CREATE_TABLE);
+        db.execSQL(DatabaseContract.RetailersDB.CREATE_TABLE);
     }
 }
