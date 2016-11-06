@@ -28,7 +28,7 @@ public class RestClient {
 
     public RestClient() {
         GsonBuilder gBuilder = new GsonBuilder();
-        //gBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+        gBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").create();
         Gson gSon = gBuilder.create();
 
         OkHttpClient.Builder builder = new OkHttpClient.Builder();

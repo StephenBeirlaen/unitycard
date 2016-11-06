@@ -75,7 +75,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
          * If no auth token is cached for this account, null will be returned -- a new
          * auth token will not be generated, and the server will not be contacted */
         // Check of er een Refresh token aanwezig is
-        String refreshToken = accountManager.peekAuthToken(account, AccountContract.TOKEN_REFRESH);
+        final String refreshToken = accountManager.peekAuthToken(account, AccountContract.TOKEN_REFRESH);
 
         // Is er een refresh token?
         if (!TextUtils.isEmpty(refreshToken)) {
@@ -100,12 +100,17 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
                     }
                     else {
                         // Could not refresh token
+                        // Invalidate refresh token
+                        accountManager.invalidateAuthToken(AccountContract.ACCOUNT_TYPE, refreshToken);
                         response.onResult(createAuthenticatorActivityBundle(response));
                     }
                 }
 
                 @Override
                 public void tokenRequestError(String error) {
+                    // Could not refresh token
+                    // Invalidate refresh token
+                    accountManager.invalidateAuthToken(AccountContract.ACCOUNT_TYPE, refreshToken);
                     response.onResult(createAuthenticatorActivityBundle(response));
                 }
             });

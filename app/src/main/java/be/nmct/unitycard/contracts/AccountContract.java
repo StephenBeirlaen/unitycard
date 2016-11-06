@@ -11,4 +11,6 @@ public class AccountContract {
     public static final String TOKEN_REFRESH = "be.nmct.unitycard.account.refreshtoken";
     public static final String TOKEN_ACCESS_LABEL = "OAuth 2.0 Access Token";
     public static final String TOKEN_REFRESH_LABEL = "OAuth 2.0 Refresh Token";
+
+    public static final String KEY_USER_ID = "be.nmct.unitycard.account.userid";
 }

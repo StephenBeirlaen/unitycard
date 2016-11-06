@@ -235,6 +235,7 @@ public class MainActivity extends AppCompatActivity
         fabAddRetailer.hide();
     }
 
+    public static final String TASK_LOAD_MY_LOYALTY_CARD = "TASK_LOAD_MY_LOYALTY_CARD";
     public static final String TASK_LOAD_RETAILERS = "TASK_LOAD_RETAILERS";
 
     // Lijst die bijhoudt welke taken er in progress zijn, voor parallele taken.

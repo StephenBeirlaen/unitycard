@@ -24,4 +24,10 @@ public class GetTokenResponse {
 
     @SerializedName(".expires")
     private Date expires;*/
+
+    private String user_id;
+
+    public String getUserId() {
+        return user_id;
+    }
 }

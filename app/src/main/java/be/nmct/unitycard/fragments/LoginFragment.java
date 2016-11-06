@@ -6,6 +6,7 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.ProgressBar;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.auth.AuthHelper;
+import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.helpers.ConnectionChecker;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -109,10 +111,18 @@ public class LoginFragment extends Fragment {
                     else {
                         // Account met de zelfde username terug gevonden
                         account = accountsByType[0];
+
+                        // Check of er een Refresh token aanwezig is
+                        String refreshToken = mAccountManager.peekAuthToken(account, AccountContract.TOKEN_REFRESH);
+                        if (TextUtils.isEmpty(refreshToken)) { // Is er geen refresh token meer aanwezig?
+                            // Remove account
+                            AuthHelper.removeStoredAccount(account, getActivity());
+                            account = null;
+                        }
                     }
                 }
 
-                if (account != null) { // als er al een account is
+                if (account != null) { // Als er al een account is
                     // Direct melden dat login OK is
                     mListener.onLoginSuccessful(userName);
                 }

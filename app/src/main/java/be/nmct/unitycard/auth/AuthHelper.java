@@ -32,8 +32,9 @@ public class AuthHelper {
             public void tokenReceived(GetTokenResponse getTokenResponse) {
                 if (getTokenResponse != null) {
                     // Save the user locally with token if request was valid
-                    final String accessToken = getTokenResponse.getAccessToken();// todo: overal textutils weer inschakelen
+                    final String accessToken = getTokenResponse.getAccessToken();
                     final String refreshToken = getTokenResponse.getRefreshToken();
+                    final String userId = getTokenResponse.getUserId();
 
                     // Create and add account
                     Account account = new Account(userName, AccountContract.ACCOUNT_TYPE);
@@ -42,6 +43,9 @@ public class AuthHelper {
                     // Save nieuwe access en refresh tokens
                     accountManager.setAuthToken(account, AccountContract.TOKEN_ACCESS, accessToken);
                     accountManager.setAuthToken(account, AccountContract.TOKEN_REFRESH, refreshToken);
+
+                    // Save username
+                    accountManager.setUserData(account, AccountContract.KEY_USER_ID, userId);
 
                     callback.accountAdded(account);
                 }
@@ -158,6 +162,14 @@ public class AuthHelper {
 
     public static String getUsername(Account account) {
         return account.name;
+    }
+
+    public static String getUserId(Context context) {
+        AccountManager accountManager = AccountManager.get(context);
+
+        Account account = getUser(context);
+
+        return accountManager.getUserData(account, AccountContract.KEY_USER_ID);
     }
 
     public static Boolean isUserLoggedIn(Context context) { // return nullable boolean

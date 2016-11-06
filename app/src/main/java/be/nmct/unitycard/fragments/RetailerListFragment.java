@@ -43,14 +43,6 @@ public class RetailerListFragment extends Fragment {
         return view;
     }
 
-    public interface RetailerListFragmentListener {
-        void showFabAddRetailer();
-        void hideFabAddRetailer();
-        void swipeRefreshLayoutAddTask(String task);
-        void swipeRefreshLayoutRemoveTask(String task);
-        void requestNewLogin();
-    }
-
     private void loadRetailers() {
         // Show loading indication
         mListener.swipeRefreshLayoutAddTask(MainActivity.TASK_LOAD_RETAILERS);
@@ -87,10 +79,21 @@ public class RetailerListFragment extends Fragment {
 
             @Override
             public void requestNewLogin() {
+                // Hide loading indication
+                mListener.swipeRefreshLayoutRemoveTask(MainActivity.TASK_LOAD_RETAILERS);
+
                 // Something went wrong, toon login scherm
                 mListener.requestNewLogin();
             }
         });
+    }
+
+    public interface RetailerListFragmentListener {
+        void showFabAddRetailer();
+        void hideFabAddRetailer();
+        void swipeRefreshLayoutAddTask(String task);
+        void swipeRefreshLayoutRemoveTask(String task);
+        void requestNewLogin();
     }
 
     @Override
