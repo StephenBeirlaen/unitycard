@@ -50,11 +50,12 @@ public class AddRetailerFragment extends Fragment {
 
     private void loadRetailers() {
         String[] columns = new String[] {
-                "retailercategoryid",
-                "retailername",
-                "tagline",
-                "chain",
-                "logourl"
+                "Id",
+                "RetailerCategoryId",
+                "RetailerName",
+                "Tagline",
+                "Chain",
+                "LogoUrl"
         };// todo: kan dit niet van ergens anders komen?
         Cursor data = getActivity().getContentResolver().query(RETAILERS_URI, columns, null, null, null);
 

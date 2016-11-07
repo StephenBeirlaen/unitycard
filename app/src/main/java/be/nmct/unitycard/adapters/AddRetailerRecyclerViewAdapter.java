@@ -70,7 +70,7 @@ public class AddRetailerRecyclerViewAdapter
 
         holder.txvRetailerName.setText(cursorRetailers.getString(cursorRetailers.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME)));
         holder.txvRetailerType.setText(cursorRetailers.getString(cursorRetailers.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID)));
-        //holder.txvRetailerLocation.setText(cursorRetailers.getString(cursorRetailers.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_TITLE)));
+        holder.txvRetailerLocation.setText(cursorRetailers.getString(cursorRetailers.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_ID)));
         String logoUrl = cursorRetailers.getString(cursorRetailers.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOGOURL));
         if (logoUrl != null && !logoUrl.equals("")) {
             Picasso.with(mContext)

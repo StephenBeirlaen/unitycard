@@ -74,12 +74,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                         // todo: temporary
                         for (Retailer retailer : retailers) {
-                            ContentValues contentValues = new ContentValues(); // todo: id hierbij??
+                            ContentValues contentValues = new ContentValues();
+
+                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_ID, retailer.getId());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID, retailer.getRetailerCategoryId());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME, retailer.getName());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_TAGLINE, retailer.getTagline());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
+
                             getContext().getContentResolver().insert(ContentProviderContract.RETAILERS_URI, contentValues);
                         }
                     }
