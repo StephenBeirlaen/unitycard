@@ -16,7 +16,7 @@ import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.ContentProviderContract;
 import be.nmct.unitycard.contracts.DatabaseContract;
 import be.nmct.unitycard.models.Retailer;
-import be.nmct.unitycard.repositories.RetailerRepository;
+import be.nmct.unitycard.repositories.ApiRepository;
 
 /**
  * Created by Stephen on 4/11/2016.
@@ -66,10 +66,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
             public void tokenReceived(final String accessToken) {
                 Log.d(LOG_TAG, "Using access token: " + accessToken);
 
-                final RetailerRepository retailerRepo = new RetailerRepository(getContext());
-                retailerRepo.getAllRetailers(accessToken, new RetailerRepository.GetAllRetailersListener() {
+                final ApiRepository apiRepo = new ApiRepository(getContext());
+                apiRepo.getAllRetailers(accessToken, new ApiRepository.GetResultListener<List<Retailer>>() {
                     @Override
-                    public void retailersReceived(List<Retailer> retailers) {
+                    public void resultReceived(List<Retailer> retailers) {
                         Log.d(LOG_TAG, "Received all retailers: " + retailers);
 
                         // todo: temporary
@@ -88,7 +88,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     }
 
                     @Override
-                    public void retailersRequestError(String error) {
+                    public void requestError(String error) {
                         // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
                         AuthHelper.invalidateAccessToken(accessToken, getContext());
                     }

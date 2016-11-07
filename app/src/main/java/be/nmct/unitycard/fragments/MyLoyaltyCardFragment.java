@@ -21,7 +21,7 @@ import be.nmct.unitycard.activities.MainActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.LoyaltyCardContract;
 import be.nmct.unitycard.models.LoyaltyCard;
-import be.nmct.unitycard.repositories.RetailerRepository;
+import be.nmct.unitycard.repositories.ApiRepository;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -86,10 +86,10 @@ public class MyLoyaltyCardFragment extends Fragment {
             public void tokenReceived(final String accessToken) {
                 Log.d(LOG_TAG, "Using access token: " + accessToken);
 
-                final RetailerRepository retailerRepo = new RetailerRepository(getActivity());
-                retailerRepo.getLoyaltyCard(accessToken, AuthHelper.getUserId(getActivity()), new RetailerRepository.GetLoyaltyCardListener() {
+                final ApiRepository apiRepo = new ApiRepository(getActivity());
+                apiRepo.getLoyaltyCard(accessToken, AuthHelper.getUserId(getActivity()), new ApiRepository.GetResultListener<LoyaltyCard>() {
                     @Override
-                    public void loyaltyCardReceived(LoyaltyCard loyaltyCard) {
+                    public void resultReceived(LoyaltyCard loyaltyCard) {
                         Log.d(LOG_TAG, "Received loyalty card: " + loyaltyCard);
 
                         // Hide loading indication
@@ -108,12 +108,12 @@ public class MyLoyaltyCardFragment extends Fragment {
                                 imageViewQR.setImageBitmap(bm);
                             }
                         } catch (WriterException e) {
-                            //eek
+                            // todo
                         }
                     }
 
                     @Override
-                    public void loyaltyCardRequestError(String error) {
+                    public void requestError(String error) {
                         // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
                         AuthHelper.invalidateAccessToken(accessToken, getActivity());
 

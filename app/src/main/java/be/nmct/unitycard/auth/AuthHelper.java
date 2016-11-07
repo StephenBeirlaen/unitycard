@@ -134,7 +134,7 @@ public class AuthHelper {
                     *   - KEY_ACCOUNT_NAME - the name of the account you supplied
                     *   - KEY_ACCOUNT_TYPE - the type of the account
                     *   - KEY_AUTHTOKEN - the auth token you wanted */
-                    authToken = result.getString(AccountManager.KEY_AUTHTOKEN); // todo: test komt dit er wel uit?
+                    authToken = result.getString(AccountManager.KEY_AUTHTOKEN);
                 }
 
                 if (TextUtils.isEmpty(authToken)) {
@@ -202,7 +202,7 @@ public class AuthHelper {
         Account[] accounts = getStoredAccountsByType(context);
 
         if (accounts != null) {
-            for (int index = 0; index < accounts.length; index++) { // todo: this deletes all accounts, not a specific one
+            for (int index = 0; index < accounts.length; index++) {
                 removeStoredAccount(accounts[index], context);
             }
         }

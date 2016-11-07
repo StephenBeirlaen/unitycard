@@ -4,18 +4,11 @@ package be.nmct.unitycard.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.List;
-
 import be.nmct.unitycard.R;
-import be.nmct.unitycard.activities.MainActivity;
-import be.nmct.unitycard.auth.AuthHelper;
-import be.nmct.unitycard.models.Retailer;
-import be.nmct.unitycard.repositories.RetailerRepository;
 import butterknife.ButterKnife;
 
 public class RetailerListFragment extends Fragment {
@@ -53,8 +46,8 @@ public class RetailerListFragment extends Fragment {
             public void tokenReceived(final String accessToken) {
                 Log.d(LOG_TAG, "Using access token: " + accessToken);
 
-                final RetailerRepository retailerRepo = new RetailerRepository(getActivity());
-                retailerRepo.getAllRetailers(accessToken, new RetailerRepository.GetAllRetailersListener() {
+                final ApiRepository retailerRepo = new ApiRepository(getActivity());
+                retailerRepo.getAllRetailers(accessToken, new ApiRepository.GetAllRetailersListener() {
                     @Override
                     public void retailersReceived(List<Retailer> retailers) {
                         Log.d(LOG_TAG, "Received all retailers: " + retailers);
