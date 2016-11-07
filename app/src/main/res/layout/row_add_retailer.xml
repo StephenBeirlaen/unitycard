@@ -20,8 +20,6 @@
             android:layout_height="60dp"
             android:id="@+id/imageViewLogoRetailer"
             android:layout_marginRight="5dp"/>
-            <!--android:src="@drawable/logoRetailer"
-            />-->
 
         <LinearLayout
             android:layout_width="wrap_content"

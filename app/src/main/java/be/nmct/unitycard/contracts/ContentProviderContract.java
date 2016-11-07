@@ -16,6 +16,4 @@ public class ContentProviderContract {
     // MIME-types (vnd = vendor specific)
     public static final String RETAILERS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd.unitycard.retailer";
     public static final String RETAILERS_ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.unitycard.retailer";
-
-    public static final int RETAILER_ID_PATH_POSITION = 1; // todo: lorenz, why this?
 }
