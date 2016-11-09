@@ -58,7 +58,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     @Override
-    public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient providerClient, SyncResult syncResult) {
+    public void onPerformSync(final Account account, Bundle extras, String authority, ContentProviderClient providerClient, SyncResult syncResult) {
         // When the framework is ready to sync your application's data, this gets run
 
         AuthHelper.getAccessToken(account, getContext(), new AuthHelper.GetAccessTokenListener() {
@@ -93,6 +93,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         AuthHelper.invalidateAccessToken(accessToken, getContext());
                     }
                 });
+
             }
 
             @Override
