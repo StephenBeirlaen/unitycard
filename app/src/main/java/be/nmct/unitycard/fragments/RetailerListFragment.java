@@ -31,62 +31,12 @@ public class RetailerListFragment extends Fragment {
 
         mListener.showFabAddRetailer();
 
-        loadRetailers();
-
         return view;
-    }
-
-    private void loadRetailers() {
-        /*// Show loading indication
-        mListener.swipeRefreshLayoutAddTask(MainActivity.TASK_LOAD_RETAILERS);
-
-        // Get access token
-        AuthHelper.getAccessToken(AuthHelper.getUser(getActivity()), getActivity(), new AuthHelper.GetAccessTokenListener() {
-            @Override
-            public void tokenReceived(final String accessToken) {
-                Log.d(LOG_TAG, "Using access token: " + accessToken);
-
-                final ApiRepository retailerRepo = new ApiRepository(getActivity());
-                retailerRepo.getAllRetailers(accessToken, new ApiRepository.GetAllRetailersListener() {
-                    @Override
-                    public void retailersReceived(List<Retailer> retailers) {
-                        Log.d(LOG_TAG, "Received all retailers: " + retailers);
-
-                        // Hide loading indication
-                        mListener.swipeRefreshLayoutRemoveTask(MainActivity.TASK_LOAD_RETAILERS);
-                    }
-
-                    @Override
-                    public void retailersRequestError(String error) {
-                        // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
-                        AuthHelper.invalidateAccessToken(accessToken, getActivity());
-
-                        // Hide loading indication
-                        mListener.swipeRefreshLayoutRemoveTask(MainActivity.TASK_LOAD_RETAILERS);
-
-                        // Try again
-                        loadRetailers();
-                    }
-                });
-            }
-
-            @Override
-            public void requestNewLogin() {
-                // Hide loading indication
-                mListener.swipeRefreshLayoutRemoveTask(MainActivity.TASK_LOAD_RETAILERS);
-
-                // Something went wrong, toon login scherm
-                mListener.requestNewLogin();
-            }
-        });*/
     }
 
     public interface RetailerListFragmentListener {
         void showFabAddRetailer();
         void hideFabAddRetailer();
-        void swipeRefreshLayoutAddTask(String task);
-        void swipeRefreshLayoutRemoveTask(String task);
-        void requestNewLogin();
     }
 
     @Override

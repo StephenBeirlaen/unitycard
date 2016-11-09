@@ -32,7 +32,7 @@ public interface ApiService {
     );
 
     @POST("/api/loyaltycards/{userId}/retailers")
-    Observable<Response> addLoyaltyCardRetailer(
+    Observable<Response<Void>> addLoyaltyCardRetailer(
             @Header("Authorization") String authorizationHeader,
             @Path("userId") String userId,
             @Body AddLoyaltyCardRetailerBody body

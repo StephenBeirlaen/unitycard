@@ -1,30 +1,28 @@
 package be.nmct.unitycard.fragments;
 
 import android.content.Context;
-import android.database.Cursor;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import be.nmct.unitycard.R;
-import be.nmct.unitycard.adapters.AddRetailerRecyclerViewAdapter;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILERS_URI;
+import be.nmct.unitycard.databinding.FragmentAddRetailerBinding;
+import be.nmct.unitycard.models.viewmodels.AddRetailerFragmentVM;
 
 public class AddRetailerFragment extends Fragment {
 
-    @Bind(R.id.recyclerViewAddRetailerFragment) RecyclerView recyclerViewAddRetailerList;
+    //@Bind(R.id.recyclerViewAddRetailerFragment) RecyclerView recyclerViewAddRetailerList; // moved
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     private AddRetailerFragmentListener mListener;
-    private AddRetailerRecyclerViewAdapter addRetailerRecyclerViewAdapter;
+    private AddRetailerFragmentVM mAddRetailerFragmentVM;
+    private FragmentAddRetailerBinding mFragmentAddRetailerBinding;
+    //private AddRetailerRecyclerViewAdapter addRetailerRecyclerViewAdapter;
 
     public AddRetailerFragment() {
         // Required empty public constructor
@@ -36,20 +34,32 @@ public class AddRetailerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_retailer, container, false);
-        ButterKnife.bind(this, view);
+        //View view = inflater.inflate(R.layout.fragment_add_retailer, container, false);
+        //ButterKnife.bind(this, view); // niet meer nodig met databinding
 
-        recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerViewAddRetailerList.setHasFixedSize(true);
-        recyclerViewAddRetailerList.setItemAnimator(new DefaultItemAnimator());
+        mFragmentAddRetailerBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_retailer, container, false);
 
-        loadRetailers();
+        mFragmentAddRetailerBinding.recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mFragmentAddRetailerBinding.recyclerViewAddRetailerList.setHasFixedSize(true);
+        mFragmentAddRetailerBinding.recyclerViewAddRetailerList.setItemAnimator(new DefaultItemAnimator());
 
-        return view;
+        mAddRetailerFragmentVM = new AddRetailerFragmentVM(mFragmentAddRetailerBinding, getActivity());
+
+        //loadRetailers(); // moved to onStart()
+
+        //return view;
+        return mFragmentAddRetailerBinding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        mAddRetailerFragmentVM.loadRetailers();
     }
 
     private void loadRetailers() {
-        String[] columns = new String[] {
+        /*String[] columns = new String[] { // moved to VM
                 "Id",
                 "RetailerCategoryId",
                 "RetailerName",
@@ -57,10 +67,10 @@ public class AddRetailerFragment extends Fragment {
                 "Chain",
                 "LogoUrl"
         };// todo: kan dit niet van ergens anders komen?
-        Cursor data = getActivity().getContentResolver().query(RETAILERS_URI, columns, null, null, null);
+        Cursor data = getActivity().getContentResolver().query(RETAILERS_URI, columns, null, null, null);*/
 
-        addRetailerRecyclerViewAdapter = new AddRetailerRecyclerViewAdapter(getActivity(), data/*, mListener*/);
-        recyclerViewAddRetailerList.setAdapter(addRetailerRecyclerViewAdapter);
+        //addRetailerRecyclerViewAdapter = new AddRetailerRecyclerViewAdapter(getActivity(), data/*, mListener*/); // moved to retailersbinder
+        //recyclerViewAddRetailerList.setAdapter(addRetailerRecyclerViewAdapter); // moved to retailersbinder
     }
 
     public interface AddRetailerFragmentListener {

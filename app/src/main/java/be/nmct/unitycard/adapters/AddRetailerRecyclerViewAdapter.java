@@ -2,6 +2,7 @@ package be.nmct.unitycard.adapters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.contracts.DatabaseContract;
+import be.nmct.unitycard.models.Retailer;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -23,13 +25,15 @@ import butterknife.ButterKnife;
 public class AddRetailerRecyclerViewAdapter
         extends RecyclerView.Adapter<AddRetailerRecyclerViewAdapter.AddRetailerViewHolder> {
 
-    private Cursor cursorRetailers;
+    //private Cursor cursorRetailers;
+    private ObservableList<Retailer> mRetailers;
     private Context mContext;
     //private TracksFragment.TracksFragmentListener mListener;
 
-    public AddRetailerRecyclerViewAdapter(Context context, Cursor cursorRetailers/*, TracksFragment.TracksFragmentListener listener*/) {
+    public AddRetailerRecyclerViewAdapter(Context context, ObservableList<Retailer> retailers/*Cursor cursorRetailers*//*, TracksFragment.TracksFragmentListener listener*/) {
         this.mContext = context;
-        this.cursorRetailers = cursorRetailers;
+        //this.cursorRetailers = cursorRetailers;
+        this.mRetailers = retailers;
         //this.mListener = listener;
     }
 
@@ -66,7 +70,7 @@ public class AddRetailerRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(AddRetailerViewHolder holder, int position) {
-        cursorRetailers.moveToPosition(position);
+        /*cursorRetailers.moveToPosition(position);
 
         holder.txvRetailerName.setText(cursorRetailers.getString(cursorRetailers.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME)));
         holder.txvRetailerType.setText(cursorRetailers.getString(cursorRetailers.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID)));
@@ -76,15 +80,29 @@ public class AddRetailerRecyclerViewAdapter
             Picasso.with(mContext)
                     .load(logoUrl)
                     .into(holder.imgLogoRetailer);
+        }*/
+
+        Retailer retailer = mRetailers.get(position);
+        /*holder.getBinding().setSeries(series);
+        holder.getBinding().executePendingBindings();*/ // todo: ook rows binden
+
+        holder.txvRetailerName.setText(retailer.getName());
+        holder.txvRetailerType.setText(retailer.getRetailerCategoryId());
+        holder.txvRetailerLocation.setText(retailer.getId());
+        String logoUrl = retailer.getLogoUrl();
+        if (logoUrl != null && !logoUrl.equals("")) {
+            Picasso.with(mContext)
+                    .load(logoUrl)
+                    .into(holder.imgLogoRetailer);
         }
     }
 
     @Override
     public int getItemCount() {
-        return cursorRetailers.getCount();
+        return /*cursorRetailers.getCount()*/mRetailers.size();
     }
 
-    public Cursor swapCursor(Cursor cursor) {
+    /*public Cursor swapCursor(Cursor cursor) {
         if (cursorRetailers == cursor) {
             return null;
         }
@@ -94,5 +112,5 @@ public class AddRetailerRecyclerViewAdapter
             this.notifyDataSetChanged();
         }
         return oldCursor;
-    }
+    }*/
 }
