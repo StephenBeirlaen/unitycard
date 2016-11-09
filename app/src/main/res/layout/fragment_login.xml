@@ -1,76 +1,86 @@
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context="be.nmct.unitycard.fragments.LoginFragment">
 
-    <LinearLayout
+    <data>
+        <variable
+            name="viewmodel"
+            type="be.nmct.unitycard.models.viewmodels.LoginFragmentVM" />
+    </data>
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="64dp"
-        android:layout_marginRight="64dp">
+        android:layout_height="match_parent">
 
-        <android.support.design.widget.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppCompatEditText">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="64dp"
+            android:layout_marginRight="64dp">
 
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/txt_username"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="1"
-                android:hint="@string/username"
-                style="@style/styleEditText">
+                android:theme="@style/AppCompatEditText">
 
-                <requestFocus />
-            </android.support.v7.widget.AppCompatEditText>
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/txt_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:hint="@string/username"
+                    style="@style/styleEditText">
 
-        </android.support.design.widget.TextInputLayout>
+                    <requestFocus />
+                </android.support.v7.widget.AppCompatEditText>
 
-        <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppCompatEditText">
+            </android.support.design.widget.TextInputLayout>
 
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/txt_password"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:fontFamily="sans-serif"
-                android:maxLines="1"
-                android:hint="@string/password"
-                style="@style/styleEditText">
+                android:theme="@style/AppCompatEditText">
 
-            </android.support.v7.widget.AppCompatEditText>
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/txt_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword"
+                    android:fontFamily="sans-serif"
+                    android:maxLines="1"
+                    android:hint="@string/password"
+                    style="@style/styleEditText">
 
-        </android.support.design.widget.TextInputLayout>
+                </android.support.v7.widget.AppCompatEditText>
 
-        <Button
-            android:id="@+id/btn_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Log in"
-            style="@style/ButtonTheme" />
+            </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/btn_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Register"
-            style="@style/ButtonTheme" />
+            <Button
+                android:id="@+id/btn_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Log in"
+                style="@style/ButtonTheme" />
 
-        <ProgressBar
-            android:id="@+id/progress_circle_login"
-            android:visibility="invisible"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/btn_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Register"
+                style="@style/ButtonTheme" />
 
-    </LinearLayout>
+            <ProgressBar
+                android:id="@+id/progress_circle_login"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-</android.support.v4.widget.NestedScrollView>
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>

@@ -2,6 +2,7 @@ package be.nmct.unitycard.fragments;
 
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -20,20 +20,20 @@ import be.nmct.unitycard.R;
 import be.nmct.unitycard.activities.MainActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.LoyaltyCardContract;
+import be.nmct.unitycard.databinding.FragmentMyLoyaltyCardBinding;
 import be.nmct.unitycard.models.LoyaltyCard;
+import be.nmct.unitycard.models.viewmodels.MyLoyaltyCardFragmentVM;
 import be.nmct.unitycard.repositories.ApiRepository;
-import butterknife.Bind;
-import butterknife.ButterKnife;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
 
 public class MyLoyaltyCardFragment extends Fragment {
 
-    @Bind(R.id.imageViewQR) ImageView imageViewQR;
-
     private final String LOG_TAG = this.getClass().getSimpleName();
     private MyLoyaltyCardFragmentListener mListener;
+    private FragmentMyLoyaltyCardBinding mBinding;
+    private MyLoyaltyCardFragmentVM mMyLoyaltyCardFragmentVM;
 
     public MyLoyaltyCardFragment() {
         // Required empty public constructor
@@ -45,14 +45,20 @@ public class MyLoyaltyCardFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_my_loyalty_card, container, false);
-        ButterKnife.bind(this, view);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_my_loyalty_card, container, false);
+        mMyLoyaltyCardFragmentVM = new MyLoyaltyCardFragmentVM(mBinding, getActivity());
 
-        loadQRcode();
-
-        return view;
+        return mBinding.getRoot();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        loadQRcode();
+    }
+
+    // TODO: after changing to contentprovider, move this to VM! base on addretailerfragmentVM
     // http://stackoverflow.com/questions/28232116/android-using-zxing-generate-qr-code
     Bitmap encodeAsBitmap(String content, BarcodeFormat format, int width, int height) throws WriterException {
         BitMatrix result;
@@ -100,12 +106,12 @@ public class MyLoyaltyCardFragment extends Fragment {
                             Bitmap bm = encodeAsBitmap(
                                     LoyaltyCardContract.getQRcodeContent(loyaltyCard.getId()),
                                     BarcodeFormat.QR_CODE,
-                                    imageViewQR.getWidth(),
-                                    imageViewQR.getHeight()
+                                    mBinding.imageViewQR.getWidth(),
+                                    mBinding.imageViewQR.getHeight()
                             );
 
                             if (bm != null) {
-                                imageViewQR.setImageBitmap(bm);
+                                mBinding.imageViewQR.setImageBitmap(bm);
                             }
                         } catch (WriterException e) {
                             // todo

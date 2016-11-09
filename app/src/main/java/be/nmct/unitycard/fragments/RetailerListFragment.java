@@ -2,6 +2,7 @@ package be.nmct.unitycard.fragments;
 
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import be.nmct.unitycard.R;
-import butterknife.ButterKnife;
+import be.nmct.unitycard.databinding.FragmentRetailerListBinding;
+import be.nmct.unitycard.models.viewmodels.RetailerListFragmentVM;
 
 public class RetailerListFragment extends Fragment {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     private RetailerListFragmentListener mListener;
+    private FragmentRetailerListBinding mBinding;
+    private RetailerListFragmentVM mRetailerListFragmentVM;
 
     public RetailerListFragment() {
         // Required empty public constructor
@@ -26,12 +30,19 @@ public class RetailerListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_retailer_list, container, false);
-        ButterKnife.bind(this, view);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_retailer_list, container, false);
+        mRetailerListFragmentVM = new RetailerListFragmentVM(mBinding, getActivity());
 
         mListener.showFabAddRetailer();
 
-        return view;
+        return mBinding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // todo: perform load actions here
     }
 
     public interface RetailerListFragmentListener {

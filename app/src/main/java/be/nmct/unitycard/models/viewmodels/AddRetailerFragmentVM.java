@@ -20,17 +20,17 @@ import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILERS_URI;
 
 public class AddRetailerFragmentVM extends BaseObservable {
 
-    private FragmentAddRetailerBinding mFragmentAddRetailerBinding;
+    private FragmentAddRetailerBinding mBinding;
     private Context mContext;
 
     @Bindable
     private ObservableList<Retailer> retailerList;
 
-    public AddRetailerFragmentVM(FragmentAddRetailerBinding fragmentAddRetailerBinding, Context context) {
-        this.mFragmentAddRetailerBinding = fragmentAddRetailerBinding;
+    public AddRetailerFragmentVM(FragmentAddRetailerBinding binding, Context context) {
+        this.mBinding = binding;
         this.mContext = context;
 
-        mFragmentAddRetailerBinding.setViewmodel(this);
+        mBinding.setViewmodel(this);
     }
 
     public void loadRetailers() {
@@ -57,7 +57,7 @@ public class AddRetailerFragmentVM extends BaseObservable {
             );
             retailerList.add(retailer);
         }
-        this.mFragmentAddRetailerBinding.setRetailerList(retailerList);
+        this.mBinding.setRetailerList(retailerList);
         notifyPropertyChanged(BR.retailerList);
 
         data.close();

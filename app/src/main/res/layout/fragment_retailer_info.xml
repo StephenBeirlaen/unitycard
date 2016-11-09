@@ -1,86 +1,91 @@
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context="be.nmct.unitycard.fragments.RetailerInfoFragment">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="15dp">
+    <data>
+        <variable
+            name="viewmodel"
+            type="be.nmct.unitycard.models.viewmodels.RetailerInfoFragmentVM" />
+    </data>
 
-        <LinearLayout
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
-
-            <ImageView
-                android:id="@+id/imageViewLogoRetailer"
-                android:layout_width="150dp"
-                android:layout_height="150dp" />
-            <!--android:src="@drawable/logoRetailer"
-            />-->
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textViewRetailerInfoType"
-                android:text="@string/retailerType"
-                android:layout_marginRight="150dp"
-                android:textStyle="bold"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textViewRetailerInfoPunten"
-                android:text="@string/retailerPoints"
-                android:layout_marginRight="150dp" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/buttonToonAlleWinkels"
-                android:text="@string/toonAlleWinkels"
-                style="@style/ButtonTheme" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
-                android:id="@+id/textViewRetailerInfoDichtsbijzijndeWinkel"
-                android:text="@string/retailerDichtsbijzijndeWinkel"/>
+            android:layout_marginTop="15dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="25dp">
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/imageViewLogoRetailer"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp" />
+                <!--android:src="@drawable/logoRetailer"
+                />-->
+
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:id="@+id/textViewRetailerInfoDichtsbijzijndeWinkelValue"
-                    android:text="@string/retailerDichtsbijzijndeWinkelValue" />
+                    android:id="@+id/textViewRetailerInfoType"
+                    android:text="@string/retailerType"
+                    android:layout_marginRight="150dp"
+                    android:textStyle="bold"/>
 
-                <Button
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="200dp"
-                    android:text="@string/OpenKaart"
-                    android:id="@+id/buttonOpenKaart"/>
+                    android:id="@+id/textViewRetailerInfoPunten"
+                    android:text="@string/retailerPoints"
+                    android:layout_marginRight="150dp" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/buttonToonAlleWinkels"
+                    android:text="@string/toonAlleWinkels"
+                    style="@style/ButtonTheme" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:id="@+id/textViewRetailerInfoDichtsbijzijndeWinkel"
+                    android:text="@string/retailerDichtsbijzijndeWinkel"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="25dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="25dp"
+                        android:id="@+id/textViewRetailerInfoDichtsbijzijndeWinkelValue"
+                        android:text="@string/retailerDichtsbijzijndeWinkelValue" />
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="200dp"
+                        android:text="@string/OpenKaart"
+                        android:id="@+id/buttonOpenKaart"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </RelativeLayout>
 
+    </android.support.v4.widget.NestedScrollView>
 
-
-
-
-
-    </RelativeLayout>
-
-</android.support.v4.widget.NestedScrollView>
+</layout>

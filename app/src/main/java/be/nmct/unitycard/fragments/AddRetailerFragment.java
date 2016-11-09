@@ -16,13 +16,10 @@ import be.nmct.unitycard.models.viewmodels.AddRetailerFragmentVM;
 
 public class AddRetailerFragment extends Fragment {
 
-    //@Bind(R.id.recyclerViewAddRetailerFragment) RecyclerView recyclerViewAddRetailerList; // moved
-
     private final String LOG_TAG = this.getClass().getSimpleName();
     private AddRetailerFragmentListener mListener;
+    private FragmentAddRetailerBinding mBinding;
     private AddRetailerFragmentVM mAddRetailerFragmentVM;
-    private FragmentAddRetailerBinding mFragmentAddRetailerBinding;
-    //private AddRetailerRecyclerViewAdapter addRetailerRecyclerViewAdapter;
 
     public AddRetailerFragment() {
         // Required empty public constructor
@@ -34,21 +31,15 @@ public class AddRetailerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //View view = inflater.inflate(R.layout.fragment_add_retailer, container, false);
-        //ButterKnife.bind(this, view); // niet meer nodig met databinding
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_retailer, container, false);
 
-        mFragmentAddRetailerBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_retailer, container, false);
+        mBinding.recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.recyclerViewAddRetailerList.setHasFixedSize(true);
+        mBinding.recyclerViewAddRetailerList.setItemAnimator(new DefaultItemAnimator());
 
-        mFragmentAddRetailerBinding.recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mFragmentAddRetailerBinding.recyclerViewAddRetailerList.setHasFixedSize(true);
-        mFragmentAddRetailerBinding.recyclerViewAddRetailerList.setItemAnimator(new DefaultItemAnimator());
+        mAddRetailerFragmentVM = new AddRetailerFragmentVM(mBinding, getActivity());
 
-        mAddRetailerFragmentVM = new AddRetailerFragmentVM(mFragmentAddRetailerBinding, getActivity());
-
-        //loadRetailers(); // moved to onStart()
-
-        //return view;
-        return mFragmentAddRetailerBinding.getRoot();
+        return mBinding.getRoot();
     }
 
     @Override
@@ -56,21 +47,6 @@ public class AddRetailerFragment extends Fragment {
         super.onStart();
 
         mAddRetailerFragmentVM.loadRetailers();
-    }
-
-    private void loadRetailers() {
-        /*String[] columns = new String[] { // moved to VM
-                "Id",
-                "RetailerCategoryId",
-                "RetailerName",
-                "Tagline",
-                "Chain",
-                "LogoUrl"
-        };// todo: kan dit niet van ergens anders komen?
-        Cursor data = getActivity().getContentResolver().query(RETAILERS_URI, columns, null, null, null);*/
-
-        //addRetailerRecyclerViewAdapter = new AddRetailerRecyclerViewAdapter(getActivity(), data/*, mListener*/); // moved to retailersbinder
-        //recyclerViewAddRetailerList.setAdapter(addRetailerRecyclerViewAdapter); // moved to retailersbinder
     }
 
     public interface AddRetailerFragmentListener {

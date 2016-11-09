@@ -2,8 +2,8 @@ package be.nmct.unitycard.di;
 
 import javax.inject.Singleton;
 
-import be.nmct.unitycard.repositories.AuthRepository;
 import be.nmct.unitycard.repositories.ApiRepository;
+import be.nmct.unitycard.repositories.AuthRepository;
 import dagger.Component;
 
 @Singleton // Constraints this component to one-per-application or unscoped bindings.

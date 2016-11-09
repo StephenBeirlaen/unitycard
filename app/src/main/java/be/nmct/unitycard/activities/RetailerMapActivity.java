@@ -1,25 +1,28 @@
 package be.nmct.unitycard.activities;
 
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import be.nmct.unitycard.R;
+import be.nmct.unitycard.databinding.ActivityRetailerMapBinding;
 import be.nmct.unitycard.fragments.RetailerMapFragment;
-import butterknife.ButterKnife;
+import be.nmct.unitycard.models.viewmodels.RetailerMapActivityVM;
 
 public class RetailerMapActivity extends AppCompatActivity
         implements
         RetailerMapFragment.RetailerMapFragmentListener {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
+    private ActivityRetailerMapBinding mBinding;
+    private RetailerMapActivityVM mRetailerMapActivityVM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_retailer_map);
-        ButterKnife.bind(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_retailer_map);
 
         if (getSupportActionBar() != null) { // back arrow op toolbar plaatsen
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

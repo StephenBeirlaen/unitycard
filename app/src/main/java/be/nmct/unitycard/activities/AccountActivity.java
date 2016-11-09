@@ -4,6 +4,7 @@ import android.Manifest;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -12,31 +13,29 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.RelativeLayout;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.contracts.AccountContract;
+import be.nmct.unitycard.databinding.ActivityAccountBinding;
 import be.nmct.unitycard.fragments.LoginFragment;
 import be.nmct.unitycard.fragments.RegisterFragment;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import be.nmct.unitycard.models.viewmodels.AccountActivityVM;
 
 public class AccountActivity extends AppCompatActivity
         implements
         LoginFragment.LoginFragmentListener,
         RegisterFragment.RegisterFragmentListener {
 
-    @Bind(R.id.relative_layout) RelativeLayout relativeLayout;
-
     private final String LOG_TAG = this.getClass().getSimpleName();
+    private ActivityAccountBinding mBinding;
+    private AccountActivityVM mAccountActivityVM;
     private AccountAuthenticatorResponse mAccountAuthenticatorResponse;
     public static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_account);
-        ButterKnife.bind(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_account);
 
         if (savedInstanceState == null) {
             // Komen we vanuit de authenticator service?
@@ -84,7 +83,7 @@ public class AccountActivity extends AppCompatActivity
         // Heeft de gebruiker deze permission al eens geweigerd?
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
             // Uitleggen waarom deze permission toch wel nodig is
-            Snackbar.make(relativeLayout, reason, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(mBinding.relativeLayout, reason, Snackbar.LENGTH_INDEFINITE)
                     .setAction("OK", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -138,7 +137,7 @@ public class AccountActivity extends AppCompatActivity
 
     @Override
     public void handleError(String error) {
-        Snackbar.make(relativeLayout, error, Snackbar.LENGTH_LONG).show();
+        Snackbar.make(mBinding.relativeLayout, error, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
