@@ -2,6 +2,7 @@ package be.nmct.unitycard.fragments;
 
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import be.nmct.unitycard.R;
-import butterknife.ButterKnife;
+import be.nmct.unitycard.databinding.FragmentRetailerListBinding;
+import be.nmct.unitycard.models.viewmodels.RetailerListFragmentVM;
 
 public class RetailerListFragment extends Fragment {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     private RetailerListFragmentListener mListener;
+    private FragmentRetailerListBinding mBinding;
+    private RetailerListFragmentVM mRetailerListFragmentVM;
 
     public RetailerListFragment() {
         // Required empty public constructor
@@ -26,67 +30,24 @@ public class RetailerListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_retailer_list, container, false);
-        ButterKnife.bind(this, view);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_retailer_list, container, false);
+        mRetailerListFragmentVM = new RetailerListFragmentVM(mBinding, getActivity());
 
         mListener.showFabAddRetailer();
 
-        loadRetailers();
-
-        return view;
+        return mBinding.getRoot();
     }
 
-    private void loadRetailers() {
-        /*// Show loading indication
-        mListener.swipeRefreshLayoutAddTask(MainActivity.TASK_LOAD_RETAILERS);
+    @Override
+    public void onStart() {
+        super.onStart();
 
-        // Get access token
-        AuthHelper.getAccessToken(AuthHelper.getUser(getActivity()), getActivity(), new AuthHelper.GetAccessTokenListener() {
-            @Override
-            public void tokenReceived(final String accessToken) {
-                Log.d(LOG_TAG, "Using access token: " + accessToken);
-
-                final ApiRepository retailerRepo = new ApiRepository(getActivity());
-                retailerRepo.getAllRetailers(accessToken, new ApiRepository.GetAllRetailersListener() {
-                    @Override
-                    public void retailersReceived(List<Retailer> retailers) {
-                        Log.d(LOG_TAG, "Received all retailers: " + retailers);
-
-                        // Hide loading indication
-                        mListener.swipeRefreshLayoutRemoveTask(MainActivity.TASK_LOAD_RETAILERS);
-                    }
-
-                    @Override
-                    public void retailersRequestError(String error) {
-                        // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
-                        AuthHelper.invalidateAccessToken(accessToken, getActivity());
-
-                        // Hide loading indication
-                        mListener.swipeRefreshLayoutRemoveTask(MainActivity.TASK_LOAD_RETAILERS);
-
-                        // Try again
-                        loadRetailers();
-                    }
-                });
-            }
-
-            @Override
-            public void requestNewLogin() {
-                // Hide loading indication
-                mListener.swipeRefreshLayoutRemoveTask(MainActivity.TASK_LOAD_RETAILERS);
-
-                // Something went wrong, toon login scherm
-                mListener.requestNewLogin();
-            }
-        });*/
+        // todo: perform load actions here
     }
 
     public interface RetailerListFragmentListener {
         void showFabAddRetailer();
         void hideFabAddRetailer();
-        void swipeRefreshLayoutAddTask(String task);
-        void swipeRefreshLayoutRemoveTask(String task);
-        void requestNewLogin();
     }
 
     @Override

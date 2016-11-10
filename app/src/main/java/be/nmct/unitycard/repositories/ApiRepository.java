@@ -46,7 +46,7 @@ public class ApiRepository {
         subscribeApiCall(mRestClient.getApiService().getLoyaltyCardRetailers(RestClient.getAuthorizationHeader(accessToken), userId), callback);
     }
 
-    public void addLoyaltyCardRetailer(String accessToken, String userId, AddLoyaltyCardRetailerBody addLoyaltyCardRetailerBody, final GetResultListener callback) {
+    public void addLoyaltyCardRetailer(String accessToken, String userId, AddLoyaltyCardRetailerBody addLoyaltyCardRetailerBody, final GetResultListener<Void> callback) {
         subscribeApiCall(mRestClient.getApiService().addLoyaltyCardRetailer(RestClient.getAuthorizationHeader(accessToken), userId, addLoyaltyCardRetailerBody), callback);
     }
 

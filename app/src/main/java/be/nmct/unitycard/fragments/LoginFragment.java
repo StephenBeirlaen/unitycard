@@ -4,6 +4,7 @@ package be.nmct.unitycard.fragments;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -11,29 +12,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.AccountContract;
+import be.nmct.unitycard.databinding.FragmentLoginBinding;
 import be.nmct.unitycard.helpers.ConnectionChecker;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import be.nmct.unitycard.models.viewmodels.LoginFragmentVM;
 
 import static be.nmct.unitycard.activities.AccountActivity.REQUEST_PERMISSION_GET_ACCOUNTS;
 
 public class LoginFragment extends Fragment {
 
-    @Bind(R.id.btn_login) Button btnLogin;
-    @Bind(R.id.btn_register) Button btnRegister;
-    @Bind(R.id.txt_username) EditText txtUsername;
-    @Bind(R.id.txt_password) EditText txtPassword;
-    @Bind(R.id.progress_circle_login) ProgressBar progressCircle;
-
     private final String LOG_TAG = this.getClass().getSimpleName();
     private LoginFragmentListener mListener;
+    private FragmentLoginBinding mBinding;
+    private LoginFragmentVM mLoginFragmentVM;
     private AccountManager mAccountManager; // todo: nog nodig straks als alles in helper zit?
     public static final String STATE_TXT_USERNAME = "be.nmct.unitycard.state_login_txt_username";
     public static final String STATE_TXT_PASSWORD = "be.nmct.unitycard.state_login_txt_password";
@@ -48,16 +42,16 @@ public class LoginFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
-        ButterKnife.bind(this, view);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
+        mLoginFragmentVM = new LoginFragmentVM(mBinding, getActivity());
 
         mAccountManager = AccountManager.get(getActivity());
 
-        btnLogin.setOnClickListener(new View.OnClickListener() {
+        mBinding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username = txtUsername.getText().toString(); // input ophalen
-                String password = txtPassword.getText().toString();
+                String username = mBinding.txtUsername.getText().toString(); // input ophalen
+                String password = mBinding.txtPassword.getText().toString();
 
                 if (username.length() == 0) { // een basic client side validatie
                     mListener.handleError("Username is empty"); // todo zelfde controles als op server gebruiken
@@ -71,14 +65,14 @@ public class LoginFragment extends Fragment {
                     inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
                             InputMethodManager.HIDE_NOT_ALWAYS);
                     // show progress scroller
-                    progressCircle.setVisibility(View.VISIBLE);
+                    mBinding.progressCircleLogin.setVisibility(View.VISIBLE);
 
                     signIn("stephen.beirlaen@student.howest.be", "-Password1");
                 }
             }
         });
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
+        mBinding.btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.btnRegisterClicked();
@@ -89,11 +83,18 @@ public class LoginFragment extends Fragment {
             String username = savedInstanceState.getString(STATE_TXT_USERNAME);
             String password = savedInstanceState.getString(STATE_TXT_PASSWORD);
 
-            this.txtUsername.setText(username);
-            this.txtPassword.setText(password);
+            this.mBinding.txtUsername.setText(username);
+            this.mBinding.txtPassword.setText(password);
         }
 
-        return view;
+        return mBinding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // todo: perform load actions here
     }
 
     private void signIn(final String userName, String password) {
@@ -144,12 +145,12 @@ public class LoginFragment extends Fragment {
             else {
                 // No permission = null
                 mListener.handlePermissionRequest(REQUEST_PERMISSION_GET_ACCOUNTS);
-                progressCircle.setVisibility(View.INVISIBLE);
+                mBinding.progressCircleLogin.setVisibility(View.INVISIBLE);
             }
         }
         else {
             mListener.handleError("No internet connection");
-            progressCircle.setVisibility(View.INVISIBLE);
+            mBinding.progressCircleLogin.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -180,8 +181,8 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        String username = txtUsername.getText().toString();
-        String password = txtPassword.getText().toString();
+        String username = mBinding.txtUsername.getText().toString();
+        String password = mBinding.txtPassword.getText().toString();
 
         if (!username.equals(""))
             outState.putString(STATE_TXT_USERNAME, username);

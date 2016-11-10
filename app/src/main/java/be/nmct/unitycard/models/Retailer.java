@@ -25,7 +25,8 @@ public class Retailer {
     @SerializedName("LogoUrl")
     private String logoUrl;
 
-    public Retailer(int retailerCategoryId, String name, String tagline, boolean chain, String logoUrl) {
+    public Retailer(int id, int retailerCategoryId, String name, String tagline, boolean chain, String logoUrl) {
+        this.id = id;
         this.retailerCategoryId = retailerCategoryId;
         this.name = name;
         this.tagline = tagline;

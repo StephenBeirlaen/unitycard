@@ -29,8 +29,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
-        // todo
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -57,8 +56,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) throws NetworkErrorException {
-        // todo voor als de refresh token expired is
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     // Deze methode zal pas uitgevoerd worden als er geen token meer in de cache zit (invalidated)
@@ -140,13 +138,11 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
-        // todo
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
-        // todo
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

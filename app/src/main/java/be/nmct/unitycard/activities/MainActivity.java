@@ -2,19 +2,17 @@ package be.nmct.unitycard.activities;
 
 import android.accounts.Account;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,11 +23,11 @@ import java.util.List;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.auth.AuthHelper;
+import be.nmct.unitycard.databinding.ActivityMainBinding;
 import be.nmct.unitycard.fragments.AdvertisingFragment;
 import be.nmct.unitycard.fragments.MyLoyaltyCardFragment;
 import be.nmct.unitycard.fragments.RetailerListFragment;
-import butterknife.Bind;
-import butterknife.ButterKnife;
+import be.nmct.unitycard.models.viewmodels.MainActivityVM;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -38,43 +36,38 @@ public class MainActivity extends AppCompatActivity
         RetailerListFragment.RetailerListFragmentListener,
         AdvertisingFragment.AdvertisingFragmentListener {
 
-    @Bind(R.id.drawer_layout) DrawerLayout drawerLayout;
-    @Bind(R.id.toolbar) Toolbar toolbar;
-    @Bind(R.id.nav_view) NavigationView navigationView;
-    @Bind(R.id.fab_add_retailer) FloatingActionButton fabAddRetailer;
-    @Bind(R.id.swipeRefreshLayout) SwipeRefreshLayout swipeRefreshLayout;
-
     private final String LOG_TAG = this.getClass().getSimpleName();
+    private ActivityMainBinding mBinding;
+    private MainActivityVM mMainActivityVM;
     public static final int REQUEST_LOGIN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mBinding.toolbar);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
-                drawerLayout,
-                toolbar,
+                mBinding.drawerLayout,
+                mBinding.toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
-        drawerLayout.addDrawerListener(toggle);
+        mBinding.drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.setCheckedItem(R.id.nav_my_loyalty_card);
+        mBinding.navView.setNavigationItemSelectedListener(this);
+        mBinding.navView.setCheckedItem(R.id.nav_my_loyalty_card);
 
-        fabAddRetailer.setOnClickListener(new View.OnClickListener() {
+        mBinding.fabAddRetailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showAddRetailerActivity();
             }
         });
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mBinding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 // De huidige fragment opzoeken
@@ -112,7 +105,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void displayUsernameInSidebar(Account user) {
-        TextView txtSidebarUsername = (TextView)navigationView.getHeaderView(0).findViewById(R.id.txt_sidebar_username);
+        TextView txtSidebarUsername = (TextView) mBinding.navView.getHeaderView(0).findViewById(R.id.txt_sidebar_username);
 
         txtSidebarUsername.setText(AuthHelper.getUsername(user));
     }
@@ -187,8 +180,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mBinding.drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -221,18 +214,18 @@ public class MainActivity extends AppCompatActivity
             logOut();
         }
 
-        drawerLayout.closeDrawer(GravityCompat.START);
+        mBinding.drawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
     @Override
     public void showFabAddRetailer() {
-        fabAddRetailer.show();
+        mBinding.fabAddRetailer.show();
     }
 
     @Override
     public void hideFabAddRetailer() {
-        fabAddRetailer.hide();
+        mBinding.fabAddRetailer.hide();
     }
 
     public static final String TASK_LOAD_MY_LOYALTY_CARD = "TASK_LOAD_MY_LOYALTY_CARD";
@@ -247,7 +240,7 @@ public class MainActivity extends AppCompatActivity
         pendingTasks.add(task);
 
         // Show refreshing indicator
-        swipeRefreshLayout.setRefreshing(true);
+        mBinding.swipeRefreshLayout.setRefreshing(true);
     }
 
     @Override
@@ -257,7 +250,7 @@ public class MainActivity extends AppCompatActivity
 
         // Determine if the refreshing indicator must be hidden
         if (pendingTasks.isEmpty()) {
-            swipeRefreshLayout.setRefreshing(false);
+            mBinding.swipeRefreshLayout.setRefreshing(false);
         }
     }
 
@@ -269,7 +262,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void handleError(String error) {
-        Snackbar.make(drawerLayout, error, Snackbar.LENGTH_LONG).show();
-        swipeRefreshLayout.setRefreshing(false); // Stop refresh animation
+        Snackbar.make(mBinding.drawerLayout, error, Snackbar.LENGTH_LONG).show();
+        mBinding.swipeRefreshLayout.setRefreshing(false); // Stop refresh animation
     }
 }

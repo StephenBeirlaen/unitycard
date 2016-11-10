@@ -1,30 +1,25 @@
 package be.nmct.unitycard.fragments;
 
 import android.content.Context;
-import android.database.Cursor;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import be.nmct.unitycard.R;
-import be.nmct.unitycard.adapters.AddRetailerRecyclerViewAdapter;
-import butterknife.Bind;
-import butterknife.ButterKnife;
-
-import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILERS_URI;
+import be.nmct.unitycard.databinding.FragmentAddRetailerBinding;
+import be.nmct.unitycard.models.viewmodels.AddRetailerFragmentVM;
 
 public class AddRetailerFragment extends Fragment {
 
-    @Bind(R.id.recyclerViewAddRetailerFragment) RecyclerView recyclerViewAddRetailerList;
-
     private final String LOG_TAG = this.getClass().getSimpleName();
     private AddRetailerFragmentListener mListener;
-    private AddRetailerRecyclerViewAdapter addRetailerRecyclerViewAdapter;
+    private FragmentAddRetailerBinding mBinding;
+    private AddRetailerFragmentVM mAddRetailerFragmentVM;
 
     public AddRetailerFragment() {
         // Required empty public constructor
@@ -36,31 +31,22 @@ public class AddRetailerFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_retailer, container, false);
-        ButterKnife.bind(this, view);
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_retailer, container, false);
 
-        recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerViewAddRetailerList.setHasFixedSize(true);
-        recyclerViewAddRetailerList.setItemAnimator(new DefaultItemAnimator());
+        mBinding.recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.recyclerViewAddRetailerList.setHasFixedSize(true);
+        mBinding.recyclerViewAddRetailerList.setItemAnimator(new DefaultItemAnimator());
 
-        loadRetailers();
+        mAddRetailerFragmentVM = new AddRetailerFragmentVM(mBinding, getActivity());
 
-        return view;
+        return mBinding.getRoot();
     }
 
-    private void loadRetailers() {
-        String[] columns = new String[] {
-                "Id",
-                "RetailerCategoryId",
-                "RetailerName",
-                "Tagline",
-                "Chain",
-                "LogoUrl"
-        };// todo: kan dit niet van ergens anders komen?
-        Cursor data = getActivity().getContentResolver().query(RETAILERS_URI, columns, null, null, null);
+    @Override
+    public void onStart() {
+        super.onStart();
 
-        addRetailerRecyclerViewAdapter = new AddRetailerRecyclerViewAdapter(getActivity(), data/*, mListener*/);
-        recyclerViewAddRetailerList.setAdapter(addRetailerRecyclerViewAdapter);
+        mAddRetailerFragmentVM.loadRetailers();
     }
 
     public interface AddRetailerFragmentListener {

@@ -2,6 +2,7 @@ package be.nmct.unitycard.fragments;
 
 
 import android.content.Context;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -9,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import be.nmct.unitycard.R;
-import butterknife.ButterKnife;
+import be.nmct.unitycard.databinding.FragmentRetailerOffersBinding;
+import be.nmct.unitycard.models.viewmodels.RetailerOffersFragmentVM;
 
 public class RetailerOffersFragment extends Fragment {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     private RetailerOffersFragmentListener mListener;
+    private FragmentRetailerOffersBinding mBinding;
+    private RetailerOffersFragmentVM mRetailerOffersFragmentVM;
 
     public RetailerOffersFragment() {
         // Required empty public constructor
@@ -26,9 +30,17 @@ public class RetailerOffersFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_retailer_offers, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+        mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_retailer_offers, container, false);
+        mRetailerOffersFragmentVM = new RetailerOffersFragmentVM(mBinding, getActivity());
+
+        return mBinding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // todo: perform load actions here
     }
 
     public interface RetailerOffersFragmentListener {

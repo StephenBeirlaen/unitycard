@@ -1,12 +1,22 @@
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     tools:context="be.nmct.unitycard.fragments.RetailerMapFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="hello retailer map fragment" />
+    <data>
+        <variable
+            name="viewmodel"
+            type="be.nmct.unitycard.models.viewmodels.RetailerMapFragmentVM" />
+    </data>
 
-</android.support.v4.widget.NestedScrollView>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="hello retailer map fragment" />
+
+    </android.support.v4.widget.NestedScrollView>
+
+</layout>
