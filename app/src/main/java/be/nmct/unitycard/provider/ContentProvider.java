@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 import be.nmct.unitycard.contracts.ContentProviderContract;
 import be.nmct.unitycard.contracts.DatabaseContract;
-import be.nmct.unitycard.database.DatabaseHelper;
+import be.nmct.unitycard.helpers.DatabaseHelper;
 
 /**
  * Created by lorenzvercoutere on 6/11/16.

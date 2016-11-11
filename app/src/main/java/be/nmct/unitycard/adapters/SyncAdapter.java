@@ -7,14 +7,24 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SyncResult;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
+import be.nmct.unitycard.activities.MainActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.ContentProviderContract;
 import be.nmct.unitycard.contracts.DatabaseContract;
+import be.nmct.unitycard.contracts.LoyaltyCardContract;
+import be.nmct.unitycard.helpers.DatabaseHelper;
+import be.nmct.unitycard.models.LoyaltyCard;
 import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.repositories.ApiRepository;
 
@@ -91,6 +101,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     public void requestError(String error) {
                         // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
                         AuthHelper.invalidateAccessToken(accessToken, getContext());
+
+                        // todo: what if it fails?
                     }
                 });
 
@@ -98,7 +110,45 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             @Override
             public void requestNewLogin() {
+                // todo
+            }
+        });
 
+        // Get access token
+        AuthHelper.getAccessToken(account, getContext(), new AuthHelper.GetAccessTokenListener() {
+            @Override
+            public void tokenReceived(final String accessToken) {
+                Log.d(LOG_TAG, "Using access token: " + accessToken);
+
+                final ApiRepository apiRepo = new ApiRepository(getContext());
+                apiRepo.getLoyaltyCard(accessToken, AuthHelper.getUserId(getContext()), new ApiRepository.GetResultListener<LoyaltyCard>() {
+                    @Override
+                    public void resultReceived(LoyaltyCard loyaltyCard) {
+                        Log.d(LOG_TAG, "Received loyalty card: " + loyaltyCard);
+
+                        // todo: temporary
+                        ContentValues contentValues = new ContentValues();
+
+                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_ID, loyaltyCard.getId());
+                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID, loyaltyCard.getUserId());
+                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP, DatabaseHelper.convertDateToString(loyaltyCard.getCreatedTimestamp()));
+
+                        getContext().getContentResolver().insert(ContentProviderContract.LOYALTYCARDS_URI, contentValues);
+                    }
+
+                    @Override
+                    public void requestError(String error) {
+                        // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
+                        AuthHelper.invalidateAccessToken(accessToken, getContext());
+
+                        // todo: what if it fails?
+                    }
+                });
+            }
+
+            @Override
+            public void requestNewLogin() {
+                // todo
             }
         });
     }

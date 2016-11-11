@@ -18,7 +18,8 @@ public class LoyaltyCard {
     @SerializedName("CreatedTimestamp")
     private Date createdTimestamp;
 
-    public LoyaltyCard(String userId, Date createdTimestamp) {
+    public LoyaltyCard(int id, String userId, Date createdTimestamp) {
+        this.id = id;
         this.userId = userId;
         this.createdTimestamp = createdTimestamp;
     }

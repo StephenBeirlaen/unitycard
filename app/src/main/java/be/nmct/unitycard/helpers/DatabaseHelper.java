@@ -1,8 +1,12 @@
-package be.nmct.unitycard.database;
+package be.nmct.unitycard.helpers;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import be.nmct.unitycard.contracts.DatabaseContract;
 
@@ -11,8 +15,6 @@ import be.nmct.unitycard.contracts.DatabaseContract;
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
-
-    // todo: move this file?
 
     private static DatabaseHelper INSTANCE;
     private static Object object = new Object();
@@ -67,5 +69,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DatabaseContract.RetailerLocationsDB.CREATE_TABLE);
         db.execSQL(DatabaseContract.OffersDB.CREATE_TABLE);
         db.execSQL(DatabaseContract.RetailerCategoriesDB.CREATE_TABLE);
+    }
+
+    public static String convertDateToString(Date date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.format(date);
+    }
+
+    public static Date convertStringToDate(String dateString) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return dateFormat.parse(dateString);
     }
 }

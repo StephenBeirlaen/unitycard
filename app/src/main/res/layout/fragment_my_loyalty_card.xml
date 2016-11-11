@@ -25,8 +25,8 @@
                 android:id="@+id/textViewYourLoyaltyCard"/>
 
             <ImageView
-                android:layout_width="300dp"
-                android:layout_height="300dp"
+                android:layout_width="@dimen/qr_code_size"
+                android:layout_height="@dimen/qr_code_size"
                 android:layout_below="@id/textViewYourLoyaltyCard"
                 android:layout_marginTop="25dp"
                 android:layout_centerHorizontal="true"

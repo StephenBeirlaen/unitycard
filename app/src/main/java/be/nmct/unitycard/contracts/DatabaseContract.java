@@ -36,7 +36,7 @@ public class DatabaseContract {
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
-    public interface LoyaltyCardColumns extends BaseColumns{
+    public interface LoyaltyCardColumns extends BaseColumns {
         String TABLE_NAME = "LoyaltyCards";
         String COLUMN_ID = "Id";
         String COLUMN_USER_ID = "UserId";
