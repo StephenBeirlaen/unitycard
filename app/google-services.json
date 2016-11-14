@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "190077193197",
+    "project_id": "firebase-unitycard"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:190077193197:android:38522c8b56cda412",
+        "android_client_info": {
+          "package_name": "be.nmct.unitycard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "190077193197-7gtqq58noshdhrq7e8upn2mm1vb7b9no.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "be.nmct.unitycard",
+            "certificate_hash": "1DFCEAB82030BC7C8AAF8065F12A61C9ABD1B726"
+          }
+        },
+        {
+          "client_id": "190077193197-d64if6qkkqdca45q1o61ehfr634mqo41.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeXMb6weBEtES6dx3E6FLE6qGc1K63RTI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
