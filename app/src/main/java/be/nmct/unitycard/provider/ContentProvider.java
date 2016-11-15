@@ -75,6 +75,7 @@ public class ContentProvider extends android.content.ContentProvider {
         UNITYCARD_PROJECTION_MAP = new HashMap<>();
 
         //inladen Retailers
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns._ID, DatabaseContract.RetailerColumns._ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_ID, DatabaseContract.RetailerColumns.COLUMN_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID, DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME, DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME);
@@ -83,17 +84,20 @@ public class ContentProvider extends android.content.ContentProvider {
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, DatabaseContract.RetailerColumns.COLUMN_LOGOURL);
 
         //inladen LoyaltyCards
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyCardColumns._ID, DatabaseContract.LoyaltyCardColumns._ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyCardColumns.COLUMN_ID, DatabaseContract.LoyaltyCardColumns.COLUMN_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID, DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP, DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP);
 
         //inladen LoyaltyPoints
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyPointsColumns._ID, DatabaseContract.LoyaltyPointsColumns._ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyPointsColumns.COLUMN_ID, DatabaseContract.LoyaltyPointsColumns.COLUMN_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyPointsColumns.COLUMN_LOYALTYCARD_ID, DatabaseContract.LoyaltyPointsColumns.COLUMN_LOYALTYCARD_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyPointsColumns.COLUMN_RETAILER_ID, DatabaseContract.LoyaltyPointsColumns.COLUMN_RETAILER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyPointsColumns.COLUMN_POINTS, DatabaseContract.LoyaltyPointsColumns.COLUMN_POINTS);
 
         //inladen RetailerLocations
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns._ID, DatabaseContract.RetailerLocationsColumns._ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_ID, DatabaseContract.RetailerLocationsColumns.COLUMN_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID, DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_NAME, DatabaseContract.RetailerLocationsColumns.COLUMN_NAME);
@@ -106,6 +110,7 @@ public class ContentProvider extends android.content.ContentProvider {
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_COUNTRY, DatabaseContract.RetailerLocationsColumns.COLUMN_COUNTRY);
 
         //inladen Offers
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns._ID, DatabaseContract.OffersColumns._ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns.COLUMN_ID, DatabaseContract.OffersColumns.COLUMN_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns.COLUMN_RETAILER_ID, DatabaseContract.OffersColumns.COLUMN_RETAILER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns.COLUMN_OFFER_DEMAND, DatabaseContract.OffersColumns.COLUMN_OFFER_DEMAND);
@@ -113,6 +118,7 @@ public class ContentProvider extends android.content.ContentProvider {
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns.COLUMN_CREATED_TIMESTAMP, DatabaseContract.OffersColumns.COLUMN_CREATED_TIMESTAMP);
 
         //inladen RetailerCategories
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerCategoriesColumns._ID, DatabaseContract.RetailerCategoriesColumns._ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_ID, DatabaseContract.RetailerCategoriesColumns.COLUMN_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_NAME, DatabaseContract.RetailerCategoriesColumns.COLUMN_NAME);
 
@@ -146,6 +152,30 @@ public class ContentProvider extends android.content.ContentProvider {
                 break;
             case LOYALTYPOINTS_ID:
                 queryBuilder.setTables(DatabaseContract.LoyaltyPointsColumns.TABLE_NAME);
+                queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
+                break;
+            case RETAILERLOCATIONS:
+                queryBuilder.setTables(DatabaseContract.RetailerLocationsColumns.TABLE_NAME);
+                queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
+                break;
+            case RETAILERLOCATIONS_ID:
+                queryBuilder.setTables(DatabaseContract.RetailerLocationsColumns.TABLE_NAME);
+                queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
+                break;
+            case OFFERS:
+                queryBuilder.setTables(DatabaseContract.OffersColumns.TABLE_NAME);
+                queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
+                break;
+            case OFFERS_ID:
+                queryBuilder.setTables(DatabaseContract.OffersColumns.TABLE_NAME);
+                queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
+                break;
+            case RETAILERCATEGORIES:
+                queryBuilder.setTables(DatabaseContract.RetailerCategoriesColumns.TABLE_NAME);
+                queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
+                break;
+            case RETAILERCATEGORIES_ID:
+                queryBuilder.setTables(DatabaseContract.RetailerCategoriesColumns.TABLE_NAME);
                 queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
                 break;
             default:
@@ -187,6 +217,18 @@ public class ContentProvider extends android.content.ContentProvider {
                 return ContentProviderContract.LOYALTYPOINTS_CONTENT_TYPE;
             case LOYALTYPOINTS_ID:
                 return ContentProviderContract.LOYALTYPOINTS_ITEM_CONTENT_TYPE;
+            case RETAILERLOCATIONS:
+                return ContentProviderContract.RETAILER_LOCATIONS_CONTENT_TYPE;
+            case RETAILERLOCATIONS_ID:
+                return ContentProviderContract.RETAILER_LOCATIONS_ITEM_CONTENT_TYPE;
+            case OFFERS:
+                return ContentProviderContract.OFFERS_CONTENT_TYPE;
+            case OFFERS_ID:
+                return ContentProviderContract.OFFERS_ITEM_CONTENT_TYPE;
+            case RETAILERCATEGORIES:
+                return ContentProviderContract.RETAILER_CATEGORIES_CONTENT_TYPE;
+            case RETAILERCATEGORIES_ID:
+                return ContentProviderContract.RETAILER_CATEGORIES_ITEM_CONTENT_TYPE;
             default:
                 throw new IllegalArgumentException("Uknown Uri: " + uri);
         }
