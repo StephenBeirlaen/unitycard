@@ -59,10 +59,8 @@ public class MyLoyaltyCardFragment extends Fragment {
     }
 
     public interface MyLoyaltyCardFragmentListener {
-        void swipeRefreshLayoutAddTask(String task);
-        void swipeRefreshLayoutRemoveTask(String task);
-        void requestNewLogin();
         void handleError(String error);
+        // todo: weg indien geen events?
     }
 
     @Override

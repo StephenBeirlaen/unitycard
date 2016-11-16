@@ -2,6 +2,8 @@ package be.nmct.unitycard.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 /**
  * Created by lorenzvercoutere on 30/10/16.
  */
@@ -37,8 +39,12 @@ public class RetailerLocation {
     @SerializedName("Country")
     private String country;
 
+    @SerializedName("UpdatedTimestamp")
+    private Date updatedTimestamp;
+
     public RetailerLocation(int retailerId, String name, double latitude, double longitude,
-                            String street, String number, int zipcode, String city, String country) {
+                            String street, String number, int zipcode, String city, String country,
+                            Date updatedTimestamp) {
         this.retailerId = retailerId;
         this.name = name;
         this.latitude = latitude;
@@ -48,6 +54,7 @@ public class RetailerLocation {
         this.zipcode = zipcode;
         this.city = city;
         this.country = country;
+        this.updatedTimestamp = updatedTimestamp;
     }
 
     public int getId() {
@@ -118,5 +125,12 @@ public class RetailerLocation {
     }
     public void setStreet(String street) {
         this.street = street;
+    }
+
+    public Date getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+    public void setUpdatedTimestamp(Date updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
     }
 }

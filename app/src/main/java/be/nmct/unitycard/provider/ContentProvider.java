@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -72,33 +74,36 @@ public class ContentProvider extends android.content.ContentProvider {
     @Override
     public boolean onCreate() {
         dataBaseHelper = DatabaseHelper.getInstance(getContext());
-        UNITYCARD_PROJECTION_MAP = new HashMap<>();
+        UNITYCARD_PROJECTION_MAP = new HashMap<>(); // todo: voor wat is dit??
 
         //inladen Retailers
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns._ID, DatabaseContract.RetailerColumns._ID);
-        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_ID, DatabaseContract.RetailerColumns.COLUMN_ID);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID, DatabaseContract.RetailerColumns.COLUMN_SERVER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID, DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME, DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_TAGLINE, DatabaseContract.RetailerColumns.COLUMN_TAGLINE);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, DatabaseContract.RetailerColumns.COLUMN_CHAIN);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, DatabaseContract.RetailerColumns.COLUMN_LOGOURL);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP);
 
         //inladen LoyaltyCards
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyCardColumns._ID, DatabaseContract.LoyaltyCardColumns._ID);
-        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyCardColumns.COLUMN_ID, DatabaseContract.LoyaltyCardColumns.COLUMN_ID);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID, DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID, DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP, DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP);
 
         //inladen LoyaltyPoints
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyPointsColumns._ID, DatabaseContract.LoyaltyPointsColumns._ID);
-        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyPointsColumns.COLUMN_ID, DatabaseContract.LoyaltyPointsColumns.COLUMN_ID);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyPointsColumns.COLUMN_SERVER_ID, DatabaseContract.LoyaltyPointsColumns.COLUMN_SERVER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyPointsColumns.COLUMN_LOYALTYCARD_ID, DatabaseContract.LoyaltyPointsColumns.COLUMN_LOYALTYCARD_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyPointsColumns.COLUMN_RETAILER_ID, DatabaseContract.LoyaltyPointsColumns.COLUMN_RETAILER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyPointsColumns.COLUMN_POINTS, DatabaseContract.LoyaltyPointsColumns.COLUMN_POINTS);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyPointsColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseContract.LoyaltyPointsColumns.COLUMN_UPDATED_TIMESTAMP);
 
         //inladen RetailerLocations
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns._ID, DatabaseContract.RetailerLocationsColumns._ID);
-        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_ID, DatabaseContract.RetailerLocationsColumns.COLUMN_ID);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_SERVER_ID, DatabaseContract.RetailerLocationsColumns.COLUMN_SERVER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID, DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_NAME, DatabaseContract.RetailerLocationsColumns.COLUMN_NAME);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_LATITUDE, DatabaseContract.RetailerLocationsColumns.COLUMN_LATITUDE);
@@ -108,19 +113,22 @@ public class ContentProvider extends android.content.ContentProvider {
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_ZIPCODE, DatabaseContract.RetailerLocationsColumns.COLUMN_ZIPCODE);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_CITY, DatabaseContract.RetailerLocationsColumns.COLUMN_CITY);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_COUNTRY, DatabaseContract.RetailerLocationsColumns.COLUMN_COUNTRY);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseContract.RetailerLocationsColumns.COLUMN_UPDATED_TIMESTAMP);
 
         //inladen Offers
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns._ID, DatabaseContract.OffersColumns._ID);
-        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns.COLUMN_ID, DatabaseContract.OffersColumns.COLUMN_ID);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns.COLUMN_SERVER_ID, DatabaseContract.OffersColumns.COLUMN_SERVER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns.COLUMN_RETAILER_ID, DatabaseContract.OffersColumns.COLUMN_RETAILER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns.COLUMN_OFFER_DEMAND, DatabaseContract.OffersColumns.COLUMN_OFFER_DEMAND);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns.COLUMN_OFFER_RECEIVE, DatabaseContract.OffersColumns.COLUMN_OFFER_RECEIVE);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns.COLUMN_CREATED_TIMESTAMP, DatabaseContract.OffersColumns.COLUMN_CREATED_TIMESTAMP);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.OffersColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseContract.OffersColumns.COLUMN_UPDATED_TIMESTAMP);
 
         //inladen RetailerCategories
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerCategoriesColumns._ID, DatabaseContract.RetailerCategoriesColumns._ID);
-        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_ID, DatabaseContract.RetailerCategoriesColumns.COLUMN_ID);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_SERVER_ID, DatabaseContract.RetailerCategoriesColumns.COLUMN_SERVER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_NAME, DatabaseContract.RetailerCategoriesColumns.COLUMN_NAME);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseContract.RetailerCategoriesColumns.COLUMN_UPDATED_TIMESTAMP);
 
         return true;
     }
@@ -179,7 +187,7 @@ public class ContentProvider extends android.content.ContentProvider {
                 queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
                 break;
             default:
-                throw new IllegalArgumentException("Uknown Uri: " + uri);
+                throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
 
         SQLiteDatabase db = dataBaseHelper.getReadableDatabase();
@@ -230,7 +238,7 @@ public class ContentProvider extends android.content.ContentProvider {
             case RETAILERCATEGORIES_ID:
                 return ContentProviderContract.RETAILER_CATEGORIES_ITEM_CONTENT_TYPE;
             default:
-                throw new IllegalArgumentException("Uknown Uri: " + uri);
+                throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
     }
 
@@ -241,14 +249,25 @@ public class ContentProvider extends android.content.ContentProvider {
         long newRowId;
         switch (uriMatcher.match(uri)){
             case RETAILERS:
-                newRowId = db.insert(
+                // todo: insert or update
+
+                if (insertOrUpdate(db, uri, DatabaseContract.RetailersDB.TABLE_NAME, contentValues, DatabaseContract.RetailerColumns.COLUMN_SERVER_ID)) {
+                    // Na insert content observers verwittigen dat data mogelijk gewijzigd is
+                    //Uri retailerItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILERS_ITEM_URI, contentValues.getAsInteger(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID));
+                    //getContext().getContentResolver().notifyChange(retailerItemUri, null);
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    //return retailerItemUri;
+                    return uri;
+                }
+
+                /*newRowId = db.insert(
                         DatabaseContract.RetailersDB.TABLE_NAME, null, contentValues);
                 if(newRowId > 0){
                     Uri retailerItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILERS_ITEM_URI, newRowId);
                     // Na insert content observers verwittigen dat data mogelijk gewijzigd is
                     getContext().getContentResolver().notifyChange(retailerItemUri, null);
                     return retailerItemUri;
-                }
+                }*/
                 break;
             case LOYALTYCARDS:
                 newRowId = db.insert(
@@ -299,6 +318,21 @@ public class ContentProvider extends android.content.ContentProvider {
                 throw new IllegalArgumentException("Uknown URI: " + uri);
         }
         throw new IllegalArgumentException();
+    }
+
+    // Adapted from http://stackoverflow.com/questions/23417476/use-insert-or-replace-in-contentprovider
+    private boolean insertOrUpdate(SQLiteDatabase db, Uri uri, String table, ContentValues values, String onColumn) throws SQLException {
+        try {
+            if (db.insertOrThrow(table, null, values) > 0)
+                return true;
+        } catch (SQLiteConstraintException e) {
+            int nrRows = update(uri, values, onColumn + "=?",
+                    new String[] {values.getAsString(onColumn)});
+            if (nrRows == 0)
+                throw e;
+        }
+
+        return false;
     }
 
     @Override
