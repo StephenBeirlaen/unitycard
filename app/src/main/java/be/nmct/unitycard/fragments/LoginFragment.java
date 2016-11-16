@@ -117,6 +117,7 @@ public class LoginFragment extends Fragment {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // TODO: Navigate to MyLoyaltyCard (from Facebook)
+
             }
 
             @Override
