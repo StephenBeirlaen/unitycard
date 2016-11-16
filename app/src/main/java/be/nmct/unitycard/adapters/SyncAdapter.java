@@ -70,6 +70,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(final Account account, Bundle extras, String authority, ContentProviderClient providerClient, SyncResult syncResult) {
+        // Om de debugger te attachen:
+        // android.os.Debug.waitForDebugger();
+
         // When the framework is ready to sync your application's data, this gets run
         Log.d(LOG_TAG, "Synchronisation started");
 
@@ -92,7 +95,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID, loyaltyCard.getId());
                         contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID, loyaltyCard.getUserId());
                         contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP, DatabaseHelper.convertDateToString(loyaltyCard.getCreatedTimestamp()));
-                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseHelper.convertDateToString(loyaltyCard.getUpdatedTimestamp()));
+                        //contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseHelper.convertDateToString(loyaltyCard.getUpdatedTimestamp()));
+                        // todo: temp!!! is gewoon om insertOrUpdate te testen
+                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseHelper.convertDateToString(new java.util.Date(2016,11,15)));
 
                         getContext().getContentResolver().insert(ContentProviderContract.LOYALTYCARDS_URI, contentValues);
 
@@ -123,7 +128,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_TAGLINE, retailer.getTagline());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseHelper.convertDateToString(retailer.getUpdatedTimestamp()));
+                            //contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseHelper.convertDateToString(retailer.getUpdatedTimestamp()));
+                            // todo: temp!!! is gewoon om insertOrUpdate te testen
+                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseHelper.convertDateToString(new java.util.Date(2016,11,15)));
 
                             getContext().getContentResolver().insert(ContentProviderContract.RETAILERS_URI, contentValues);
 

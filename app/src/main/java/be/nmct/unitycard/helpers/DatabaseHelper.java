@@ -79,12 +79,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public static String convertDateToString(Date date) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return dateFormat.format(date);
+        if (date != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return dateFormat.format(date);
+        }
+        return null;
     }
 
     public static Date convertStringToDate(String dateString) throws ParseException {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return dateFormat.parse(dateString);
+        if (dateString != null) {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return dateFormat.parse(dateString);
+        }
+        return null;
     }
 }

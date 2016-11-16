@@ -30,6 +30,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import be.nmct.unitycard.R;
+import be.nmct.unitycard.activities.MainActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.databinding.FragmentLoginBinding;

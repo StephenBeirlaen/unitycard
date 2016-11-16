@@ -249,29 +249,20 @@ public class ContentProvider extends android.content.ContentProvider {
         long newRowId;
         switch (uriMatcher.match(uri)){
             case RETAILERS:
-                // todo: insert or update
-
-                if (insertOrUpdate(db, uri, DatabaseContract.RetailersDB.TABLE_NAME, contentValues, DatabaseContract.RetailerColumns.COLUMN_SERVER_ID)) {
-                    // Na insert content observers verwittigen dat data mogelijk gewijzigd is
-                    //Uri retailerItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILERS_ITEM_URI, contentValues.getAsInteger(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID));
-                    //getContext().getContentResolver().notifyChange(retailerItemUri, null);
-                    getContext().getContentResolver().notifyChange(uri, null);
-                    //return retailerItemUri;
-                    return uri;
-                }
-
-                /*newRowId = db.insert(
-                        DatabaseContract.RetailersDB.TABLE_NAME, null, contentValues);
-                if(newRowId > 0){
+                newRowId = insertOrUpdate(db,
+                        DatabaseContract.RetailersDB.TABLE_NAME,
+                        DatabaseContract.RetailersDB.COLUMN_SERVER_ID, contentValues);
+                if (newRowId > 0) {
                     Uri retailerItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILERS_ITEM_URI, newRowId);
                     // Na insert content observers verwittigen dat data mogelijk gewijzigd is
                     getContext().getContentResolver().notifyChange(retailerItemUri, null);
                     return retailerItemUri;
-                }*/
+                }
                 break;
             case LOYALTYCARDS:
-                newRowId = db.insert(
-                        DatabaseContract.LoyaltyCardDB.TABLE_NAME, null, contentValues);
+                newRowId = insertOrUpdate(db,
+                        DatabaseContract.LoyaltyCardDB.TABLE_NAME,
+                        DatabaseContract.LoyaltyCardDB.COLUMN_SERVER_ID, contentValues);
                 if(newRowId > 0){
                     Uri loyaltyCardItemUri = ContentUris.withAppendedId(ContentProviderContract.LOYALTYCARDS_ITEM_URI, newRowId);
                     getContext().getContentResolver().notifyChange(loyaltyCardItemUri, null);
@@ -279,8 +270,9 @@ public class ContentProvider extends android.content.ContentProvider {
                 }
                 break;
             case LOYALTYPOINTS:
-                newRowId = db.insert(
-                        DatabaseContract.LoyaltyPointsDB.TABLE_NAME, null, contentValues);
+                newRowId = insertOrUpdate(db,
+                        DatabaseContract.LoyaltyPointsDB.TABLE_NAME,
+                        DatabaseContract.LoyaltyPointsDB.COLUMN_SERVER_ID, contentValues);
                 if(newRowId > 0){
                     Uri loyaltyPointItemUri = ContentUris.withAppendedId(ContentProviderContract.LOYALTYPOINTS_ITEM_URI, newRowId);
                     getContext().getContentResolver().notifyChange(loyaltyPointItemUri, null);
@@ -288,8 +280,9 @@ public class ContentProvider extends android.content.ContentProvider {
                 }
                 break;
             case RETAILERLOCATIONS:
-                newRowId = db.insert(
-                        DatabaseContract.RetailerLocationsDB.TABLE_NAME, null, contentValues);
+                newRowId = insertOrUpdate(db,
+                        DatabaseContract.RetailerLocationsDB.TABLE_NAME,
+                        DatabaseContract.RetailerLocationsDB.COLUMN_SERVER_ID, contentValues);
                 if(newRowId > 0){
                     Uri retailerLocationItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILER_LOCATIONS_ITEM_URI, newRowId);
                     getContext().getContentResolver().notifyChange(retailerLocationItemUri, null);
@@ -297,8 +290,9 @@ public class ContentProvider extends android.content.ContentProvider {
                 }
                 break;
             case OFFERS:
-                newRowId = db.insert(
-                        DatabaseContract.OffersDB.TABLE_NAME, null, contentValues);
+                newRowId = insertOrUpdate(db,
+                        DatabaseContract.OffersDB.TABLE_NAME,
+                        DatabaseContract.OffersDB.COLUMN_SERVER_ID, contentValues);
                 if(newRowId > 0){
                     Uri offerItemUri = ContentUris.withAppendedId(ContentProviderContract.OFFERS_ITEM_URI, newRowId);
                     getContext().getContentResolver().notifyChange(offerItemUri, null);
@@ -306,8 +300,9 @@ public class ContentProvider extends android.content.ContentProvider {
                 }
                 break;
             case RETAILERCATEGORIES:
-                newRowId = db.insert(
-                        DatabaseContract.RetailerCategoriesDB.TABLE_NAME, null, contentValues);
+                newRowId = insertOrUpdate(db,
+                        DatabaseContract.RetailerCategoriesDB.TABLE_NAME,
+                        DatabaseContract.RetailerCategoriesDB.COLUMN_SERVER_ID, contentValues);
                 if(newRowId > 0){
                     Uri retailerCategoryItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILER_CATEGORIES_ITEM_URI, newRowId);
                     getContext().getContentResolver().notifyChange(retailerCategoryItemUri, null);
@@ -320,19 +315,21 @@ public class ContentProvider extends android.content.ContentProvider {
         throw new IllegalArgumentException();
     }
 
-    // Adapted from http://stackoverflow.com/questions/23417476/use-insert-or-replace-in-contentprovider
-    private boolean insertOrUpdate(SQLiteDatabase db, Uri uri, String table, ContentValues values, String onColumn) throws SQLException {
-        try {
-            if (db.insertOrThrow(table, null, values) > 0)
-                return true;
-        } catch (SQLiteConstraintException e) {
-            int nrRows = update(uri, values, onColumn + "=?",
-                    new String[] {values.getAsString(onColumn)});
-            if (nrRows == 0)
-                throw e;
-        }
-
-        return false;
+    private long insertOrUpdate(SQLiteDatabase db, String table, String nullColumnHack, ContentValues contentValues) {
+        // Deze methode zal proberen inserten, maar wanneer er een conflict
+        // optreedt (de Id bestaat al) zal de record vervangen worden (replace)
+        // Het gaat hier wel om server id's! Niet de record id van de lokale db
+        /* int CONFLICT_REPLACE: (https://developer.android.com/reference/android/database/sqlite/SQLiteDatabase.html#CONFLICT_REPLACE)
+        * When a UNIQUE constraint violation occurs, the pre-existing rows that are causing
+        * the constraint violation are removed prior to inserting or updating the current row.
+        * Thus the insert or update always occurs. The command continues executing normally.
+        * No error is returned. If a NOT NULL constraint violation occurs, the NULL value is
+        * replaced by the default value for that column. If the column has no default value,
+        * then the ABORT algorithm is used. If a CHECK constraint violation occurs then the
+        * IGNORE algorithm is used. When this conflict resolution strategy deletes rows in
+        * order to satisfy a constraint, it does not invoke delete triggers on those rows.
+        * This behavior might change in a future release.*/
+        return db.insertWithOnConflict(table, nullColumnHack, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
     }
 
     @Override
