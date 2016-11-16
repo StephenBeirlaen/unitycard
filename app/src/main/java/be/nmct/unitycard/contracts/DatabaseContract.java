@@ -32,7 +32,7 @@ public class DatabaseContract {
                 + COLUMN_RETAILER_NAME + " text not null, "
                 + COLUMN_TAGLINE + " text not null, "
                 + COLUMN_CHAIN + " real, "
-                + COLUMN_LOGOURL + " text not null ,"
+                + COLUMN_LOGOURL + " text not null, "
                 + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
@@ -53,7 +53,7 @@ public class DatabaseContract {
                 + _ID + " integer primary key autoincrement, "
                 + COLUMN_SERVER_ID + " integer not null unique, "
                 + COLUMN_USER_ID + " text not null, "
-                + COLUMN_CREATED_TIMESTAMP + " text not null ,"
+                + COLUMN_CREATED_TIMESTAMP + " text not null, "
                 + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
@@ -76,7 +76,7 @@ public class DatabaseContract {
                 + COLUMN_SERVER_ID + " integer not null unique, "
                 + COLUMN_LOYALTYCARD_ID + " integer, "
                 + COLUMN_RETAILER_ID + " integer, "
-                + COLUMN_POINTS + " integer ,"
+                + COLUMN_POINTS + " integer, "
                 + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
@@ -111,7 +111,7 @@ public class DatabaseContract {
                 + COLUMN_NUMBER + " text not null, "
                 + COLUMN_ZIPCODE + " integer, "
                 + COLUMN_CITY + " text not null, "
-                + COLUMN_COUNTRY + " text not null ,"
+                + COLUMN_COUNTRY + " text not null, "
                 + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
@@ -136,7 +136,7 @@ public class DatabaseContract {
                 + COLUMN_RETAILER_ID + " integer, "
                 + COLUMN_OFFER_DEMAND + " text not null, "
                 + COLUMN_OFFER_RECEIVE + " text not null, "
-                + COLUMN_CREATED_TIMESTAMP + " text not null ,"
+                + COLUMN_CREATED_TIMESTAMP + " text not null, "
                 + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
@@ -155,7 +155,7 @@ public class DatabaseContract {
                 + TABLE_NAME + "("
                 + _ID + " integer primary key autoincrement, "
                 + COLUMN_SERVER_ID + " integer not null unique, "
-                + COLUMN_NAME + " text not null ,"
+                + COLUMN_NAME + " text not null, "
                 + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 

@@ -4,6 +4,7 @@ package be.nmct.unitycard.fragments;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,12 +42,20 @@ public class RegisterFragment extends Fragment {
                 String firstname = mBinding.txtFirstName.getText().toString();
                 String lastname = mBinding.txtLastName.getText().toString();
                 String username = mBinding.txtUsername.getText().toString();
-                String password;
-                if(mBinding.txtPassword.getText().equals(mBinding.txtRepeatpassword.getText())){
+                String password1 = mBinding.txtPassword.getText().toString();
+                String password2 = mBinding.txtRepeatpassword.getText().toString();
+                String password = "";
+                if(password1.equals(password2)){
                     password = mBinding.txtPassword.getText().toString();
                 }
 
-
+                //gebruiker maken van gegevens
+                if(!firstname.equals("") && !lastname.equals("") && !username.equals("") && !password.equals("")){
+                    //verder gaan naar startscherm
+                }
+                else{
+                    //fout medelen in snackbar
+                }
             }
         });
 
