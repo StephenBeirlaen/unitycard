@@ -4,14 +4,30 @@ package be.nmct.unitycard.fragments;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.BinderThread;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.auth.AuthHelper;
@@ -29,8 +45,12 @@ public class LoginFragment extends Fragment {
     private FragmentLoginBinding mBinding;
     private LoginFragmentVM mLoginFragmentVM;
     private AccountManager mAccountManager; // todo: nog nodig straks als alles in helper zit?
+    private CallbackManager callbackManager;
+    private static final int RC_SIGN_IN = 9001;
+    private GoogleApiClient mGoogleApiClient;
     public static final String STATE_TXT_USERNAME = "be.nmct.unitycard.state_login_txt_username";
     public static final String STATE_TXT_PASSWORD = "be.nmct.unitycard.state_login_txt_password";
+
 
     public LoginFragment() {
         // Required empty public constructor
@@ -87,6 +107,51 @@ public class LoginFragment extends Fragment {
             this.mBinding.txtPassword.setText(password);
         }
 
+        FacebookSdk.sdkInitialize(getContext());
+        callbackManager = CallbackManager.Factory.create();
+
+
+        LoginButton loginButton = (LoginButton) getView().findViewById(R.id.buttonLoginFacebook);
+        loginButton.setReadPermissions("email");
+        loginButton.setFragment(this);
+
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // TODO: Navigate to MyLoyaltyCard (from Facebook)
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        //mGoogleApiClient = new GoogleApiClient.Builder(getContext()).enableAutoManage(getActivity(), /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
+        SignInButton signInButton = (SignInButton) getView().findViewById(R.id.buttonLoginGoogle);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setColorScheme(SignInButton.COLOR_AUTO);
+        signInButton.setScopes(gso.getScopeArray());
+
+        signInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()){
+                    case R.id.buttonLoginGoogle:
+                        signInWithGoogle();
+                        break;
+                }
+            }
+        });
+
+
         return mBinding.getRoot();
     }
 
@@ -95,6 +160,32 @@ public class LoginFragment extends Fragment {
         super.onStart();
 
         // todo: perform load actions here
+    }
+
+    private void signInWithGoogle(){
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            handleSignInResult(result);
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        if (result.isSuccess()) {
+            // Signed in successfully
+
+
+        } else {
+            // Signed out
+
+        }
     }
 
     private void signIn(final String userName, String password) {
