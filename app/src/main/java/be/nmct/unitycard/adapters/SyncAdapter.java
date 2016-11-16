@@ -89,9 +89,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         // todo: temporary
                         ContentValues contentValues = new ContentValues();
 
-                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_ID, loyaltyCard.getId());
+                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID, loyaltyCard.getId());
                         contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID, loyaltyCard.getUserId());
                         contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP, DatabaseHelper.convertDateToString(loyaltyCard.getCreatedTimestamp()));
+                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseHelper.convertDateToString(loyaltyCard.getUpdatedTimestamp()));
 
                         getContext().getContentResolver().insert(ContentProviderContract.LOYALTYCARDS_URI, contentValues);
 
@@ -116,12 +117,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         for (Retailer retailer : retailers) {
                             ContentValues contentValues = new ContentValues();
 
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_ID, retailer.getId());
+                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID, retailer.getId());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID, retailer.getRetailerCategoryId());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME, retailer.getName());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_TAGLINE, retailer.getTagline());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
+                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseHelper.convertDateToString(retailer.getUpdatedTimestamp()));
 
                             getContext().getContentResolver().insert(ContentProviderContract.RETAILERS_URI, contentValues);
 

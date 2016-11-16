@@ -13,13 +13,13 @@ public class DatabaseContract {
 
     public interface RetailerColumns extends BaseColumns {
         String TABLE_NAME = "Retailers";
-        String COLUMN_ID = "Id";
         String COLUMN_SERVER_ID = "ServerId";
         String COLUMN_RETAILER_CATEGORY_ID = "RetailerCategoryId";
         String COLUMN_RETAILER_NAME = "RetailerName";
         String COLUMN_TAGLINE = "Tagline";
         String COLUMN_CHAIN = "Chain";
         String COLUMN_LOGOURL= "LogoUrl";
+        String COLUMN_UPDATED_TIMESTAMP = "UpdatedTimestamp";
     }
 
     public static abstract class RetailersDB implements RetailerColumns {
@@ -27,12 +27,13 @@ public class DatabaseContract {
         public static final String CREATE_TABLE = "create table "
                 + TABLE_NAME + "("
                 + _ID + " integer primary key autoincrement, "
-                + COLUMN_ID + " integer, "
+                + COLUMN_SERVER_ID + " integer, "
                 + COLUMN_RETAILER_CATEGORY_ID + " integer, "
                 + COLUMN_RETAILER_NAME + " text not null, "
                 + COLUMN_TAGLINE + " text not null, "
                 + COLUMN_CHAIN + " real, "
                 + COLUMN_LOGOURL + " text not null "
+                + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -40,18 +41,20 @@ public class DatabaseContract {
 
     public interface LoyaltyCardColumns extends BaseColumns {
         String TABLE_NAME = "LoyaltyCards";
-        String COLUMN_ID = "Id";
+        String COLUMN_SERVER_ID = "ServerId";
         String COLUMN_USER_ID = "UserId";
         String COLUMN_CREATED_TIMESTAMP = "CreatedTimestamp";
+        String COLUMN_UPDATED_TIMESTAMP = "UpdatedTimestamp";
     }
 
     public static abstract class LoyaltyCardDB implements LoyaltyCardColumns {
         public static final String CREATE_TABLE = "create table "
                 + TABLE_NAME + "("
                 + _ID + " integer primary key autoincrement, "
-                + COLUMN_ID + " integer, "
+                + COLUMN_SERVER_ID + " integer, "
                 + COLUMN_USER_ID + " text not null, "
                 + COLUMN_CREATED_TIMESTAMP + " text not null"
+                + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -59,20 +62,22 @@ public class DatabaseContract {
 
     public interface LoyaltyPointsColumns extends BaseColumns {
         String TABLE_NAME = "LoyaltyPoints";
-        String COLUMN_ID = "Id";
+        String COLUMN_SERVER_ID = "ServerId";
         String COLUMN_LOYALTYCARD_ID = "LoyaltyCardId";
         String COLUMN_RETAILER_ID = "RetailerId";
         String COLUMN_POINTS = "Points";
+        String COLUMN_UPDATED_TIMESTAMP = "UpdatedTimestamp";
     }
 
     public static abstract class LoyaltyPointsDB implements LoyaltyPointsColumns {
         public static final String CREATE_TABLE = "create table "
                 + TABLE_NAME + "("
                 + _ID + " integer primary key autoincrement, "
-                + COLUMN_ID + " integer, "
+                + COLUMN_SERVER_ID + " integer, "
                 + COLUMN_LOYALTYCARD_ID + " integer, "
                 + COLUMN_RETAILER_ID + " integer, "
                 + COLUMN_POINTS + " integer "
+                + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -80,7 +85,7 @@ public class DatabaseContract {
 
     public interface RetailerLocationsColumns extends BaseColumns {
         String TABLE_NAME = "RetailerLocations";
-        String COLUMN_ID = "Id";
+        String COLUMN_SERVER_ID = "ServerId";
         String COLUMN_RETAILER_ID = "RetailerId";
         String COLUMN_NAME = "Name";
         String COLUMN_LATITUDE = "Latitude";
@@ -90,13 +95,14 @@ public class DatabaseContract {
         String COLUMN_ZIPCODE = "ZipCode";
         String COLUMN_CITY = "City";
         String COLUMN_COUNTRY = "Country";
+        String COLUMN_UPDATED_TIMESTAMP = "UpdatedTimestamp";
     }
 
     public static abstract class RetailerLocationsDB implements RetailerLocationsColumns {
         public static final String CREATE_TABLE = "create table "
                 + TABLE_NAME + "("
                 + _ID + " integer primary key autoincrement, "
-                + COLUMN_ID + " integer, "
+                + COLUMN_SERVER_ID + " integer, "
                 + COLUMN_RETAILER_ID + " integer, "
                 + COLUMN_NAME + " text not null, "
                 + COLUMN_LATITUDE + " double, "
@@ -106,6 +112,7 @@ public class DatabaseContract {
                 + COLUMN_ZIPCODE + " integer, "
                 + COLUMN_CITY + " text not null, "
                 + COLUMN_COUNTRY + " text not null"
+                + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -113,22 +120,24 @@ public class DatabaseContract {
 
     public interface OffersColumns extends BaseColumns {
         String TABLE_NAME = "Offers";
-        String COLUMN_ID = "Id";
+        String COLUMN_SERVER_ID = "ServerId";
         String COLUMN_RETAILER_ID = "RetailerId";
         String COLUMN_OFFER_DEMAND = "OfferDemand";
         String COLUMN_OFFER_RECEIVE = "OfferReceive";
         String COLUMN_CREATED_TIMESTAMP = "CreatedTimestamp";
+        String COLUMN_UPDATED_TIMESTAMP = "UpdatedTimestamp";
     }
 
     public static abstract class OffersDB implements OffersColumns {
         public static final String CREATE_TABLE = "create table "
                 + TABLE_NAME + "("
                 + _ID + " integer primary key autoincrement, "
-                + COLUMN_ID + " integer, "
+                + COLUMN_SERVER_ID + " integer, "
                 + COLUMN_RETAILER_ID + " integer, "
                 + COLUMN_OFFER_DEMAND + " text not null, "
                 + COLUMN_OFFER_RECEIVE + " text not null, "
                 + COLUMN_CREATED_TIMESTAMP + " text not null"
+                + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
@@ -136,16 +145,18 @@ public class DatabaseContract {
 
     public interface RetailerCategoriesColumns extends BaseColumns {
         String TABLE_NAME = "RetailerCategories";
-        String COLUMN_ID = "Id";
+        String COLUMN_SERVER_ID = "ServerId";
         String COLUMN_NAME = "CategoryName";
+        String COLUMN_UPDATED_TIMESTAMP = "UpdatedTimestamp";
     }
 
     public static abstract class RetailerCategoriesDB implements RetailerCategoriesColumns {
         public static final String CREATE_TABLE = "create table "
                 + TABLE_NAME + "("
                 + _ID + " integer primary key autoincrement, "
-                + COLUMN_ID + " integer, "
+                + COLUMN_SERVER_ID + " integer, "
                 + COLUMN_NAME + " text not null"
+                + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;

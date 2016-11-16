@@ -65,9 +65,10 @@ public class MyLoyaltyCardFragmentVM extends BaseObservable {
 
     public void loadQRcode() {
         String[] columns = new String[] {
-                DatabaseContract.LoyaltyCardColumns.COLUMN_ID,
+                DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID,
                 DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID,
-                DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP
+                DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP,
+                DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP
         };
 
         Cursor data = mContext.getContentResolver().query(LOYALTYCARDS_URI, columns, null, null, null);
@@ -76,9 +77,10 @@ public class MyLoyaltyCardFragmentVM extends BaseObservable {
             LoyaltyCard loyaltyCard = null;
             try {
                 loyaltyCard = new LoyaltyCard(
-                        data.getInt(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_ID)),
+                        data.getInt(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID)),
                         data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID)),
-                        DatabaseHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP)))
+                        DatabaseHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP))),
+                        DatabaseHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP)))
                 );
             } catch (ParseException e) {
                 e.printStackTrace();

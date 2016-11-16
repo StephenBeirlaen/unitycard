@@ -22,15 +22,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-<<<<<<< HEAD
-=======
 import java.util.ArrayList;
 import java.util.List;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
->>>>>>> 31386e1fd5fa52105f11d269f465cd53898d5f33
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.ContentProviderContract;
