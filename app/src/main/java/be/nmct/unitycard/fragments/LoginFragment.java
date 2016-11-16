@@ -110,12 +110,10 @@ public class LoginFragment extends Fragment {
         FacebookSdk.sdkInitialize(getContext());
         callbackManager = CallbackManager.Factory.create();
 
+        this.mBinding.buttonLoginFacebook.setReadPermissions("email");
+        this.mBinding.buttonLoginFacebook.setFragment(this);
 
-        LoginButton loginButton = (LoginButton) getView().findViewById(R.id.buttonLoginFacebook);
-        loginButton.setReadPermissions("email");
-        loginButton.setFragment(this);
-
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+        this.mBinding.buttonLoginFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 // TODO: Navigate to MyLoyaltyCard (from Facebook)
@@ -135,12 +133,12 @@ public class LoginFragment extends Fragment {
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
         //mGoogleApiClient = new GoogleApiClient.Builder(getContext()).enableAutoManage(getActivity(), /* OnConnectionFailedListener */).addApi(Auth.GOOGLE_SIGN_IN_API, gso).build();
-        SignInButton signInButton = (SignInButton) getView().findViewById(R.id.buttonLoginGoogle);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-        signInButton.setColorScheme(SignInButton.COLOR_AUTO);
-        signInButton.setScopes(gso.getScopeArray());
 
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        this.mBinding.buttonLoginGoogle.setSize(SignInButton.SIZE_STANDARD);
+        this.mBinding.buttonLoginGoogle.setColorScheme(SignInButton.COLOR_AUTO);
+        this.mBinding.buttonLoginGoogle.setScopes(gso.getScopeArray());
+
+        this.mBinding.buttonLoginGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (view.getId()){

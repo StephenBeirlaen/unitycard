@@ -33,6 +33,23 @@ public class RegisterFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false);
         mRegisterFragmentVM = new RegisterFragmentVM(mBinding, getActivity());
 
+
+        this.mBinding.buttonRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //nieuwe gebruiker aanmaken met gegevens
+                String firstname = mBinding.txtFirstName.getText().toString();
+                String lastname = mBinding.txtLastName.getText().toString();
+                String username = mBinding.txtUsername.getText().toString();
+                String password;
+                if(mBinding.txtPassword.getText().equals(mBinding.txtRepeatpassword.getText())){
+                    password = mBinding.txtPassword.getText().toString();
+                }
+
+
+            }
+        });
+
         return mBinding.getRoot();
     }
 
