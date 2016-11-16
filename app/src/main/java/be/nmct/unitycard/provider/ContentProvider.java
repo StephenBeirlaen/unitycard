@@ -5,6 +5,8 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
@@ -199,14 +201,25 @@ public class ContentProvider extends android.content.ContentProvider {
         long newRowId;
         switch (uriMatcher.match(uri)){
             case RETAILERS:
-                newRowId = db.insert(
+                // todo: insert or update
+
+                if (insertOrUpdate(db, uri, DatabaseContract.RetailersDB.TABLE_NAME, contentValues, DatabaseContract.RetailerColumns.COLUMN_SERVER_ID)) {
+                    // Na insert content observers verwittigen dat data mogelijk gewijzigd is
+                    //Uri retailerItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILERS_ITEM_URI, contentValues.getAsInteger(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID));
+                    //getContext().getContentResolver().notifyChange(retailerItemUri, null);
+                    getContext().getContentResolver().notifyChange(uri, null);
+                    //return retailerItemUri;
+                    return uri;
+                }
+
+                /*newRowId = db.insert(
                         DatabaseContract.RetailersDB.TABLE_NAME, null, contentValues);
                 if(newRowId > 0){
                     Uri retailerItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILERS_ITEM_URI, newRowId);
                     // Na insert content observers verwittigen dat data mogelijk gewijzigd is
                     getContext().getContentResolver().notifyChange(retailerItemUri, null);
                     return retailerItemUri;
-                }
+                }*/
                 break;
             case LOYALTYCARDS:
                 newRowId = db.insert(
@@ -257,6 +270,21 @@ public class ContentProvider extends android.content.ContentProvider {
                 throw new IllegalArgumentException("Uknown URI: " + uri);
         }
         throw new IllegalArgumentException();
+    }
+
+    // Adapted from http://stackoverflow.com/questions/23417476/use-insert-or-replace-in-contentprovider
+    private boolean insertOrUpdate(SQLiteDatabase db, Uri uri, String table, ContentValues values, String onColumn) throws SQLException {
+        try {
+            if (db.insertOrThrow(table, null, values) > 0)
+                return true;
+        } catch (SQLiteConstraintException e) {
+            int nrRows = update(uri, values, onColumn + "=?",
+                    new String[] {values.getAsString(onColumn)});
+            if (nrRows == 0)
+                throw e;
+        }
+
+        return false;
     }
 
     @Override

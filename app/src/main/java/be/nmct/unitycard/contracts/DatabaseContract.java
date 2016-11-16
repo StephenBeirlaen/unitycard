@@ -14,6 +14,7 @@ public class DatabaseContract {
     public interface RetailerColumns extends BaseColumns {
         String TABLE_NAME = "Retailers";
         String COLUMN_ID = "Id";
+        String COLUMN_SERVER_ID = "ServerId";
         String COLUMN_RETAILER_CATEGORY_ID = "RetailerCategoryId";
         String COLUMN_RETAILER_NAME = "RetailerName";
         String COLUMN_TAGLINE = "Tagline";

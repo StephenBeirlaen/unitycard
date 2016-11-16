@@ -138,6 +138,7 @@ public class LoginFragment extends Fragment {
                         @Override
                         public void accountAddError(String error) {
                             mListener.handleError(error);
+                            mBinding.progressCircleLogin.setVisibility(View.INVISIBLE);
                         }
                     });
                 }

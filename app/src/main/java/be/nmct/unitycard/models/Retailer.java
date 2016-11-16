@@ -2,6 +2,8 @@ package be.nmct.unitycard.models;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
+
 /**
  * Created by lorenzvercoutere on 30/10/16.
  */
@@ -25,13 +27,17 @@ public class Retailer {
     @SerializedName("LogoUrl")
     private String logoUrl;
 
-    public Retailer(int id, int retailerCategoryId, String name, String tagline, boolean chain, String logoUrl) {
+    @SerializedName("UpdatedTimestamp")
+    private Date updatedTimestamp;
+
+    public Retailer(int id, int retailerCategoryId, String name, String tagline, boolean chain, String logoUrl, Date updatedTimestamp) {
         this.id = id;
         this.retailerCategoryId = retailerCategoryId;
         this.name = name;
         this.tagline = tagline;
         this.chain = chain;
         this.logoUrl = logoUrl;
+        this.updatedTimestamp = updatedTimestamp;
     }
 
     public int getId() {
@@ -74,5 +80,12 @@ public class Retailer {
     }
     public void setChain(boolean chain) {
         this.chain = chain;
+    }
+
+    public Date getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+    public void setUpdatedTimestamp(Date updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
     }
 }

@@ -24,11 +24,15 @@ public class Offer {
     @SerializedName("CreatedTimestamp")
     private Date createdTimestamp;
 
-    public Offer(int retailerId, String offerDemand, String offerReceive, Date createdTimestamp) {
+    @SerializedName("UpdatedTimestamp")
+    private Date updatedTimestamp;
+
+    public Offer(int retailerId, String offerDemand, String offerReceive, Date createdTimestamp, Date updatedTimestamp) {
         this.retailerId = retailerId;
         this.offerDemand = offerDemand;
         this.offerReceive = offerReceive;
         this.createdTimestamp = createdTimestamp;
+        this.updatedTimestamp = updatedTimestamp;
     }
 
     public int getId() {
@@ -64,5 +68,12 @@ public class Offer {
     }
     public void setCreatedTimestamp(Date createdTimestamp) {
         this.createdTimestamp = createdTimestamp;
+    }
+
+    public Date getUpdatedTimestamp() {
+        return updatedTimestamp;
+    }
+    public void setUpdatedTimestamp(Date updatedTimestamp) {
+        this.updatedTimestamp = updatedTimestamp;
     }
 }

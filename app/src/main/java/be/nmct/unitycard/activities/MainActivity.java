@@ -1,7 +1,11 @@
 package be.nmct.unitycard.activities;
 
 import android.accounts.Account;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -18,11 +22,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.auth.AuthHelper;
+import be.nmct.unitycard.contracts.ContentProviderContract;
 import be.nmct.unitycard.databinding.ActivityMainBinding;
 import be.nmct.unitycard.fragments.AdvertisingFragment;
 import be.nmct.unitycard.fragments.MyLoyaltyCardFragment;
@@ -70,11 +72,7 @@ public class MainActivity extends AppCompatActivity
         mBinding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                // De huidige fragment opzoeken
-                // todo
-
-                // Vragen aan die fragment om zijn content te vernieuwen
-                // todo
+                refreshCachedData();
             }
         });
 
@@ -102,6 +100,62 @@ public class MainActivity extends AppCompatActivity
             // Geen permission, skip het checken voor accounts en ga naar login scherm. Later bij het inloggen om permissie vragen
             showAccountActivity();
         }
+    }
+
+    // Listener for synchronization changes
+    public static final String ACTION_FINISHED_SYNC = "be.nmct.unitycard.ACTION_FINISHED_SYNC";
+    public static final String ACTION_FINISHED_SYNC_RESULT = "be.nmct.unitycard.ACTION_FINISHED_SYNC_RESULT";
+    private static final int RESULT_SYNC_SUCCESS = 1;
+    public static final int RESULT_SYNC_FAILED = -1;
+    private static IntentFilter syncIntentFilter = new IntentFilter(ACTION_FINISHED_SYNC);
+    private BroadcastReceiver syncBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Hide the refreshing indicator
+            mBinding.swipeRefreshLayout.setRefreshing(false);
+
+            // Check if there was an error
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                int result = extras.getInt(ACTION_FINISHED_SYNC_RESULT, RESULT_SYNC_SUCCESS);
+                if (result == RESULT_SYNC_SUCCESS) { // als er geen error was
+                    return; // niets doen
+                }
+
+                requestNewLogin(); // nieuwe login aanvragen
+            }
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Register broadcastreceiver for synchronization changes
+        registerReceiver(syncBroadcastReceiver, syncIntentFilter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Unregister broadcastreceiver for synchronization changes
+        unregisterReceiver(syncBroadcastReceiver);
+    }
+
+    private void refreshCachedData() { // Vernieuw de cached data
+        // Pass the settings flags by inserting them in a bundle
+        Bundle settingsBundle = new Bundle();
+        // Forces a manual sync. The sync adapter framework ignores the existing settings,
+        // such as the flag set by setSyncAutomatically().
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+        // Forces the sync to start immediately. If you don't set this, the system may wait
+        // several seconds before running the sync request, because it tries to optimize
+        // battery use by scheduling many requests in a short period of time.
+        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+
+        // Request Synchronization
+        ContentResolver.requestSync(AuthHelper.getUser(MainActivity.this), ContentProviderContract.AUTHORITY, settingsBundle);
     }
 
     private void displayUsernameInSidebar(Account user) {
@@ -178,6 +232,35 @@ public class MainActivity extends AppCompatActivity
                 .commit();
     }
 
+    // Lijst die bijhoudt welke taken er in progress zijn, voor parallele taken.
+    private int pendingTasks = 0;
+
+    public void swipeRefreshLayoutAddTask() {
+        // Add task
+        pendingTasks++;
+
+        // Show refreshing indicator
+        mBinding.swipeRefreshLayout.setRefreshing(true);
+    }
+
+    public void swipeRefreshLayoutRemoveTask() {
+        if (pendingTasks > 0) {
+            // Remove the task from the list
+            pendingTasks--;
+
+            // Determine if the refreshing indicator must be hidden
+            if (pendingTasks != 0) return;
+        }
+
+        // Hide the refreshing indicator
+        mBinding.swipeRefreshLayout.setRefreshing(false);
+    }
+
+    public void requestNewLogin() { // todo: dit callen of rechtstreeks showaccountactivity() callen?
+        // Something went wrong, toon login scherm
+        showAccountActivity();
+    }
+
     @Override
     public void onBackPressed() {
         if (mBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
@@ -226,38 +309,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void hideFabAddRetailer() {
         mBinding.fabAddRetailer.hide();
-    }
-
-    public static final String TASK_LOAD_MY_LOYALTY_CARD = "TASK_LOAD_MY_LOYALTY_CARD";
-    public static final String TASK_LOAD_RETAILERS = "TASK_LOAD_RETAILERS";
-
-    // Lijst die bijhoudt welke taken er in progress zijn, voor parallele taken.
-    private List<String> pendingTasks = new ArrayList<>();
-
-    @Override
-    public void swipeRefreshLayoutAddTask(String task) {
-        // Add task
-        pendingTasks.add(task);
-
-        // Show refreshing indicator
-        mBinding.swipeRefreshLayout.setRefreshing(true);
-    }
-
-    @Override
-    public void swipeRefreshLayoutRemoveTask(String task) {
-        // Remove the task from the list
-        pendingTasks.remove(task);
-
-        // Determine if the refreshing indicator must be hidden
-        if (pendingTasks.isEmpty()) {
-            mBinding.swipeRefreshLayout.setRefreshing(false);
-        }
-    }
-
-    @Override
-    public void requestNewLogin() {
-        // Something went wrong, toon login scherm
-        showAccountActivity();
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.content.ContentProviderClient;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -70,13 +71,42 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(final Account account, Bundle extras, String authority, ContentProviderClient providerClient, SyncResult syncResult) {
         // When the framework is ready to sync your application's data, this gets run
+        Log.d(LOG_TAG, "Synchronisation started");
 
+        // Get access token
         AuthHelper.getAccessToken(account, getContext(), new AuthHelper.GetAccessTokenListener() {
             @Override
             public void tokenReceived(final String accessToken) {
                 Log.d(LOG_TAG, "Using access token: " + accessToken);
 
                 final ApiRepository apiRepo = new ApiRepository(getContext());
+
+                apiRepo.getLoyaltyCard(accessToken, AuthHelper.getUserId(getContext()), new ApiRepository.GetResultListener<LoyaltyCard>() {
+                    @Override
+                    public void resultReceived(LoyaltyCard loyaltyCard) {
+                        Log.d(LOG_TAG, "Received loyalty card: " + loyaltyCard);
+
+                        // todo: temporary
+                        ContentValues contentValues = new ContentValues();
+
+                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_ID, loyaltyCard.getId());
+                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID, loyaltyCard.getUserId());
+                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP, DatabaseHelper.convertDateToString(loyaltyCard.getCreatedTimestamp()));
+
+                        getContext().getContentResolver().insert(ContentProviderContract.LOYALTYCARDS_URI, contentValues);
+
+                        handleSyncSuccess();
+                    }
+
+                    @Override
+                    public void requestError(String error) {
+                        // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
+                        AuthHelper.invalidateAccessToken(accessToken, getContext());
+
+                        handleSyncError();
+                    }
+                });
+
                 apiRepo.getAllRetailers(accessToken, new ApiRepository.GetResultListener<List<Retailer>>() {
                     @Override
                     public void resultReceived(List<Retailer> retailers) {
@@ -94,6 +124,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
 
                             getContext().getContentResolver().insert(ContentProviderContract.RETAILERS_URI, contentValues);
+
+                            handleSyncSuccess();
                         }
                     }
 
@@ -102,7 +134,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
                         AuthHelper.invalidateAccessToken(accessToken, getContext());
 
-                        // todo: what if it fails?
+                        handleSyncError();
                     }
                 });
 
@@ -110,46 +142,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
             @Override
             public void requestNewLogin() {
-                // todo
+                handleSyncError();
             }
         });
+    }
 
-        // Get access token
-        AuthHelper.getAccessToken(account, getContext(), new AuthHelper.GetAccessTokenListener() {
-            @Override
-            public void tokenReceived(final String accessToken) {
-                Log.d(LOG_TAG, "Using access token: " + accessToken);
+    private void handleSyncSuccess() {
+        getContext().sendBroadcast(new Intent(MainActivity.ACTION_FINISHED_SYNC));
+    }
 
-                final ApiRepository apiRepo = new ApiRepository(getContext());
-                apiRepo.getLoyaltyCard(accessToken, AuthHelper.getUserId(getContext()), new ApiRepository.GetResultListener<LoyaltyCard>() {
-                    @Override
-                    public void resultReceived(LoyaltyCard loyaltyCard) {
-                        Log.d(LOG_TAG, "Received loyalty card: " + loyaltyCard);
-
-                        // todo: temporary
-                        ContentValues contentValues = new ContentValues();
-
-                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_ID, loyaltyCard.getId());
-                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID, loyaltyCard.getUserId());
-                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP, DatabaseHelper.convertDateToString(loyaltyCard.getCreatedTimestamp()));
-
-                        getContext().getContentResolver().insert(ContentProviderContract.LOYALTYCARDS_URI, contentValues);
-                    }
-
-                    @Override
-                    public void requestError(String error) {
-                        // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
-                        AuthHelper.invalidateAccessToken(accessToken, getContext());
-
-                        // todo: what if it fails?
-                    }
-                });
-            }
-
-            @Override
-            public void requestNewLogin() {
-                // todo
-            }
-        });
+    private void handleSyncError() {
+        getContext().sendBroadcast(new Intent(MainActivity.ACTION_FINISHED_SYNC)
+                .putExtra(MainActivity.ACTION_FINISHED_SYNC_RESULT, MainActivity.RESULT_SYNC_FAILED)
+        );
     }
 }
