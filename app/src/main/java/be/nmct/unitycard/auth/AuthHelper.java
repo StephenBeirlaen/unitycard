@@ -13,7 +13,11 @@ import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.text.ParseException;
+import java.util.Date;
+
 import be.nmct.unitycard.contracts.AccountContract;
+import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.GetTokenResponse;
 import be.nmct.unitycard.repositories.AuthRepository;
 
@@ -205,6 +209,27 @@ public class AuthHelper {
             for (int index = 0; index < accounts.length; index++) {
                 removeStoredAccount(accounts[index], context);
             }
+        }
+    }
+
+    public static void setLastSyncTimestamp(Context context, Account account, String timestampTypeKey, Date lastSyncTimestamp) {
+        AccountManager accountManager = AccountManager.get(context);
+
+        // Save last sync timestamp in string format
+        accountManager.setUserData(account, timestampTypeKey,
+                TimestampHelper.convertDateToString(lastSyncTimestamp));
+    }
+
+    public static Date getLastSyncTimestamp(Context context, Account account, String timestampTypeKey) throws ParseException {
+        AccountManager accountManager = AccountManager.get(context);
+
+        // Get last sync timestamp in string format, convert to Date object
+        String timeString = accountManager.getUserData(account, timestampTypeKey);
+        if (TextUtils.isEmpty(timeString)) { // er is nog nooit gesynct geweest, geen timestamp gevonden
+            return new Date(0); // = "the epoch", namely January 1, 1970, 00:00:00 GMT.
+        }
+        else {
+            return TimestampHelper.convertStringToDate(timeString);
         }
     }
 }

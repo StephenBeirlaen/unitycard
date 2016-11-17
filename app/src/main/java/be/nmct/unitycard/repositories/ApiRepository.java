@@ -4,11 +4,13 @@ import android.content.Context;
 import android.util.Log;
 
 import java.lang.annotation.Annotation;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import be.nmct.unitycard.UnityCardApplication;
+import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.AuthErrorResponse;
 import be.nmct.unitycard.models.LoyaltyCard;
 import be.nmct.unitycard.models.Offer;
@@ -38,12 +40,12 @@ public class ApiRepository {
 
     // ----- LoyaltyCards -----
 
-    public void getLoyaltyCard(String accessToken, String userId, final GetResultListener<LoyaltyCard> callback) {
-        subscribeApiCall(mRestClient.getApiService().getLoyaltyCard(RestClient.getAuthorizationHeader(accessToken), userId), callback);
+    public void getLoyaltyCard(String accessToken, String userId, Date lastUpdatedTimestamp, final GetResultListener<LoyaltyCard> callback) {
+        subscribeApiCall(mRestClient.getApiService().getLoyaltyCard(RestClient.getAuthorizationHeader(accessToken), userId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
-    public void getLoyaltyCardRetailers(String accessToken, String userId, final GetResultListener<List<Retailer>> callback) {
-        subscribeApiCall(mRestClient.getApiService().getLoyaltyCardRetailers(RestClient.getAuthorizationHeader(accessToken), userId), callback);
+    public void getLoyaltyCardRetailers(String accessToken, String userId, Date lastUpdatedTimestamp, final GetResultListener<List<Retailer>> callback) {
+        subscribeApiCall(mRestClient.getApiService().getLoyaltyCardRetailers(RestClient.getAuthorizationHeader(accessToken), userId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
     public void addLoyaltyCardRetailer(String accessToken, String userId, AddLoyaltyCardRetailerBody addLoyaltyCardRetailerBody, final GetResultListener<Void> callback) {
@@ -52,40 +54,40 @@ public class ApiRepository {
 
     // ----- LoyaltyPoints -----
 
-    public void getTotalLoyaltyPoints(String accessToken, String userId, final GetResultListener<Integer> callback) {
-        subscribeApiCall(mRestClient.getApiService().getTotalLoyaltyPoints(RestClient.getAuthorizationHeader(accessToken), userId), callback);
+    public void getTotalLoyaltyPoints(String accessToken, String userId, Date lastUpdatedTimestamp, final GetResultListener<Integer> callback) {
+        subscribeApiCall(mRestClient.getApiService().getTotalLoyaltyPoints(RestClient.getAuthorizationHeader(accessToken), userId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
     // ----- Offers -----
 
-    public void getAllRetailerOffers(String accessToken, String userId, final GetResultListener<List<Offer>> callback) {
-        subscribeApiCall(mRestClient.getApiService().getAllRetailerOffers(RestClient.getAuthorizationHeader(accessToken), userId), callback);
+    public void getAllRetailerOffers(String accessToken, String userId, Date lastUpdatedTimestamp, final GetResultListener<List<Offer>> callback) {
+        subscribeApiCall(mRestClient.getApiService().getAllRetailerOffers(RestClient.getAuthorizationHeader(accessToken), userId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
-    public void getRetailerOffers(String accessToken, String retailerId, String userId, final GetResultListener<List<Offer>> callback) {
-        subscribeApiCall(mRestClient.getApiService().getRetailerOffers(RestClient.getAuthorizationHeader(accessToken), retailerId, userId), callback);
+    public void getRetailerOffers(String accessToken, String retailerId, String userId, Date lastUpdatedTimestamp, final GetResultListener<List<Offer>> callback) {
+        subscribeApiCall(mRestClient.getApiService().getRetailerOffers(RestClient.getAuthorizationHeader(accessToken), retailerId, userId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
     // ----- Retailers -----
 
-    public void getAllRetailers(String accessToken, final GetResultListener<List<Retailer>> callback) {
-        subscribeApiCall(mRestClient.getApiService().getAllRetailers(RestClient.getAuthorizationHeader(accessToken)), callback);
+    public void getAllRetailers(String accessToken, Date lastUpdatedTimestamp, final GetResultListener<List<Retailer>> callback) {
+        subscribeApiCall(mRestClient.getApiService().getAllRetailers(RestClient.getAuthorizationHeader(accessToken), TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
     public void getRetailer(String accessToken, String retailerId, final GetResultListener<Retailer> callback) {
         subscribeApiCall(mRestClient.getApiService().getRetailer(RestClient.getAuthorizationHeader(accessToken), retailerId), callback);
     }
 
-    public void getRetailerLocations(String accessToken, String retailerId, final GetResultListener<List<RetailerLocation>> callback) {
-        subscribeApiCall(mRestClient.getApiService().getRetailerLocations(RestClient.getAuthorizationHeader(accessToken), retailerId), callback);
+    public void getRetailerLocations(String accessToken, String retailerId, Date lastUpdatedTimestamp, final GetResultListener<List<RetailerLocation>> callback) {
+        subscribeApiCall(mRestClient.getApiService().getRetailerLocations(RestClient.getAuthorizationHeader(accessToken), retailerId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
     public void getRetailerLocation(String accessToken, String retailerId, String locationId, final GetResultListener<RetailerLocation> callback) {
         subscribeApiCall(mRestClient.getApiService().getRetailerLocation(RestClient.getAuthorizationHeader(accessToken), retailerId, locationId), callback);
     }
 
-    public void getAllRetailerCategories(final GetResultListener<List<RetailerCategory>> callback) {
-        subscribeApiCall(mRestClient.getApiService().getAllRetailerCategories(), callback);
+    public void getAllRetailerCategories(Date lastUpdatedTimestamp, final GetResultListener<List<RetailerCategory>> callback) {
+        subscribeApiCall(mRestClient.getApiService().getAllRetailerCategories(TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
     // Generic code

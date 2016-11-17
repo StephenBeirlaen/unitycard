@@ -77,20 +77,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DatabaseContract.OffersDB.DELETE_TABLE);
         db.execSQL(DatabaseContract.RetailerCategoriesDB.DELETE_TABLE);**/
     }
-
-    public static String convertDateToString(Date date) {
-        if (date != null) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            return dateFormat.format(date);
-        }
-        return null;
-    }
-
-    public static Date convertStringToDate(String dateString) throws ParseException {
-        if (dateString != null) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            return dateFormat.parse(dateString);
-        }
-        return null;
-    }
 }

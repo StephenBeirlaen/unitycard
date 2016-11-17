@@ -18,6 +18,7 @@ import be.nmct.unitycard.contracts.DatabaseContract;
 import be.nmct.unitycard.contracts.LoyaltyCardContract;
 import be.nmct.unitycard.databinding.FragmentMyLoyaltyCardBinding;
 import be.nmct.unitycard.helpers.DatabaseHelper;
+import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.LoyaltyCard;
 
 import static android.graphics.Color.BLACK;
@@ -79,8 +80,8 @@ public class MyLoyaltyCardFragmentVM extends BaseObservable {
                 loyaltyCard = new LoyaltyCard(
                         data.getInt(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID)),
                         data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID)),
-                        DatabaseHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP))),
-                        DatabaseHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP)))
+                        TimestampHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP))),
+                        TimestampHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP)))
                 );
             } catch (ParseException e) {
                 e.printStackTrace();

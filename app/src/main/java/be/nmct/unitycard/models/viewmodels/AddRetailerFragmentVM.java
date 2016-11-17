@@ -13,6 +13,7 @@ import be.nmct.unitycard.BR;
 import be.nmct.unitycard.contracts.DatabaseContract;
 import be.nmct.unitycard.databinding.FragmentAddRetailerBinding;
 import be.nmct.unitycard.helpers.DatabaseHelper;
+import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.Retailer;
 
 import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILERS_URI;
@@ -60,7 +61,7 @@ public class AddRetailerFragmentVM extends BaseObservable {
                         data.getString(data.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_TAGLINE)),
                         data.getInt(data.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_CHAIN)) > 0,
                         data.getString(data.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOGOURL)),
-                        DatabaseHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP)))
+                        TimestampHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP)))
                 );
             } catch (ParseException e) {
                 e.printStackTrace();
