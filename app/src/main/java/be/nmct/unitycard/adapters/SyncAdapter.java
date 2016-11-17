@@ -8,25 +8,18 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import be.nmct.unitycard.activities.MainActivity;
+import be.nmct.unitycard.activities.customer.MainActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.contracts.ContentProviderContract;
 import be.nmct.unitycard.contracts.DatabaseContract;
-import be.nmct.unitycard.contracts.LoyaltyCardContract;
-import be.nmct.unitycard.helpers.DatabaseHelper;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.LoyaltyCard;
 import be.nmct.unitycard.models.Retailer;

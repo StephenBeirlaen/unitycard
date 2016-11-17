@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
-    tools:context=".activities.AccountActivity">
+    tools:context=".activities.login.AccountActivity">
 
     <data>
         <variable

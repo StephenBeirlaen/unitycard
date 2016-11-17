@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import be.nmct.unitycard.fragments.RetailerInfoFragment;
-import be.nmct.unitycard.fragments.RetailerOffersFragment;
+import be.nmct.unitycard.fragments.customer.RetailerInfoFragment;
+import be.nmct.unitycard.fragments.customer.RetailerOffersFragment;
 
 public class RetailerActivityPagerAdapter extends FragmentStatePagerAdapter {
     public RetailerActivityPagerAdapter(FragmentManager fm) {

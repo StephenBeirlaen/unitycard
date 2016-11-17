@@ -1,6 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="be.nmct.unitycard.fragments.RegisterFragment">
+    tools:context="be.nmct.unitycard.fragments.login.RegisterFragment">
 
     <data>
         <variable
