@@ -61,6 +61,11 @@
             android:label="Instellingen">
         </activity><!-- todo: multi language label -->
 
+        <activity
+            android:name=".activities.retailer.RetailerAdminActivity"
+            android:label="Retailer Test">
+        </activity><!-- todo: multi language label -->
+
         <provider
             android:authorities="be.nmct.unitycard.provider"
             android:name=".provider.ContentProvider"

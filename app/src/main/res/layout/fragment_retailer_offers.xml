@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewmodel"
-            type="be.nmct.unitycard.models.viewmodels.RetailerOffersFragmentVM" />
+            type="be.nmct.unitycard.models.viewmodels.fragment.RetailerOffersFragmentVM" />
     </data>
 
     <android.support.v4.widget.NestedScrollView
