@@ -13,6 +13,10 @@ public class AccountContract {
     public static final String TOKEN_REFRESH_LABEL = "OAuth 2.0 Refresh Token";
 
     public static final String KEY_USER_ID = "be.nmct.unitycard.account.userid";
+    public static final String KEY_USER_ROLE = "be.nmct.unitycard.account.userrole";
+
+    public static final String ROLE_CUSTOMER = "be.nmct.unitycard.account.role.customer";
+    public static final String ROLE_RETAILER = "be.nmct.unitycard.account.role.retailer";
 
     // Alle synchronisatie timestamps voor de tabellen:
     public static final String KEY_LAST_SYNC_TIMESTAMP_RETAILERS = "be.nmct.unitycard.account.last_sync_timestamp.retailers";

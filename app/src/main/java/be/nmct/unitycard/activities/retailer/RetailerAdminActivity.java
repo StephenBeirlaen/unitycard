@@ -48,8 +48,6 @@ public class RetailerAdminActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_retailer_admin);
-
-        setSupportActionBar(mBinding.toolbar);
     }
 
     @Override

@@ -30,4 +30,10 @@ public class GetTokenResponse {
     public String getUserId() {
         return user_id;
     }
+
+    private String user_role;
+
+    public String getUserRole() {
+        return user_role;
+    }
 }

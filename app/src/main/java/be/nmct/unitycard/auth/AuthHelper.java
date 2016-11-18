@@ -39,6 +39,7 @@ public class AuthHelper {
                     final String accessToken = getTokenResponse.getAccessToken();
                     final String refreshToken = getTokenResponse.getRefreshToken();
                     final String userId = getTokenResponse.getUserId();
+                    final String userRole = getTokenResponse.getUserRole();
 
                     // Create and add account
                     Account account = new Account(userName, AccountContract.ACCOUNT_TYPE);
@@ -50,6 +51,13 @@ public class AuthHelper {
 
                     // Save username
                     accountManager.setUserData(account, AccountContract.KEY_USER_ID, userId);
+                    // Save user account role
+                    if (userRole.equals("Retailer")) {
+                        accountManager.setUserData(account, AccountContract.KEY_USER_ROLE, AccountContract.ROLE_RETAILER);
+                    }
+                    else {
+                        accountManager.setUserData(account, AccountContract.KEY_USER_ROLE, AccountContract.ROLE_CUSTOMER);
+                    }
 
                     callback.accountAdded(account);
                 }
@@ -174,6 +182,14 @@ public class AuthHelper {
         Account account = getUser(context);
 
         return accountManager.getUserData(account, AccountContract.KEY_USER_ID);
+    }
+
+    public static String getUserRole(Context context) {
+        AccountManager accountManager = AccountManager.get(context);
+
+        Account account = getUser(context);
+
+        return accountManager.getUserData(account, AccountContract.KEY_USER_ROLE);
     }
 
     public static Boolean isUserLoggedIn(Context context) { // return nullable boolean

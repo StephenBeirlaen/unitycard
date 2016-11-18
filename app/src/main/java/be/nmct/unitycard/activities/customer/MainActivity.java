@@ -27,7 +27,9 @@ import com.facebook.appevents.AppEventsLogger;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.activities.login.AccountActivity;
+import be.nmct.unitycard.activities.retailer.RetailerAdminActivity;
 import be.nmct.unitycard.auth.AuthHelper;
+import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.contracts.ContentProviderContract;
 import be.nmct.unitycard.databinding.ActivityMainBinding;
 import be.nmct.unitycard.fragments.customer.AdvertisingFragment;
@@ -96,8 +98,20 @@ public class MainActivity extends AppCompatActivity
         if (loggedInResult != null) { // app has permission to access accounts? If null -> no permission
             if (loggedInResult) {
                 // Logged in
-                showFragmentMyLoyaltyCard();
-                displayUsernameInSidebar(AuthHelper.getUser(this));
+
+                // Check user account role
+                String role = AuthHelper.getUserRole(this);
+                if (role.equals(AccountContract.ROLE_CUSTOMER)) {
+                    showFragmentMyLoyaltyCard();
+                    displayUsernameInSidebar(AuthHelper.getUser(this));
+                }
+                else if (role.equals(AccountContract.ROLE_RETAILER)) {
+                    showRetailerAdminActivity();
+                    finish();
+                }
+                else {
+                    showAccountActivity();
+                }
             }
             else {
                 // Not logged in, toon login scherm
@@ -184,6 +198,11 @@ public class MainActivity extends AppCompatActivity
 
     private void showSettingsActivity() {
         Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+    }
+
+    private void showRetailerAdminActivity() {
+        Intent intent = new Intent(this, RetailerAdminActivity.class);
         startActivity(intent);
     }
 
