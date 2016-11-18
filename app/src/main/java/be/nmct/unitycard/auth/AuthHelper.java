@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 import be.nmct.unitycard.contracts.AccountContract;
+import be.nmct.unitycard.contracts.ContentProviderContract;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.GetTokenResponse;
 import be.nmct.unitycard.repositories.AuthRepository;
@@ -219,6 +220,9 @@ public class AuthHelper {
     }
 
     public static void logUserOff(Context context) {
+        // Wis alle cached data
+        ContentProviderContract.clearAllContent(context);
+
         Account[] accounts = getStoredAccountsByType(context);
 
         if (accounts != null) {

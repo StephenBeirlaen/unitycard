@@ -32,7 +32,7 @@ import be.nmct.unitycard.repositories.ApiRepository;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
-    ContentResolver mContentResolver;
+    private ContentResolver mContentResolver;
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -103,7 +103,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP, TimestampHelper.convertDateToString(loyaltyCard.getCreatedTimestamp()));
                             contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(loyaltyCard.getUpdatedTimestamp()));
 
-                            getContext().getContentResolver().insert(ContentProviderContract.LOYALTYCARDS_URI, contentValues);
+                            mContentResolver.insert(ContentProviderContract.LOYALTYCARDS_URI, contentValues);
                         }
 
                         handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_LOYALTY_CARD);
@@ -144,7 +144,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailer.getUpdatedTimestamp()));
 
-                            getContext().getContentResolver().insert(ContentProviderContract.RETAILERS_URI, contentValues);
+                            mContentResolver.insert(ContentProviderContract.RETAILERS_URI, contentValues);
 
                             handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
                         }

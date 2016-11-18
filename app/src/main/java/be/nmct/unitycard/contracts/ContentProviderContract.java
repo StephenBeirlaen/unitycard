@@ -1,5 +1,6 @@
 package be.nmct.unitycard.contracts;
 
+import android.content.Context;
 import android.net.Uri;
 
 /**
@@ -46,4 +47,24 @@ public class ContentProviderContract {
 
     public static final String RETAILER_CATEGORIES_CONTENT_TYPE = "vnd.android.cursor.dir/vnd.unitycard.retailercategory";
     public static final String RETAILER_CATEGORIES_ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.unitycard.retailercategory";
+
+    public static void clearAllContent(Context context) {
+        context.getContentResolver().delete(ContentProviderContract.RETAILERS_URI, null, null);
+        context.getContentResolver().delete(ContentProviderContract.RETAILERS_ITEM_URI, null, null);
+
+        context.getContentResolver().delete(ContentProviderContract.LOYALTYCARDS_URI, null, null);
+        context.getContentResolver().delete(ContentProviderContract.LOYALTYCARDS_ITEM_URI, null, null);
+
+        context.getContentResolver().delete(ContentProviderContract.LOYALTYPOINTS_URI, null, null);
+        context.getContentResolver().delete(ContentProviderContract.LOYALTYPOINTS_ITEM_URI, null, null);
+
+        context.getContentResolver().delete(ContentProviderContract.RETAILER_LOCATIONS_URI, null, null);
+        context.getContentResolver().delete(ContentProviderContract.RETAILER_LOCATIONS_ITEM_URI, null, null);
+
+        context.getContentResolver().delete(ContentProviderContract.OFFERS_URI, null, null);
+        context.getContentResolver().delete(ContentProviderContract.OFFERS_ITEM_URI, null, null);
+
+        context.getContentResolver().delete(ContentProviderContract.RETAILER_CATEGORIES_URI, null, null);
+        context.getContentResolver().delete(ContentProviderContract.RETAILER_CATEGORIES_ITEM_URI, null, null);
+    }
 }
