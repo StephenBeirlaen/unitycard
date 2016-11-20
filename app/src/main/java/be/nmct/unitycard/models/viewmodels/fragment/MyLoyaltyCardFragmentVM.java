@@ -1,9 +1,12 @@
 package be.nmct.unitycard.models.viewmodels.fragment;
 
 import android.content.Context;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.databinding.BaseObservable;
 import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Handler;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -11,13 +14,11 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.contracts.DatabaseContract;
 import be.nmct.unitycard.contracts.LoyaltyCardContract;
 import be.nmct.unitycard.databinding.FragmentMyLoyaltyCardBinding;
-import be.nmct.unitycard.helpers.DatabaseHelper;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.LoyaltyCard;
 
@@ -39,6 +40,70 @@ public class MyLoyaltyCardFragmentVM extends BaseObservable {
         this.mContext = context;
 
         mBinding.setViewmodel(this);
+
+        loadQRcode();
+    }
+
+    public class MyContentObserver extends ContentObserver {
+        public MyContentObserver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            onChange(selfChange, null);
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            if (uri.equals(LOYALTYCARDS_URI)) {
+                loadQRcode();
+            }
+        }
+    }
+
+    private void loadQRcode() {
+        String[] columns = new String[] {
+                DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID,
+                DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID,
+                DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP,
+                DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP
+        };
+
+        Cursor data = mContext.getContentResolver().query(LOYALTYCARDS_URI, columns, null, null, null);
+
+        if (data != null && data.moveToNext()) {
+            LoyaltyCard loyaltyCard = null;
+            try {
+                loyaltyCard = new LoyaltyCard(
+                        data.getInt(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID)),
+                        data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID)),
+                        TimestampHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP))),
+                        TimestampHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP)))
+                );
+
+                int size = (int)mContext.getResources().getDimension(R.dimen.qr_code_size);
+                // Genereer een QR code
+                Bitmap bm = encodeAsBitmap(
+                        LoyaltyCardContract.getQRcodeContent(loyaltyCard.getId()),
+                        BarcodeFormat.QR_CODE,
+                        size,
+                        size
+                );
+
+                if (bm != null) {
+                    setQRbitmap(bm);
+                }
+            } catch (ParseException | WriterException e) {
+                e.printStackTrace();
+                setQRbitmap(null);
+            }
+
+            data.close();
+        }
+        else {
+            setQRbitmap(null);
+        }
     }
 
     // http://stackoverflow.com/questions/28232116/android-using-zxing-generate-qr-code
@@ -64,45 +129,7 @@ public class MyLoyaltyCardFragmentVM extends BaseObservable {
         return bitmap;
     }
 
-    public void loadQRcode() {
-        String[] columns = new String[] {
-                DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID,
-                DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID,
-                DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP,
-                DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP
-        };
-
-        Cursor data = mContext.getContentResolver().query(LOYALTYCARDS_URI, columns, null, null, null);
-
-        if (data.moveToNext()) {
-            LoyaltyCard loyaltyCard = null;
-            try {
-                loyaltyCard = new LoyaltyCard(
-                        data.getInt(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID)),
-                        data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID)),
-                        TimestampHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP))),
-                        TimestampHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP)))
-                );
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                int size = (int)mContext.getResources().getDimension(R.dimen.qr_code_size);
-                // Genereer een QR code
-                Bitmap bm = encodeAsBitmap(
-                        LoyaltyCardContract.getQRcodeContent(loyaltyCard.getId()),
-                        BarcodeFormat.QR_CODE,
-                        size,
-                        size
-                );
-
-                if (bm != null) {
-                    mBinding.imageViewQR.setImageBitmap(bm);
-                }
-            } catch (WriterException e) {
-                // todo
-            }
-        }
+    private void setQRbitmap(Bitmap bm) {
+        mBinding.imageViewQR.setImageBitmap(bm);
     }
 }

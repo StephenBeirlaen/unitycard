@@ -132,7 +132,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     public void resultReceived(List<Retailer> retailers) {
                         Log.d(LOG_TAG, "Received all retailers: " + retailers);
 
-                        // todo: temporary
+                        // todo: temporary, met contentprovideroperation werken (batch access)
                         for (Retailer retailer : retailers) {
                             ContentValues contentValues = new ContentValues();
 

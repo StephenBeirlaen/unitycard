@@ -255,7 +255,8 @@ public class ContentProvider extends android.content.ContentProvider {
                 if (newRowId > 0) {
                     Uri retailerItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILERS_ITEM_URI, newRowId);
                     // Na insert content observers verwittigen dat data mogelijk gewijzigd is
-                    getContext().getContentResolver().notifyChange(retailerItemUri, null);
+                    // Call notifychange on the entire SET and not on one ROW:
+                    getContext().getContentResolver().notifyChange(ContentProviderContract.RETAILERS_URI, null);
                     return retailerItemUri;
                 }
                 break;
@@ -265,7 +266,7 @@ public class ContentProvider extends android.content.ContentProvider {
                         DatabaseContract.LoyaltyCardDB.COLUMN_SERVER_ID, contentValues);
                 if(newRowId > 0){
                     Uri loyaltyCardItemUri = ContentUris.withAppendedId(ContentProviderContract.LOYALTYCARDS_ITEM_URI, newRowId);
-                    getContext().getContentResolver().notifyChange(loyaltyCardItemUri, null);
+                    getContext().getContentResolver().notifyChange(ContentProviderContract.LOYALTYCARDS_URI, null);
                     return loyaltyCardItemUri;
                 }
                 break;
@@ -275,7 +276,7 @@ public class ContentProvider extends android.content.ContentProvider {
                         DatabaseContract.LoyaltyPointsDB.COLUMN_SERVER_ID, contentValues);
                 if(newRowId > 0){
                     Uri loyaltyPointItemUri = ContentUris.withAppendedId(ContentProviderContract.LOYALTYPOINTS_ITEM_URI, newRowId);
-                    getContext().getContentResolver().notifyChange(loyaltyPointItemUri, null);
+                    getContext().getContentResolver().notifyChange(ContentProviderContract.LOYALTYPOINTS_URI, null);
                     return loyaltyPointItemUri;
                 }
                 break;
@@ -285,7 +286,7 @@ public class ContentProvider extends android.content.ContentProvider {
                         DatabaseContract.RetailerLocationsDB.COLUMN_SERVER_ID, contentValues);
                 if(newRowId > 0){
                     Uri retailerLocationItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILER_LOCATIONS_ITEM_URI, newRowId);
-                    getContext().getContentResolver().notifyChange(retailerLocationItemUri, null);
+                    getContext().getContentResolver().notifyChange(ContentProviderContract.RETAILER_LOCATIONS_URI, null);
                     return retailerLocationItemUri;
                 }
                 break;
@@ -295,7 +296,7 @@ public class ContentProvider extends android.content.ContentProvider {
                         DatabaseContract.OffersDB.COLUMN_SERVER_ID, contentValues);
                 if(newRowId > 0){
                     Uri offerItemUri = ContentUris.withAppendedId(ContentProviderContract.OFFERS_ITEM_URI, newRowId);
-                    getContext().getContentResolver().notifyChange(offerItemUri, null);
+                    getContext().getContentResolver().notifyChange(ContentProviderContract.OFFERS_URI, null);
                     return offerItemUri;
                 }
                 break;
@@ -305,7 +306,7 @@ public class ContentProvider extends android.content.ContentProvider {
                         DatabaseContract.RetailerCategoriesDB.COLUMN_SERVER_ID, contentValues);
                 if(newRowId > 0){
                     Uri retailerCategoryItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILER_CATEGORIES_ITEM_URI, newRowId);
-                    getContext().getContentResolver().notifyChange(retailerCategoryItemUri, null);
+                    getContext().getContentResolver().notifyChange(ContentProviderContract.RETAILER_CATEGORIES_URI, null);
                     return retailerCategoryItemUri;
                 }
                 break;

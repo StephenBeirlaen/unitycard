@@ -3,6 +3,7 @@ package be.nmct.unitycard.fragments.customer;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,12 +15,15 @@ import be.nmct.unitycard.R;
 import be.nmct.unitycard.databinding.FragmentAddRetailerBinding;
 import be.nmct.unitycard.models.viewmodels.fragment.AddRetailerFragmentVM;
 
+import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILERS_URI;
+
 public class AddRetailerFragment extends Fragment {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     private AddRetailerFragmentListener mListener;
     private FragmentAddRetailerBinding mBinding;
     private AddRetailerFragmentVM mAddRetailerFragmentVM;
+    private AddRetailerFragmentVM.MyContentObserver myContentObserver;
 
     public AddRetailerFragment() {
         // Required empty public constructor
@@ -45,8 +49,22 @@ public class AddRetailerFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+    }
 
-        mAddRetailerFragmentVM.loadRetailers();
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Listen for contentprovider changes
+        myContentObserver = mAddRetailerFragmentVM.new MyContentObserver(new Handler());
+        getContext().getContentResolver().registerContentObserver(RETAILERS_URI, false, myContentObserver);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        getContext().getContentResolver().unregisterContentObserver(myContentObserver);
     }
 
     public interface AddRetailerFragmentListener {

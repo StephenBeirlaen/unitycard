@@ -1,9 +1,11 @@
 package be.nmct.unitycard.fragments.customer;
 
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,12 +15,16 @@ import be.nmct.unitycard.R;
 import be.nmct.unitycard.databinding.FragmentMyLoyaltyCardBinding;
 import be.nmct.unitycard.models.viewmodels.fragment.MyLoyaltyCardFragmentVM;
 
+import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYCARDS_ITEM_URI;
+import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYCARDS_URI;
+
 public class MyLoyaltyCardFragment extends Fragment {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     private MyLoyaltyCardFragmentListener mListener;
     private FragmentMyLoyaltyCardBinding mBinding;
     private MyLoyaltyCardFragmentVM mMyLoyaltyCardFragmentVM;
+    private MyLoyaltyCardFragmentVM.MyContentObserver myContentObserver;
 
     public MyLoyaltyCardFragment() {
         // Required empty public constructor
@@ -39,8 +45,22 @@ public class MyLoyaltyCardFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+    }
 
-        mMyLoyaltyCardFragmentVM.loadQRcode();
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Listen for contentprovider changes
+        myContentObserver = mMyLoyaltyCardFragmentVM.new MyContentObserver(new Handler());
+        getContext().getContentResolver().registerContentObserver(LOYALTYCARDS_URI, false, myContentObserver);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        getContext().getContentResolver().unregisterContentObserver(myContentObserver);
     }
 
     public interface MyLoyaltyCardFragmentListener {
