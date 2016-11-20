@@ -11,8 +11,10 @@ public class DatabaseContract {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "unitycarddatabase.db";
 
+    // these columns are used for both RetailersDB
     public interface RetailerColumns extends BaseColumns {
-        String TABLE_NAME = "Retailers";
+        String TABLE_NAME_ALL_RETAILERS = "Retailers";
+        String TABLE_NAME_ADDED_RETAILERS = "AddedRetailers";
         String COLUMN_SERVER_ID = "ServerId";
         String COLUMN_RETAILER_CATEGORY_ID = "RetailerCategoryId";
         String COLUMN_RETAILER_NAME = "RetailerName";
@@ -23,9 +25,8 @@ public class DatabaseContract {
     }
 
     public static abstract class RetailersDB implements RetailerColumns {
-
         public static final String CREATE_TABLE = "create table "
-                + TABLE_NAME + "("
+                + TABLE_NAME_ALL_RETAILERS + "("
                 + _ID + " integer primary key autoincrement, "
                 + COLUMN_SERVER_ID + " integer not null unique, "
                 + COLUMN_RETAILER_CATEGORY_ID + " integer, "
@@ -36,7 +37,23 @@ public class DatabaseContract {
                 + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
-        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME_ALL_RETAILERS;
+    }
+
+    public static abstract class AddedRetailersDB implements RetailerColumns {
+        public static final String CREATE_TABLE = "create table "
+                + TABLE_NAME_ADDED_RETAILERS + "("
+                + _ID + " integer primary key autoincrement, "
+                + COLUMN_SERVER_ID + " integer not null unique, "
+                + COLUMN_RETAILER_CATEGORY_ID + " integer, "
+                + COLUMN_RETAILER_NAME + " text not null, "
+                + COLUMN_TAGLINE + " text not null, "
+                + COLUMN_CHAIN + " real, "
+                + COLUMN_LOGOURL + " text not null, "
+                + COLUMN_UPDATED_TIMESTAMP + " text not null"
+                + ");";
+
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME_ADDED_RETAILERS;
     }
 
     public interface LoyaltyCardColumns extends BaseColumns {

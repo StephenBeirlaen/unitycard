@@ -14,6 +14,9 @@ public class ContentProviderContract {
     public static final Uri RETAILERS_URI = Uri.parse("content://" + AUTHORITY + "/retailers");
     public static final Uri RETAILERS_ITEM_URI = Uri.parse("content://" + AUTHORITY + "/retailers/");
 
+    public static final Uri ADDED_RETAILERS_URI = Uri.parse("content://" + AUTHORITY + "/addedretailers");
+    public static final Uri ADDED_RETAILERS_ITEM_URI = Uri.parse("content://" + AUTHORITY + "/addedretailers/");
+
     public static final Uri LOYALTYCARDS_URI = Uri.parse("content://" + AUTHORITY + "/loyaltycards");
     public static final Uri LOYALTYCARDS_ITEM_URI = Uri.parse("content://" + AUTHORITY + "/loyaltycards/");
 
@@ -51,6 +54,9 @@ public class ContentProviderContract {
     public static void clearAllContent(Context context) {
         context.getContentResolver().delete(ContentProviderContract.RETAILERS_URI, null, null);
         context.getContentResolver().delete(ContentProviderContract.RETAILERS_ITEM_URI, null, null);
+
+        context.getContentResolver().delete(ContentProviderContract.ADDED_RETAILERS_URI, null, null);
+        context.getContentResolver().delete(ContentProviderContract.ADDED_RETAILERS_ITEM_URI, null, null);
 
         context.getContentResolver().delete(ContentProviderContract.LOYALTYCARDS_URI, null, null);
         context.getContentResolver().delete(ContentProviderContract.LOYALTYCARDS_ITEM_URI, null, null);

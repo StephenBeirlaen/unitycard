@@ -64,17 +64,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private void upgradeTo1(SQLiteDatabase db) {
         db.execSQL(DatabaseContract.RetailersDB.CREATE_TABLE);
+        db.execSQL(DatabaseContract.AddedRetailersDB.CREATE_TABLE);
         db.execSQL(DatabaseContract.LoyaltyCardDB.CREATE_TABLE);
         db.execSQL(DatabaseContract.LoyaltyPointsDB.CREATE_TABLE);
         db.execSQL(DatabaseContract.RetailerLocationsDB.CREATE_TABLE);
         db.execSQL(DatabaseContract.OffersDB.CREATE_TABLE);
         db.execSQL(DatabaseContract.RetailerCategoriesDB.CREATE_TABLE);
 
-        /**db.execSQL(DatabaseContract.RetailersDB.DELETE_TABLE);
+        /*db.execSQL(DatabaseContract.RetailersDB.DELETE_TABLE);
+        db.execSQL(DatabaseContract.AddedRetailersDB.DELETE_TABLE);
         db.execSQL(DatabaseContract.LoyaltyCardDB.DELETE_TABLE);
         db.execSQL(DatabaseContract.LoyaltyPointsDB.DELETE_TABLE);
         db.execSQL(DatabaseContract.RetailerLocationsDB.DELETE_TABLE);
         db.execSQL(DatabaseContract.OffersDB.DELETE_TABLE);
-        db.execSQL(DatabaseContract.RetailerCategoriesDB.DELETE_TABLE);**/
+        db.execSQL(DatabaseContract.RetailerCategoriesDB.DELETE_TABLE);*/
     }
 }

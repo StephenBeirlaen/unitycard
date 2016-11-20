@@ -224,6 +224,9 @@ public class MainActivity extends AppCompatActivity
                     case RESULT_OK:
                         Log.d(LOG_TAG, "User " + AuthHelper.getUsername(AuthHelper.getUser(this)) + " logged in from AccountActivity.");
                         // logged in successfully
+
+                        // De eerste keer een sync forceren
+                        refreshCachedData();
                         break;
                     case RESULT_CANCELED:
                         finish(); // afsluiten

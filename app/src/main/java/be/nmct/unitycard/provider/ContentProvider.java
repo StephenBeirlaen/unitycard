@@ -28,16 +28,18 @@ public class ContentProvider extends android.content.ContentProvider {
 
     private static final int RETAILERS = 1;
     private static final int RETAILERS_ID = 2;
-    private static final int LOYALTYCARDS = 3;
-    private static final int LOYALTYCARDS_ID = 4;
-    private static final int LOYALTYPOINTS = 5;
-    private static final int LOYALTYPOINTS_ID = 6;
-    private static final int RETAILERLOCATIONS = 7;
-    private static final int RETAILERLOCATIONS_ID = 8;
-    private static final int OFFERS = 9;
-    private static final int OFFERS_ID = 10;
-    private static final int RETAILERCATEGORIES = 11;
-    private static final int RETAILERCATEGORIES_ID = 12;
+    private static final int ADDED_RETAILERS = 3;
+    private static final int ADDED_RETAILERS_ID = 4;
+    private static final int LOYALTYCARDS = 5;
+    private static final int LOYALTYCARDS_ID = 6;
+    private static final int LOYALTYPOINTS = 7;
+    private static final int LOYALTYPOINTS_ID = 8;
+    private static final int RETAILERLOCATIONS = 9;
+    private static final int RETAILERLOCATIONS_ID = 10;
+    private static final int OFFERS = 11;
+    private static final int OFFERS_ID = 12;
+    private static final int RETAILERCATEGORIES = 13;
+    private static final int RETAILERCATEGORIES_ID = 14;
 
     private static HashMap<String, String> UNITYCARD_PROJECTION_MAP;
 
@@ -49,6 +51,10 @@ public class ContentProvider extends android.content.ContentProvider {
         //Retailers
         uriMatcher.addURI(ContentProviderContract.AUTHORITY, "retailers", RETAILERS);
         uriMatcher.addURI(ContentProviderContract.AUTHORITY, "retailers/#", RETAILERS_ID);
+
+        //AddedRetailers
+        uriMatcher.addURI(ContentProviderContract.AUTHORITY, "addedretailers", ADDED_RETAILERS);
+        uriMatcher.addURI(ContentProviderContract.AUTHORITY, "addedretailers/#", ADDED_RETAILERS_ID);
 
         //Loyaltycards
         uriMatcher.addURI(ContentProviderContract.AUTHORITY, "loyaltycards", LOYALTYCARDS);
@@ -139,11 +145,19 @@ public class ContentProvider extends android.content.ContentProvider {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         switch (uriMatcher.match(uri)){
             case RETAILERS:
-                queryBuilder.setTables(DatabaseContract.RetailerColumns.TABLE_NAME);
+                queryBuilder.setTables(DatabaseContract.RetailerColumns.TABLE_NAME_ALL_RETAILERS);
                 queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
                 break;
             case RETAILERS_ID:
-                queryBuilder.setTables(DatabaseContract.RetailerColumns.TABLE_NAME);
+                queryBuilder.setTables(DatabaseContract.RetailerColumns.TABLE_NAME_ALL_RETAILERS);
+                queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
+                break;
+            case ADDED_RETAILERS:
+                queryBuilder.setTables(DatabaseContract.RetailerColumns.TABLE_NAME_ADDED_RETAILERS);
+                queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
+                break;
+            case ADDED_RETAILERS_ID:
+                queryBuilder.setTables(DatabaseContract.RetailerColumns.TABLE_NAME_ADDED_RETAILERS);
                 queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
                 break;
             case LOYALTYCARDS:
@@ -217,6 +231,10 @@ public class ContentProvider extends android.content.ContentProvider {
                 return ContentProviderContract.RETAILERS_CONTENT_TYPE;
             case RETAILERS_ID:
                 return ContentProviderContract.RETAILERS_ITEM_CONTENT_TYPE;
+            case ADDED_RETAILERS:
+                return ContentProviderContract.RETAILERS_CONTENT_TYPE;
+            case ADDED_RETAILERS_ID:
+                return ContentProviderContract.RETAILERS_ITEM_CONTENT_TYPE;
             case LOYALTYCARDS:
                 return ContentProviderContract.LOYALTYCARDS_CONTENT_TYPE;
             case LOYALTYCARDS_ID:
@@ -250,13 +268,23 @@ public class ContentProvider extends android.content.ContentProvider {
         switch (uriMatcher.match(uri)){
             case RETAILERS:
                 newRowId = insertOrUpdate(db,
-                        DatabaseContract.RetailersDB.TABLE_NAME,
+                        DatabaseContract.RetailersDB.TABLE_NAME_ALL_RETAILERS,
                         DatabaseContract.RetailersDB.COLUMN_SERVER_ID, contentValues);
                 if (newRowId > 0) {
                     Uri retailerItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILERS_ITEM_URI, newRowId);
                     // Na insert content observers verwittigen dat data mogelijk gewijzigd is
                     // Call notifychange on the entire SET and not on one ROW:
                     getContext().getContentResolver().notifyChange(ContentProviderContract.RETAILERS_URI, null);
+                    return retailerItemUri;
+                }
+                break;
+            case ADDED_RETAILERS:
+                newRowId = insertOrUpdate(db,
+                        DatabaseContract.RetailersDB.TABLE_NAME_ADDED_RETAILERS,
+                        DatabaseContract.RetailersDB.COLUMN_SERVER_ID, contentValues);
+                if (newRowId > 0) {
+                    Uri retailerItemUri = ContentUris.withAppendedId(ContentProviderContract.ADDED_RETAILERS_ITEM_URI, newRowId);
+                    getContext().getContentResolver().notifyChange(ContentProviderContract.ADDED_RETAILERS_URI, null);
                     return retailerItemUri;
                 }
                 break;
@@ -311,7 +339,7 @@ public class ContentProvider extends android.content.ContentProvider {
                 }
                 break;
             default:
-                throw new IllegalArgumentException("Uknown URI: " + uri);
+                throw new IllegalArgumentException("Unknown URI: " + uri);
         }
         throw new IllegalArgumentException();
     }
@@ -343,7 +371,7 @@ public class ContentProvider extends android.content.ContentProvider {
         switch (uriMatcher.match(uri)){
             case RETAILERS:
                 count = db.delete(
-                        DatabaseContract.RetailersDB.TABLE_NAME,
+                        DatabaseContract.RetailersDB.TABLE_NAME_ALL_RETAILERS,
                         selection,
                         selectionArgs);
                 break;
@@ -356,7 +384,26 @@ public class ContentProvider extends android.content.ContentProvider {
                 }
 
                 count = db.delete(
-                        DatabaseContract.RetailersDB.TABLE_NAME,
+                        DatabaseContract.RetailersDB.TABLE_NAME_ALL_RETAILERS,
+                        selection,
+                        selectionArgs);
+                break;
+            case ADDED_RETAILERS:
+                count = db.delete(
+                        DatabaseContract.RetailersDB.TABLE_NAME_ADDED_RETAILERS,
+                        selection,
+                        selectionArgs);
+                break;
+            case ADDED_RETAILERS_ID:
+                String addedRetailerItemId = uri.getPathSegments().get(1);
+                finalWhere = "Id = " + addedRetailerItemId;
+
+                if(selection != null){
+                    finalWhere = DatabaseUtils.concatenateWhere(finalWhere, selection);
+                }
+
+                count = db.delete(
+                        DatabaseContract.RetailersDB.TABLE_NAME_ADDED_RETAILERS,
                         selection,
                         selectionArgs);
                 break;
@@ -456,7 +503,7 @@ public class ContentProvider extends android.content.ContentProvider {
                         selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException("Uknown URI: " + uri);
+                throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
@@ -473,12 +520,11 @@ public class ContentProvider extends android.content.ContentProvider {
         switch (uriMatcher.match(uri)){
             case RETAILERS:
                 count = db.update(
-                        DatabaseContract.RetailersDB.TABLE_NAME,
+                        DatabaseContract.RetailersDB.TABLE_NAME_ALL_RETAILERS,
                         contentValues,
                         selection,
                         selectionArgs);
                 break;
-
             case RETAILERS_ID:
                 String retailerItemId = uri.getPathSegments().get(1);
                 finalWhere = "Id = " + retailerItemId;
@@ -488,7 +534,28 @@ public class ContentProvider extends android.content.ContentProvider {
                 }
 
                 count = db.update(
-                        DatabaseContract.RetailersDB.TABLE_NAME,
+                        DatabaseContract.RetailersDB.TABLE_NAME_ALL_RETAILERS,
+                        contentValues,
+                        selection,
+                        selectionArgs);
+                break;
+            case ADDED_RETAILERS:
+                count = db.update(
+                        DatabaseContract.RetailersDB.TABLE_NAME_ADDED_RETAILERS,
+                        contentValues,
+                        selection,
+                        selectionArgs);
+                break;
+            case ADDED_RETAILERS_ID:
+                String addedRetailerItemId = uri.getPathSegments().get(1);
+                finalWhere = "Id = " + addedRetailerItemId;
+
+                if(selection != null){
+                    finalWhere = DatabaseUtils.concatenateWhere(finalWhere, selection);
+                }
+
+                count = db.update(
+                        DatabaseContract.RetailersDB.TABLE_NAME_ADDED_RETAILERS,
                         contentValues,
                         selection,
                         selectionArgs);
@@ -500,7 +567,6 @@ public class ContentProvider extends android.content.ContentProvider {
                         selection,
                         selectionArgs);
                 break;
-
             case LOYALTYCARDS_ID:
                 String loyaltyCardItemId = uri.getPathSegments().get(1);
                 finalWhere = "Id = " + loyaltyCardItemId;
@@ -604,7 +670,7 @@ public class ContentProvider extends android.content.ContentProvider {
                         selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException("Uknown URI: " + uri);
+                throw new IllegalArgumentException("Unknown URI: " + uri);
         }
 
         getContext().getContentResolver().notifyChange(uri, null);
