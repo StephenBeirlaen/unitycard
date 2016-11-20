@@ -8,16 +8,22 @@
             type="be.nmct.unitycard.models.viewmodels.fragment.RetailerAdminFragmentVM" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Retailer test menu"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="25dp"/>
+
+        <Button
+            android:id="@+id/btn_scan_loyaltycard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scan klantenkaart" />
 
         <Button
             android:id="@+id/btn_logout"
@@ -25,6 +31,6 @@
             android:layout_height="wrap_content"
             android:text="Log out" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </layout>

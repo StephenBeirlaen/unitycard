@@ -24,6 +24,8 @@ import android.widget.TextView;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.activities.customer.AddRetailerActivity;
@@ -99,19 +101,28 @@ public class RetailerAdminActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_LOGIN:
-                switch (resultCode) {
-                    case RESULT_OK:
-                        Log.d(LOG_TAG, "User " + AuthHelper.getUsername(AuthHelper.getUser(this)) + " logged in from AccountActivity.");
-                        // logged in successfully
-                        break;
-                    case RESULT_CANCELED:
-                        finish(); // afsluiten
-                        break;
-                }
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
+        // Scanning via intent
+        // https://github.com/zxing/zxing/wiki/Scanning-Via-Intent
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (scanResult != null) {
+            // Handle scan result
+            handleError("Scanned Loyalty card: " + scanResult.getContents());
+        }
+        else {
+            switch (requestCode) {
+                case REQUEST_LOGIN:
+                    switch (resultCode) {
+                        case RESULT_OK:
+                            Log.d(LOG_TAG, "User " + AuthHelper.getUsername(AuthHelper.getUser(this)) + " logged in from AccountActivity.");
+                            // logged in successfully
+                            break;
+                        case RESULT_CANCELED:
+                            finish(); // afsluiten
+                            break;
+                    }
+                default:
+                    super.onActivityResult(requestCode, resultCode, data);
+            }
         }
     }
 

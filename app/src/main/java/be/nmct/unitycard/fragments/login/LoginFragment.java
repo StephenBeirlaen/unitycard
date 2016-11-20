@@ -83,7 +83,7 @@ public class LoginFragment extends Fragment {
                     // show progress scroller
                     mBinding.progressCircleLogin.setVisibility(View.VISIBLE);
 
-                    signIn("stephen.beirlaen@student.howest.be", "-Password1");
+                    signIn("lorenz.vercoutere@student.howest.be", "-Password1");
                 }
             }
         });
