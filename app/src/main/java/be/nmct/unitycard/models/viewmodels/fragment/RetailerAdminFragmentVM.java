@@ -2,16 +2,12 @@ package be.nmct.unitycard.models.viewmodels.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.database.Cursor;
 import android.databinding.BaseObservable;
-import android.graphics.Bitmap;
-import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
 import be.nmct.unitycard.databinding.FragmentRetailerAdminBinding;
-import be.nmct.unitycard.fragments.retailer.RetailerAdminFragment;
 
 /**
  * Created by Stephen on 9/11/2016.

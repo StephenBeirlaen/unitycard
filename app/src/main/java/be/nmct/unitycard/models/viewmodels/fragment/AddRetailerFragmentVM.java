@@ -15,7 +15,6 @@ import java.text.ParseException;
 import be.nmct.unitycard.BR;
 import be.nmct.unitycard.contracts.DatabaseContract;
 import be.nmct.unitycard.databinding.FragmentAddRetailerBinding;
-import be.nmct.unitycard.helpers.DatabaseHelper;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.Retailer;
 

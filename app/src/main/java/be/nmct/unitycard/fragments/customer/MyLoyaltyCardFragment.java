@@ -1,7 +1,6 @@
 package be.nmct.unitycard.fragments.customer;
 
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import be.nmct.unitycard.R;
 import be.nmct.unitycard.databinding.FragmentMyLoyaltyCardBinding;
 import be.nmct.unitycard.models.viewmodels.fragment.MyLoyaltyCardFragmentVM;
 
-import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYCARDS_ITEM_URI;
 import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYCARDS_URI;
 
 public class MyLoyaltyCardFragment extends Fragment {

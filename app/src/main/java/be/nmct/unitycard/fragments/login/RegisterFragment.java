@@ -5,7 +5,6 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +12,8 @@ import android.view.ViewGroup;
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.databinding.FragmentRegisterBinding;
 import be.nmct.unitycard.models.postmodels.RegisterUserBody;
-import be.nmct.unitycard.models.viewmodels.RegisterFragmentVM;
-import be.nmct.unitycard.repositories.AuthRepository;
 import be.nmct.unitycard.models.viewmodels.fragment.RegisterFragmentVM;
+import be.nmct.unitycard.repositories.AuthRepository;
 
 public class RegisterFragment extends Fragment {
 

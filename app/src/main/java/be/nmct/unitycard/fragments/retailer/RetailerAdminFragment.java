@@ -2,16 +2,12 @@ package be.nmct.unitycard.fragments.retailer;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.databinding.FragmentRetailerAdminBinding;
