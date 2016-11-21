@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import be.nmct.unitycard.UnityCardApplication;
 import be.nmct.unitycard.models.GetTokenErrorResponse;
 import be.nmct.unitycard.models.GetTokenResponse;
+import be.nmct.unitycard.models.postmodels.RegisterUserBody;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Response;
@@ -95,5 +96,38 @@ public class AuthRepository {
     public interface TokenResponseListener {
         void tokenReceived(GetTokenResponse getTokenResponse);
         void tokenRequestError(String error);
+    }
+
+    public void registerUser(RegisterUserBody registerUserBody, final RegisterResponseListener callback){
+        mRestClient.getAuthService().registerUser(registerUserBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Response<Void>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(LOG_TAG, "Error registering user!");
+                        callback.registerRequestError("Error registering user!");
+                    }
+
+                    @Override
+                    public void onNext(Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.userRegistered();
+                        }
+                        else {
+                            callback.registerRequestError("Tging niet");
+                        }
+                    }
+                });
+    }
+
+    public interface RegisterResponseListener {
+        void userRegistered();
+        void registerRequestError(String error);
     }
 }
