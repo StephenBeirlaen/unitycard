@@ -23,6 +23,7 @@ import be.nmct.unitycard.contracts.DatabaseContract;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.LoyaltyCard;
 import be.nmct.unitycard.models.Retailer;
+import be.nmct.unitycard.models.RetailerCategory;
 import be.nmct.unitycard.repositories.ApiRepository;
 
 /**
@@ -118,7 +119,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                 });
 
-                // Get the last sync timestamp
                 Date lastRetailersSyncTimestamp;
                 try {
                     lastRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
@@ -147,6 +147,42 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             mContentResolver.insert(ContentProviderContract.RETAILERS_URI, contentValues);
 
                             handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
+                        }
+                    }
+
+                    @Override
+                    public void requestError(String error) {
+                        // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
+                        AuthHelper.invalidateAccessToken(accessToken, getContext());
+
+                        handleSyncError();
+                    }
+                });
+
+                Date lastRetailerCategoriesSyncTimestamp;
+                try {
+                    lastRetailerCategoriesSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES);
+                } catch (ParseException e) {
+                    handleSyncError();
+                    return;
+                }
+
+                apiRepo.getAllRetailerCategories(lastRetailerCategoriesSyncTimestamp, new ApiRepository.GetResultListener<List<RetailerCategory>>() {
+                    @Override
+                    public void resultReceived(List<RetailerCategory> retailerCategories) {
+                        Log.d(LOG_TAG, "Received all retailer categories: " + retailerCategories);
+
+                        // todo: temporary, met contentprovideroperation werken (batch access)
+                        for (RetailerCategory retailerCategory : retailerCategories) {
+                            ContentValues contentValues = new ContentValues();
+
+                            contentValues.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_SERVER_ID, retailerCategory.getId());
+                            contentValues.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_NAME, retailerCategory.getName());
+                            contentValues.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailerCategory.getUpdatedTimestamp()));
+
+                            mContentResolver.insert(ContentProviderContract.RETAILER_CATEGORIES_URI, contentValues);
+
+                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES);
                         }
                     }
 
