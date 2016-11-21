@@ -1,12 +1,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="be.nmct.unitycard.fragments.RegisterFragment">
+    tools:context="be.nmct.unitycard.fragments.login.RegisterFragment">
 
     <data>
         <variable
             name="viewmodel"
-            type="be.nmct.unitycard.models.viewmodels.RegisterFragmentVM" />
+            type="be.nmct.unitycard.models.viewmodels.fragment.RegisterFragmentVM" />
     </data>
 
     <android.support.v4.widget.NestedScrollView

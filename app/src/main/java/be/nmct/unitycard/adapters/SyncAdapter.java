@@ -8,25 +8,22 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SyncResult;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.WriterException;
-
-import java.sql.Date;
-import java.text.SimpleDateFormat;
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 
-import be.nmct.unitycard.activities.MainActivity;
+import be.nmct.unitycard.activities.customer.MainActivity;
 import be.nmct.unitycard.auth.AuthHelper;
+import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.contracts.ContentProviderContract;
 import be.nmct.unitycard.contracts.DatabaseContract;
-import be.nmct.unitycard.contracts.LoyaltyCardContract;
-import be.nmct.unitycard.helpers.DatabaseHelper;
+import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.LoyaltyCard;
 import be.nmct.unitycard.models.Retailer;
+import be.nmct.unitycard.models.RetailerCategory;
 import be.nmct.unitycard.repositories.ApiRepository;
 
 /**
@@ -36,7 +33,7 @@ import be.nmct.unitycard.repositories.ApiRepository;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
-    ContentResolver mContentResolver;
+    private ContentResolver mContentResolver;
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -70,6 +67,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     @Override
     public void onPerformSync(final Account account, Bundle extras, String authority, ContentProviderClient providerClient, SyncResult syncResult) {
+        // Om de debugger te attachen:
+        //android.os.Debug.waitForDebugger();
+
         // When the framework is ready to sync your application's data, this gets run
         Log.d(LOG_TAG, "Synchronisation started");
 
@@ -81,22 +81,33 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 final ApiRepository apiRepo = new ApiRepository(getContext());
 
-                apiRepo.getLoyaltyCard(accessToken, AuthHelper.getUserId(getContext()), new ApiRepository.GetResultListener<LoyaltyCard>() {
+                // Get the last sync timestamp
+                Date lastLoyaltyCardSyncTimestamp;
+                try {
+                    lastLoyaltyCardSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_LOYALTY_CARD);
+                } catch (ParseException e) {
+                    handleSyncError();
+                    return;
+                }
+
+                apiRepo.getLoyaltyCard(accessToken, AuthHelper.getUserId(getContext()), lastLoyaltyCardSyncTimestamp, new ApiRepository.GetResultListener<LoyaltyCard>() {
                     @Override
                     public void resultReceived(LoyaltyCard loyaltyCard) {
                         Log.d(LOG_TAG, "Received loyalty card: " + loyaltyCard);
 
                         // todo: temporary
-                        ContentValues contentValues = new ContentValues();
+                        if (loyaltyCard != null) {
+                            ContentValues contentValues = new ContentValues();
 
-                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID, loyaltyCard.getId());
-                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID, loyaltyCard.getUserId());
-                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP, DatabaseHelper.convertDateToString(loyaltyCard.getCreatedTimestamp()));
-                        contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseHelper.convertDateToString(loyaltyCard.getUpdatedTimestamp()));
+                            contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID, loyaltyCard.getId());
+                            contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID, loyaltyCard.getUserId());
+                            contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP, TimestampHelper.convertDateToString(loyaltyCard.getCreatedTimestamp()));
+                            contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(loyaltyCard.getUpdatedTimestamp()));
 
-                        getContext().getContentResolver().insert(ContentProviderContract.LOYALTYCARDS_URI, contentValues);
+                            mContentResolver.insert(ContentProviderContract.LOYALTYCARDS_URI, contentValues);
+                        }
 
-                        handleSyncSuccess();
+                        handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_LOYALTY_CARD);
                     }
 
                     @Override
@@ -108,12 +119,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                 });
 
-                apiRepo.getAllRetailers(accessToken, new ApiRepository.GetResultListener<List<Retailer>>() {
+                Date lastRetailersSyncTimestamp;
+                try {
+                    lastRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
+                } catch (ParseException e) {
+                    handleSyncError();
+                    return;
+                }
+
+                apiRepo.getAllRetailers(accessToken, lastRetailersSyncTimestamp, new ApiRepository.GetResultListener<List<Retailer>>() {
                     @Override
                     public void resultReceived(List<Retailer> retailers) {
                         Log.d(LOG_TAG, "Received all retailers: " + retailers);
 
-                        // todo: temporary
+                        // todo: temporary, met contentprovideroperation werken (batch access)
                         for (Retailer retailer : retailers) {
                             ContentValues contentValues = new ContentValues();
 
@@ -123,11 +142,47 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_TAGLINE, retailer.getTagline());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
                             contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseHelper.convertDateToString(retailer.getUpdatedTimestamp()));
+                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailer.getUpdatedTimestamp()));
 
-                            getContext().getContentResolver().insert(ContentProviderContract.RETAILERS_URI, contentValues);
+                            mContentResolver.insert(ContentProviderContract.RETAILERS_URI, contentValues);
 
-                            handleSyncSuccess();
+                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
+                        }
+                    }
+
+                    @Override
+                    public void requestError(String error) {
+                        // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
+                        AuthHelper.invalidateAccessToken(accessToken, getContext());
+
+                        handleSyncError();
+                    }
+                });
+
+                Date lastRetailerCategoriesSyncTimestamp;
+                try {
+                    lastRetailerCategoriesSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES);
+                } catch (ParseException e) {
+                    handleSyncError();
+                    return;
+                }
+
+                apiRepo.getAllRetailerCategories(lastRetailerCategoriesSyncTimestamp, new ApiRepository.GetResultListener<List<RetailerCategory>>() {
+                    @Override
+                    public void resultReceived(List<RetailerCategory> retailerCategories) {
+                        Log.d(LOG_TAG, "Received all retailer categories: " + retailerCategories);
+
+                        // todo: temporary, met contentprovideroperation werken (batch access)
+                        for (RetailerCategory retailerCategory : retailerCategories) {
+                            ContentValues contentValues = new ContentValues();
+
+                            contentValues.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_SERVER_ID, retailerCategory.getId());
+                            contentValues.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_NAME, retailerCategory.getName());
+                            contentValues.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailerCategory.getUpdatedTimestamp()));
+
+                            mContentResolver.insert(ContentProviderContract.RETAILER_CATEGORIES_URI, contentValues);
+
+                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES);
                         }
                     }
 
@@ -149,7 +204,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         });
     }
 
-    private void handleSyncSuccess() {
+    private void handleSyncSuccess(Account account, String timestampTypeKey) {
+        AuthHelper.setLastSyncTimestamp(getContext(), account, timestampTypeKey, new Date()); // Date object has the current date and time on init
+
         getContext().sendBroadcast(new Intent(MainActivity.ACTION_FINISHED_SYNC));
     }
 

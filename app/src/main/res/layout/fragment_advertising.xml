@@ -1,11 +1,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="be.nmct.unitycard.fragments.AdvertisingFragment">
+    tools:context="be.nmct.unitycard.fragments.customer.AdvertisingFragment">
 
     <data>
         <variable
             name="viewmodel"
-            type="be.nmct.unitycard.models.viewmodels.AdvertisingFragmentVM" />
+            type="be.nmct.unitycard.models.viewmodels.fragment.AdvertisingFragmentVM" />
     </data>
 
     <android.support.v4.widget.NestedScrollView

@@ -1,0 +1,36 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="be.nmct.unitycard.fragments.retailer.RetailerAdminFragment">
+
+    <data>
+        <variable
+            name="viewmodel"
+            type="be.nmct.unitycard.models.viewmodels.fragment.RetailerAdminFragmentVM" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retailer test menu"
+            android:layout_marginTop="25dp"/>
+
+        <Button
+            android:id="@+id/btn_scan_loyaltycard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Scan klantenkaart" />
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Log out" />
+
+    </LinearLayout>
+
+</layout>

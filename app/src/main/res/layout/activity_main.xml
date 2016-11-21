@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
-    tools:context=".activities.MainActivity">
+    tools:context=".activities.customer.MainActivity">
 
     <data>
         <variable
             name="viewmodel"
-            type="be.nmct.unitycard.models.viewmodels.MainActivityVM" />
+            type="be.nmct.unitycard.models.viewmodels.activities.MainActivityVM" />
     </data>
 
     <android.support.v4.widget.DrawerLayout

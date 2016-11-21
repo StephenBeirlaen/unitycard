@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 
-import be.nmct.unitycard.activities.AccountActivity;
+import be.nmct.unitycard.activities.login.AccountActivity;
 import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.models.GetTokenResponse;
 import be.nmct.unitycard.repositories.AuthRepository;

@@ -1,11 +1,11 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="be.nmct.unitycard.fragments.MyLoyaltyCardFragment">
+    tools:context="be.nmct.unitycard.fragments.customer.MyLoyaltyCardFragment">
 
     <data>
         <variable
             name="viewmodel"
-            type="be.nmct.unitycard.models.viewmodels.MyLoyaltyCardFragmentVM" />
+            type="be.nmct.unitycard.models.viewmodels.fragment.MyLoyaltyCardFragmentVM" />
     </data>
 
     <FrameLayout

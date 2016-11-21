@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
-    tools:context=".activities.AccountActivity">
+    tools:context=".activities.login.AccountActivity">
 
     <data>
         <variable
             name="viewmodel"
-            type="be.nmct.unitycard.models.viewmodels.AccountActivityVM" />
+            type="be.nmct.unitycard.models.viewmodels.activities.AccountActivityVM" />
     </data>
 
     <RelativeLayout

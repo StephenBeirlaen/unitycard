@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/UnityCard.iml" filepath="$PROJECT_DIR$/UnityCard.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/unitycard.iml" filepath="$PROJECT_DIR$/unitycard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zxing.integration.android/zxing.integration.android.iml" filepath="$PROJECT_DIR$/zxing.integration.android/zxing.integration.android.iml" />
     </modules>
   </component>
 </project>
