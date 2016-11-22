@@ -18,7 +18,7 @@ import be.nmct.unitycard.databinding.FragmentRetailerListBinding;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.Retailer;
 
-import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILERS_URI;
+import static be.nmct.unitycard.contracts.ContentProviderContract.ADDED_RETAILERS_URI;
 
 /**
  * Created by Stephen on 9/11/2016.
@@ -54,7 +54,7 @@ public class RetailerListFragmentVM extends BaseObservable {
 
         @Override
         public void onChange(boolean selfChange, Uri uri) {
-            if (uri.equals(RETAILERS_URI)){
+            if (uri.equals(ADDED_RETAILERS_URI)){
                 loadRetailers();
             }
         }
@@ -71,7 +71,7 @@ public class RetailerListFragmentVM extends BaseObservable {
                 DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP
         };
 
-        Cursor data = mContext.getContentResolver().query(RETAILERS_URI, columns, null, null, null);
+        Cursor data = mContext.getContentResolver().query(ADDED_RETAILERS_URI, columns, null, null, null);
 
         if (data != null){
             retailerList = new ObservableArrayList<>();

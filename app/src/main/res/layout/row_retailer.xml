@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="retailer"
+            type="be.nmct.unitycard.models.Retailer" />
+    </data>
+
+
 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -19,7 +28,8 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:id="@+id/imageViewLogoRetailer"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginRight="5dp"
+            app:imageUrl="@{retailer.logoUrl}"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -36,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/textViewRetailerName"
-                    android:text="@string/retailerName"
+                    android:text="@{retailer.name}"
                     android:textStyle="bold"/>
 
             </LinearLayout>
@@ -51,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/textViewRetailerType"
-                    android:text="@string/retailerType" />
+                    android:text="@{String.valueOf(retailer.retailerCategoryId)}" />
 
             </LinearLayout>
 
@@ -63,9 +73,10 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="150dp"
             android:id="@+id/textViewRetailerPoints"
-            android:text="@string/retailerPoints"
+            android:text="@{String.valueOf(retailer.id)}"
             android:layout_gravity="center_vertical"/>
 
     </LinearLayout>
 
 </android.support.v7.widget.CardView>
+</layout>

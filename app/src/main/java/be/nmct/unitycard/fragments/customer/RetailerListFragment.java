@@ -16,6 +16,7 @@ import be.nmct.unitycard.R;
 import be.nmct.unitycard.databinding.FragmentRetailerListBinding;
 import be.nmct.unitycard.models.viewmodels.fragment.RetailerListFragmentVM;
 
+import static be.nmct.unitycard.contracts.ContentProviderContract.ADDED_RETAILERS_URI;
 import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILERS_URI;
 
 public class RetailerListFragment extends Fragment {
@@ -51,10 +52,22 @@ public class RetailerListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-        myContentObserver = mRetailerListFragmentVM.new MyContentObserver(new Handler());
-        getContext().getContentResolver().registerContentObserver(RETAILERS_URI, false, myContentObserver);
         // todo: perform load actions here
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        myContentObserver = mRetailerListFragmentVM.new MyContentObserver(new Handler());
+        getContext().getContentResolver().registerContentObserver(ADDED_RETAILERS_URI, false, myContentObserver);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        getContext().getContentResolver().unregisterContentObserver(myContentObserver);
     }
 
     public interface RetailerListFragmentListener {

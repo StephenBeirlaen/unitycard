@@ -167,6 +167,38 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     return;
                 }
 
+                apiRepo.getLoyaltyCardRetailers(accessToken, AuthHelper.getUserId(getContext()), lastLoyaltyCardSyncTimestamp, new ApiRepository.GetResultListener<List<Retailer>>() {
+                    @Override
+                    public void resultReceived(List<Retailer> retailers) {
+                        Log.d(LOG_TAG, "Received all retailers by loyaltycard: " + retailers);
+
+                        // todo: temporary, met contentprovideroperation werken (batch access)
+                        for (Retailer retailer : retailers) {
+                            ContentValues contentValues = new ContentValues();
+
+                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID, retailer.getId());
+                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID, retailer.getRetailerCategoryId());
+                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME, retailer.getName());
+                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_TAGLINE, retailer.getTagline());
+                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
+                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
+                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailer.getUpdatedTimestamp()));
+
+                            mContentResolver.insert(ContentProviderContract.ADDED_RETAILERS_URI, contentValues);
+
+                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
+                        }
+                    }
+
+                    @Override
+                    public void requestError(String error) {
+                        AuthHelper.invalidateAccessToken(accessToken, getContext());
+
+                        handleSyncError();
+                    }
+                });
+
+
                 apiRepo.getAllRetailerCategories(lastRetailerCategoriesSyncTimestamp, new ApiRepository.GetResultListener<List<RetailerCategory>>() {
                     @Override
                     public void resultReceived(List<RetailerCategory> retailerCategories) {
