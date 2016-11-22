@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.databinding.RowAddRetailerBinding;
+import be.nmct.unitycard.databinding.RowRetailerBinding;
 import be.nmct.unitycard.models.Retailer;
 
 /**
@@ -28,7 +29,7 @@ public class RetailerRecyclerViewAdapter extends RecyclerView.Adapter<RetailerRe
 
     @Override
     public RetailerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RowAddRetailerBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.row_retailer, parent, false);
+        RowRetailerBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.row_retailer, parent, false);
         RetailerViewHolder retailerViewHolder = new RetailerViewHolder(binding);
         return retailerViewHolder;
     }
@@ -46,10 +47,10 @@ public class RetailerRecyclerViewAdapter extends RecyclerView.Adapter<RetailerRe
 
     class RetailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        final RowAddRetailerBinding binding;
+        final RowRetailerBinding binding;
 
 
-        public RetailerViewHolder(RowAddRetailerBinding binding) {
+        public RetailerViewHolder(RowRetailerBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 
@@ -61,7 +62,7 @@ public class RetailerRecyclerViewAdapter extends RecyclerView.Adapter<RetailerRe
             // // TODO: Click on Retailer
         }
 
-        public RowAddRetailerBinding getBinding() {
+        public RowRetailerBinding getBinding() {
             return binding;
         }
     }
