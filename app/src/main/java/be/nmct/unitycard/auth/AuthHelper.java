@@ -5,6 +5,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -59,6 +60,16 @@ public class AuthHelper {
                     else {
                         accountManager.setUserData(account, AccountContract.KEY_USER_ROLE, AccountContract.ROLE_CUSTOMER);
                     }
+
+                    // Set whether or not the provider is synced when it receives a network tickle.
+                    ContentResolver.setSyncAutomatically(account, ContentProviderContract.AUTHORITY, true);
+
+                    // Add periodic sync
+                    Bundle extras = new Bundle();
+                    final long SECONDS_PER_MINUTE = 60L;
+                    final long SYNC_INTERVAL_IN_MINUTES = 60L;
+                    final long syncInterval = SYNC_INTERVAL_IN_MINUTES * SECONDS_PER_MINUTE;
+                    ContentResolver.addPeriodicSync(account, ContentProviderContract.AUTHORITY, extras, syncInterval);
 
                     callback.accountAdded(account);
                 }
