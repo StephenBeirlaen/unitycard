@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="colorButtonNormal">@color/colorPrimaryDark</item>
     </style>
 
     <style name="ButtonTheme" parent="Base.Widget.AppCompat.Button">
@@ -14,13 +14,14 @@
     </style>
     <!-- todo: colors instellen -->
     <style name="AppCompatEditText" parent="TextAppearance.AppCompat">
-        <item name="android:textColorHint">#39C</item>
-        <item name="colorControlNormal">#39C</item>
-        <item name="colorControlActivated">#8ac</item>
+        <item name="android:textColorHint">@color/colorWhite</item>
+        <item name="colorControlNormal">@color/colorWhite</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
     </style>
 
     <style name="styleEditText" parent="Widget.AppCompat.EditText">
-        <item name="android:textColor">#fff</item>
+        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
