@@ -17,6 +17,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -101,7 +102,10 @@ public class MainActivity extends AppCompatActivity
 
                 // Check user account role
                 String role = AuthHelper.getUserRole(this);
-                if (role.equals(AccountContract.ROLE_CUSTOMER)) {
+                if (TextUtils.isEmpty(role)) {
+                    showAccountActivity();
+                }
+                else if (role.equals(AccountContract.ROLE_CUSTOMER)) {
                     showFragmentMyLoyaltyCard();
                     displayUsernameInSidebar(AuthHelper.getUser(this));
                 }

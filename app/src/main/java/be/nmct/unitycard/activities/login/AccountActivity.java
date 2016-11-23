@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 
 import be.nmct.unitycard.R;
@@ -136,6 +137,17 @@ public class AccountActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onRegisterCanceled();
+        }
+
+        return true;
+    }
+
+    @Override
     public void handleError(String error) {
         Snackbar.make(mBinding.relativeLayout, error, Snackbar.LENGTH_LONG).show();
     }
@@ -158,16 +170,9 @@ public class AccountActivity extends AppCompatActivity
         finish();
     }
 
-    @Override
-    public void onRegisterCanceled() {
+    private void onRegisterCanceled() {
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.popBackStack();
-    }
-
-    @Override
-    public void onRegisterSuccessful() {
-        setResult(RESULT_OK);
-        finish();
     }
 }

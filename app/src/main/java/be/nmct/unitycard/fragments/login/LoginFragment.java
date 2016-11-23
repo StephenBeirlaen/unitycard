@@ -30,15 +30,12 @@ import be.nmct.unitycard.databinding.FragmentLoginBinding;
 import be.nmct.unitycard.helpers.ConnectionChecker;
 import be.nmct.unitycard.models.viewmodels.fragment.LoginFragmentVM;
 
-import static be.nmct.unitycard.activities.login.AccountActivity.REQUEST_PERMISSION_GET_ACCOUNTS;
-
 public class LoginFragment extends Fragment {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     private LoginFragmentListener mListener;
     private FragmentLoginBinding mBinding;
     private LoginFragmentVM mLoginFragmentVM;
-    private AccountManager mAccountManager; // todo: nog nodig straks als alles in helper zit?
     private CallbackManager callbackManager;
     private Uri uri;
     private Profile profile = new Profile("1", "", "", "","", uri);
@@ -61,8 +58,6 @@ public class LoginFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
         mLoginFragmentVM = new LoginFragmentVM(mBinding, getActivity());
 
-        mAccountManager = AccountManager.get(getActivity());
-
         mBinding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,7 +78,24 @@ public class LoginFragment extends Fragment {
                     // show progress scroller
                     mBinding.progressCircleLogin.setVisibility(View.VISIBLE);
 
-                    signIn("stephen.beirlaen@student.howest.be", "-Password1");
+                    AuthHelper.signIn("stephen.beirlaen@student.howest.be", "-Password1", getActivity(), getContext(), new AuthHelper.SignInListener() {
+                        @Override
+                        public void onSignInSuccessful(String userNameString) {
+                            mListener.onLoginSuccessful(userNameString);
+                        }
+
+                        @Override
+                        public void handleError(String error) {
+                            mListener.handleError(error);
+                            mBinding.progressCircleLogin.setVisibility(View.INVISIBLE);
+                        }
+
+                        @Override
+                        public void handlePermissionRequest(int permissionRequestCode) {
+                            mListener.handlePermissionRequest(permissionRequestCode);
+                            mBinding.progressCircleLogin.setVisibility(View.INVISIBLE);
+                        }
+                    });
                 }
             }
         });
@@ -195,7 +207,7 @@ public class LoginFragment extends Fragment {
         }
     }
 
-    private void signIn(final String userName, String password) {
+    /*private void signIn(final String userName, String password) {
         if (ConnectionChecker.isInternetAvailable(getActivity())) { // check of er verbinding is
             Account[] accountsByType = AuthHelper.getStoredAccountsByType(getActivity()); // haal alle bestaande accounts op
 
@@ -251,7 +263,7 @@ public class LoginFragment extends Fragment {
             mListener.handleError("No internet connection");
             mBinding.progressCircleLogin.setVisibility(View.INVISIBLE);
         }
-    }
+    }*/
 
     public interface LoginFragmentListener {
         void btnRegisterClicked();

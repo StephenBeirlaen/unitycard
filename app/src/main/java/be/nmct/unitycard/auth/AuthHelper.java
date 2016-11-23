@@ -5,6 +5,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -19,9 +20,12 @@ import java.util.Date;
 
 import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.contracts.ContentProviderContract;
+import be.nmct.unitycard.helpers.ConnectionChecker;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.GetTokenResponse;
 import be.nmct.unitycard.repositories.AuthRepository;
+
+import static be.nmct.unitycard.activities.login.AccountActivity.REQUEST_PERMISSION_GET_ACCOUNTS;
 
 /**
  * Created by Stephen on 28/10/2016.
@@ -29,6 +33,69 @@ import be.nmct.unitycard.repositories.AuthRepository;
 
 public class AuthHelper {
     private static final String LOG_TAG = AuthHelper.class.getSimpleName();
+
+    public static void signIn(final String userName, String password, Activity activity, Context context, final SignInListener listener) {
+        if (ConnectionChecker.isInternetAvailable(activity)) { // check of er verbinding is
+            AccountManager accountManager = AccountManager.get(context);
+
+            Account[] accountsByType = AuthHelper.getStoredAccountsByType(activity); // haal alle bestaande accounts op
+
+            if (accountsByType != null) {
+                // Permission ok
+                Account account = null;
+                if (accountsByType.length != 0) {
+                    if (!userName.equals(accountsByType[0].name)) {
+                        // Er bestaat reeds een account met andere naam, verwijder de vorige account
+                        AuthHelper.removeStoredAccount(accountsByType[0], activity);
+                    }
+                    else {
+                        // Account met de zelfde username terug gevonden
+                        account = accountsByType[0];
+
+                        // Check of er een Refresh token aanwezig is
+                        String refreshToken = accountManager.peekAuthToken(account, AccountContract.TOKEN_REFRESH);
+                        if (TextUtils.isEmpty(refreshToken)) { // Is er geen refresh token meer aanwezig?
+                            // Remove account
+                            AuthHelper.removeStoredAccount(account, activity);
+                            account = null;
+                        }
+                    }
+                }
+
+                if (account != null) { // Als er al een account is
+                    // Direct melden dat login OK is
+                    listener.onSignInSuccessful(userName);
+                }
+                else { // Als er nog geen account is
+                    // Add new account
+                    addAccount(userName, password, context, accountManager, new AuthHelper.AddAccountListener() {
+                        @Override
+                        public void accountAdded(Account account) {
+                            listener.onSignInSuccessful(userName);
+                        }
+
+                        @Override
+                        public void accountAddError(String error) {
+                            listener.handleError(error);
+                        }
+                    });
+                }
+            }
+            else {
+                // No permission = null
+                listener.handlePermissionRequest(REQUEST_PERMISSION_GET_ACCOUNTS);
+            }
+        }
+        else {
+            listener.handleError("No internet connection");
+        }
+    }
+
+    public interface SignInListener {
+        void onSignInSuccessful(String userNameString);
+        void handleError(String error);
+        void handlePermissionRequest(final int permissionRequestCode);
+    }
 
     public static void addAccount(final String userName, String password, Context context, final AccountManager accountManager, final AddAccountListener callback) {
         // Verify the user and return tokens
@@ -42,6 +109,14 @@ public class AuthHelper {
                     final String refreshToken = getTokenResponse.getRefreshToken();
                     final String userId = getTokenResponse.getUserId();
                     final String userRole = getTokenResponse.getUserRole();
+
+                    if (TextUtils.isEmpty(accessToken) ||
+                            TextUtils.isEmpty(refreshToken) ||
+                            TextUtils.isEmpty(userId) ||
+                            TextUtils.isEmpty(userRole)) {
+                        callback.accountAddError("Invalid login - response invalid");
+                        return;
+                    }
 
                     // Create and add account
                     Account account = new Account(userName, AccountContract.ACCOUNT_TYPE);
