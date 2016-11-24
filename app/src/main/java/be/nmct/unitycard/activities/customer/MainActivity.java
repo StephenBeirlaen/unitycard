@@ -106,7 +106,11 @@ public class MainActivity extends AppCompatActivity
                     showAccountActivity();
                 }
                 else if (role.equals(AccountContract.ROLE_CUSTOMER)) {
-                    showFragmentMyLoyaltyCard();
+                    if (getSupportFragmentManager().findFragmentById(R.id.content_frame) == null) {
+                        // er is nog geen fragment actief, voeg er 1 toe
+                        showFragmentMyLoyaltyCard();
+                    }
+
                     displayUsernameInSidebar(AuthHelper.getUser(this));
                 }
                 else if (role.equals(AccountContract.ROLE_RETAILER)) {

@@ -43,7 +43,10 @@ public class RetailerAdminActivity extends AppCompatActivity
         if (loggedInResult != null) { // app has permission to access accounts? If null -> no permission
             if (loggedInResult) {
                 // Logged in
-                showFragmentRetailerAdmin();
+                if (getSupportFragmentManager().findFragmentById(R.id.content_frame) == null) {
+                    // er is nog geen fragment actief, voeg er 1 toe
+                    showFragmentRetailerAdmin();
+                }
             }
             else {
                 // Not logged in, toon login scherm

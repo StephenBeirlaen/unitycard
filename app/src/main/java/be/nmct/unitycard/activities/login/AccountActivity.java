@@ -47,7 +47,10 @@ public class AccountActivity extends AppCompatActivity
             }
 
             // add initial fragment
-            showFragmentLogin();
+            if (getSupportFragmentManager().findFragmentById(R.id.content_frame) == null) {
+                // er is nog geen fragment actief, voeg er 1 toe
+                showFragmentLogin();
+            }
         }
     }
 
