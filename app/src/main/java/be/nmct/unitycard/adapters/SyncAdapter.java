@@ -81,10 +81,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 final ApiRepository apiRepo = new ApiRepository(getContext());
 
-                // Get the last sync timestamp
+                // Get the last sync timestamps
                 Date lastLoyaltyCardSyncTimestamp;
+                Date lastRetailersSyncTimestamp;
+                Date lastRetailerCategoriesSyncTimestamp;
+                Date lastAddedRetailersSyncTimestamp;
                 try {
                     lastLoyaltyCardSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_LOYALTY_CARD);
+                    lastAddedRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_ADDEDRETAILERS);
+                    lastRetailerCategoriesSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES);
+                    lastRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
                 } catch (ParseException e) {
                     handleSyncError();
                     return;
@@ -119,24 +125,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                 });
 
-                Date lastRetailersSyncTimestamp;
-                try {
-                    lastRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
-                } catch (ParseException e) {
-                    handleSyncError();
-                    return;
-                }
-
-
-                Date lastRetailerCategoriesSyncTimestamp;
-                try {
-                    lastRetailerCategoriesSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES);
-                } catch (ParseException e) {
-                    handleSyncError();
-                    return;
-                }
-
-                apiRepo.getLoyaltyCardRetailers(accessToken, AuthHelper.getUserId(getContext()), lastLoyaltyCardSyncTimestamp, new ApiRepository.GetResultListener<List<Retailer>>() {
+                apiRepo.getLoyaltyCardRetailers(accessToken, AuthHelper.getUserId(getContext()), lastAddedRetailersSyncTimestamp, new ApiRepository.GetResultListener<List<Retailer>>() {
                     @Override
                     public void resultReceived(List<Retailer> retailers) {
                         Log.d(LOG_TAG, "Received all retailers by loyaltycard: " + retailers);
@@ -155,7 +144,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                             mContentResolver.insert(ContentProviderContract.ADDED_RETAILERS_URI, contentValues);
 
-                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
+                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_ADDEDRETAILERS);
                         }
                     }
 
@@ -166,7 +155,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         handleSyncError();
                     }
                 });
-
 
                 apiRepo.getAllRetailerCategories(lastRetailerCategoriesSyncTimestamp, new ApiRepository.GetResultListener<List<RetailerCategory>>() {
                     @Override
@@ -196,15 +184,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                 });
 
-                Date lastAddRetailersSyncTimestamp;
-                try {
-                    lastAddRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_ADDEDRETAILERS);
-                } catch (ParseException e) {
-                    handleSyncError();
-                    return;
-                }
-
-                apiRepo.getAllRetailers(accessToken, lastAddRetailersSyncTimestamp, new ApiRepository.GetResultListener<List<Retailer>>() {
+                apiRepo.getAllRetailers(accessToken, lastRetailersSyncTimestamp, new ApiRepository.GetResultListener<List<Retailer>>() {
                     @Override
                     public void resultReceived(List<Retailer> retailers) {
                         Log.d(LOG_TAG, "Received all retailers: " + retailers);

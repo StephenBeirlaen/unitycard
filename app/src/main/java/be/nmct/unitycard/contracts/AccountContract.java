@@ -1,5 +1,7 @@
 package be.nmct.unitycard.contracts;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by Stephen on 28/10/2016.
  */
@@ -23,4 +25,15 @@ public class AccountContract {
     public static final String KEY_LAST_SYNC_TIMESTAMP_LOYALTY_CARD = "be.nmct.unitycard.account.last_sync_timestamp.loyaltycard";
     public static final String KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES = "be.nmct.unitycard.account.last_sync_timestamp.retailercategories";
     public static final String KEY_LAST_SYNC_TIMESTAMP_ADDEDRETAILERS = "be.nmct.unitycard.account.last_sync_timestamp.addedretailers";
+
+    public static final Integer POLICY_EMAIL_MIN_LENGTH = 6;
+    public static final Integer POLICY_EMAIL_MAX_LENGTH = 100;
+    public static final Integer POLICY_PASSWORD_MIN_LENGTH = 6;
+    public static final Integer POLICY_PASSWORD_MAX_LENGTH = 100;
+    public static final Pattern POLICY_PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[$@!%*?&_-])[A-Za-z\\d@$!%*?&_-]*");
+    public static final Integer POLICY_FIRSTNAME_MIN_LENGTH = 1;
+    public static final Integer POLICY_FIRSTNAME_MAX_LENGTH = 100;
+    public static final Integer POLICY_LASTNAME_MIN_LENGTH = 1;
+    public static final Integer POLICY_LASTNAME_MAX_LENGTH = 100;
+    public static final Integer POLICY_LANGUAGE_LENGTH = 5;
 }
