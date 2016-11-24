@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:id="@+id/recyclerViewAddRetailerList"
             android:scrollbars="vertical"
-            app:items="@{retailerList}" />
+            app:itemsAddRetailer="@{retailerList}" />
 
     </android.support.v4.widget.NestedScrollView>
 

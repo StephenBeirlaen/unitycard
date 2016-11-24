@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import be.nmct.unitycard.adapters.AddRetailerRecyclerViewAdapter;
+import be.nmct.unitycard.adapters.RetailerRecyclerViewAdapter;
 import be.nmct.unitycard.models.Retailer;
 
 /**
@@ -17,7 +18,7 @@ import be.nmct.unitycard.models.Retailer;
 
 public class AddRetailerBinder {
     // This binds XML parameters to objects
-    @BindingAdapter("items")
+    @BindingAdapter("itemsAddRetailer")
     public static void setItems(RecyclerView recyclerView, ObservableList<Retailer> retailers) {
         if (retailers != null) {
             AddRetailerRecyclerViewAdapter adapter = new AddRetailerRecyclerViewAdapter(recyclerView.getContext(), retailers);

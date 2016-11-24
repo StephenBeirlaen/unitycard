@@ -17,7 +17,7 @@ import be.nmct.unitycard.models.Retailer;
  */
 
 public class RetailerListBinder {
-    @BindingAdapter("items")
+    @BindingAdapter("itemsRetailer")
     public static void setItems(RecyclerView recyclerView, ObservableList<Retailer> retailers) {
         if (retailers != null) {
             RetailerRecyclerViewAdapter adapter = new RetailerRecyclerViewAdapter(recyclerView.getContext(), retailers);
