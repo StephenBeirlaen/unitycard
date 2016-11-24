@@ -59,6 +59,7 @@ public class RetailerListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
         myContentObserver = mRetailerListFragmentVM.new MyContentObserver(new Handler());
         getContext().getContentResolver().registerContentObserver(ADDED_RETAILERS_URI, false, myContentObserver);
     }

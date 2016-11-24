@@ -36,12 +36,11 @@ public class AddRetailerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_retailer, container, false);
+        mAddRetailerFragmentVM = new AddRetailerFragmentVM(mBinding, getActivity());
 
-        mBinding.recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity())); // todo: naamgeving..?
         mBinding.recyclerViewAddRetailerList.setHasFixedSize(true);
         mBinding.recyclerViewAddRetailerList.setItemAnimator(new DefaultItemAnimator());
-
-        mAddRetailerFragmentVM = new AddRetailerFragmentVM(mBinding, getActivity());
 
         return mBinding.getRoot();
     }

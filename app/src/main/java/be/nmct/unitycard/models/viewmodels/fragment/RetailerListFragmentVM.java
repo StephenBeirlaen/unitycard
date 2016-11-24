@@ -60,8 +60,8 @@ public class RetailerListFragmentVM extends BaseObservable {
         }
     }
 
-    public void loadRetailers(){
-        String[] columns = new String[]{
+    public void loadRetailers() { // todo: naamgeving
+        String[] columns = new String[] {
                 DatabaseContract.RetailerColumns.COLUMN_SERVER_ID,
                 DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID,
                 DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME,
@@ -74,7 +74,7 @@ public class RetailerListFragmentVM extends BaseObservable {
         Cursor data = mContext.getContentResolver().query(ADDED_RETAILERS_URI, columns, null, null, null);
 
         if (data != null){
-            retailerList = new ObservableArrayList<>();
+            retailerList = new ObservableArrayList<>(); // todo: naamgeving
             while (data.moveToNext()){
                 Retailer retailer = null;
                 try {
@@ -101,6 +101,5 @@ public class RetailerListFragmentVM extends BaseObservable {
             mBinding.setRetailerList(null);
             notifyPropertyChanged(BR.retailerList);
         }
-
     }
 }

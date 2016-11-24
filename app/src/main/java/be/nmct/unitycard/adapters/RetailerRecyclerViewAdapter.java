@@ -17,7 +17,8 @@ import be.nmct.unitycard.models.Retailer;
  * Created by lorenzvercoutere on 22/11/16.
  */
 
-public class RetailerRecyclerViewAdapter extends RecyclerView.Adapter<RetailerRecyclerViewAdapter.RetailerViewHolder> {
+public class RetailerRecyclerViewAdapter
+        extends RecyclerView.Adapter<RetailerRecyclerViewAdapter.RetailerViewHolder> {
 
     private ObservableList<Retailer> mRetailers;
     private Context mContext;
@@ -25,6 +26,26 @@ public class RetailerRecyclerViewAdapter extends RecyclerView.Adapter<RetailerRe
     public RetailerRecyclerViewAdapter(Context context, ObservableList<Retailer> retailers){
         this.mContext = context;
         this.mRetailers = retailers;
+    }
+
+    class RetailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        final RowRetailerBinding binding;
+
+        public RetailerViewHolder(RowRetailerBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+
+            binding.getRoot().setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            // // TODO: Click on Retailer
+        }
+
+        public RowRetailerBinding getBinding() {
+            return binding;
+        }
     }
 
     @Override
@@ -43,27 +64,5 @@ public class RetailerRecyclerViewAdapter extends RecyclerView.Adapter<RetailerRe
     @Override
     public int getItemCount() {
         return mRetailers.size();
-    }
-
-    class RetailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-
-        final RowRetailerBinding binding;
-
-
-        public RetailerViewHolder(RowRetailerBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-
-            binding.getRoot().setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            // // TODO: Click on Retailer
-        }
-
-        public RowRetailerBinding getBinding() {
-            return binding;
-        }
     }
 }
