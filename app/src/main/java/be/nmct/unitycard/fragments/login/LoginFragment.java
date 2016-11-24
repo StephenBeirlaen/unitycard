@@ -65,10 +65,22 @@ public class LoginFragment extends Fragment {
                 String password = mBinding.txtPassword.getText().toString();
 
                 if (username.length() == 0) { // een basic client side validatie
-                    mListener.handleError("Username is empty"); // todo zelfde controles als op server gebruiken
+                    mListener.handleError("Email is empty");
+                }
+                else if (username.length() < AccountContract.POLICY_EMAIL_MIN_LENGTH) {
+                    mListener.handleError("Email must have a minimum of " + AccountContract.POLICY_EMAIL_MIN_LENGTH + " characters"); // todo: multi language
+                }
+                else if (username.length() > AccountContract.POLICY_EMAIL_MAX_LENGTH) {
+                    mListener.handleError("Email must have a maximum of " + AccountContract.POLICY_EMAIL_MAX_LENGTH + " characters");
                 }
                 else if (password.length() == 0) {
                     mListener.handleError("Password is empty");
+                }
+                else if (password.length() < AccountContract.POLICY_PASSWORD_MIN_LENGTH) {
+                    mListener.handleError("Password must have a minimum of " + AccountContract.POLICY_PASSWORD_MIN_LENGTH + " characters");
+                }
+                else if (password.length() > AccountContract.POLICY_PASSWORD_MAX_LENGTH) {
+                    mListener.handleError("Password must have a maximum of " + AccountContract.POLICY_PASSWORD_MAX_LENGTH + " characters");
                 }
                 else {
                     // hide keyboard
@@ -78,7 +90,7 @@ public class LoginFragment extends Fragment {
                     // show progress scroller
                     mBinding.progressCircleLogin.setVisibility(View.VISIBLE);
 
-                    AuthHelper.signIn("stephen.beirlaen@student.howest.be", "-Password1", getActivity(), getContext(), new AuthHelper.SignInListener() {
+                    AuthHelper.signIn(username, password, getActivity(), getContext(), new AuthHelper.SignInListener() {
                         @Override
                         public void onSignInSuccessful(String userNameString) {
                             mListener.onLoginSuccessful(userNameString);
@@ -196,7 +208,7 @@ public class LoginFragment extends Fragment {
 
     }
 
-    private void handleSignInResult(GoogleSignInResult result) {
+    private void handleSignInResult(GoogleSignInResult result) { // todo: implement and rename method (have google in the name)
         if (result.isSuccess()) {
             // Signed in successfully
 
@@ -206,64 +218,6 @@ public class LoginFragment extends Fragment {
 
         }
     }
-
-    /*private void signIn(final String userName, String password) {
-        if (ConnectionChecker.isInternetAvailable(getActivity())) { // check of er verbinding is
-            Account[] accountsByType = AuthHelper.getStoredAccountsByType(getActivity()); // haal alle bestaande accounts op
-
-            if (accountsByType != null) {
-                // Permission ok
-                Account account = null;
-                if (accountsByType.length != 0) {
-                    if (!userName.equals(accountsByType[0].name)) {
-                        // Er bestaat reeds een account met andere naam, verwijder de vorige account
-                        AuthHelper.removeStoredAccount(accountsByType[0], getActivity());
-                    }
-                    else {
-                        // Account met de zelfde username terug gevonden
-                        account = accountsByType[0];
-
-                        // Check of er een Refresh token aanwezig is
-                        String refreshToken = mAccountManager.peekAuthToken(account, AccountContract.TOKEN_REFRESH);
-                        if (TextUtils.isEmpty(refreshToken)) { // Is er geen refresh token meer aanwezig?
-                            // Remove account
-                            AuthHelper.removeStoredAccount(account, getActivity());
-                            account = null;
-                        }
-                    }
-                }
-
-                if (account != null) { // Als er al een account is
-                    // Direct melden dat login OK is
-                    mListener.onLoginSuccessful(userName);
-                }
-                else { // Als er nog geen account is
-                    // Add new account
-                    AuthHelper.addAccount(userName, password, getContext(), mAccountManager, new AuthHelper.AddAccountListener() {
-                        @Override
-                        public void accountAdded(Account account) {
-                            mListener.onLoginSuccessful(userName);
-                        }
-
-                        @Override
-                        public void accountAddError(String error) {
-                            mListener.handleError(error);
-                            mBinding.progressCircleLogin.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                }
-            }
-            else {
-                // No permission = null
-                mListener.handlePermissionRequest(REQUEST_PERMISSION_GET_ACCOUNTS);
-                mBinding.progressCircleLogin.setVisibility(View.INVISIBLE);
-            }
-        }
-        else {
-            mListener.handleError("No internet connection");
-            mBinding.progressCircleLogin.setVisibility(View.INVISIBLE);
-        }
-    }*/
 
     public interface LoginFragmentListener {
         void btnRegisterClicked();

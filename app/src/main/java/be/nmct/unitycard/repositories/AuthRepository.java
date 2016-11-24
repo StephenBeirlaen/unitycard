@@ -5,12 +5,14 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.lang.annotation.Annotation;
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import be.nmct.unitycard.UnityCardApplication;
 import be.nmct.unitycard.models.GetTokenErrorResponse;
 import be.nmct.unitycard.models.GetTokenResponse;
+import be.nmct.unitycard.models.RegisterUserErrorResponse;
 import be.nmct.unitycard.models.postmodels.RegisterUserBody;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -120,7 +122,26 @@ public class AuthRepository {
                             callback.userRegistered();
                         }
                         else {
-                            callback.registerRequestError("Tging niet");
+                            Converter<ResponseBody, RegisterUserErrorResponse> converter =
+                                    mRestClient.getRetrofit().responseBodyConverter(RegisterUserErrorResponse.class, new Annotation[0]);
+
+                            try {
+                                // check for serverside errors:
+                                // - user email already exists
+                                RegisterUserErrorResponse errorResponse = converter.convert(response.errorBody());
+
+                                ArrayList<String> errors = errorResponse.getModelState().getErrors();
+                                String error = "Error registering!";
+                                if (errors != null && errors.size() != 0) {
+                                    error = errors.get(0);
+                                }
+
+                                callback.registerRequestError(error);
+                                Log.e(LOG_TAG, error);
+
+                            } catch (Exception e) {
+                                callback.registerRequestError("Error registering and couldn't parse error!");
+                            }
                         }
                     }
                 });
