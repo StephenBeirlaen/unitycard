@@ -1,16 +1,27 @@
 package be.nmct.unitycard.fragments.customer;
 
 
+import android.animation.LayoutTransition;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+
+import java.util.List;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.databinding.FragmentRetailerListBinding;
@@ -19,7 +30,8 @@ import be.nmct.unitycard.models.viewmodels.fragment.RetailerListFragmentVM;
 import static be.nmct.unitycard.contracts.ContentProviderContract.ADDED_RETAILERS_URI;
 import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILERS_URI;
 
-public class RetailerListFragment extends Fragment {
+public class RetailerListFragment extends Fragment
+        implements SearchView.OnQueryTextListener {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     private RetailerListFragmentListener mListener;
@@ -40,6 +52,8 @@ public class RetailerListFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_retailer_list, container, false);
         mRetailerListFragmentVM = new RetailerListFragmentVM(mBinding, getActivity());
 
+        setHasOptionsMenu(true); // voegt de search knop toe
+
         mBinding.recyclerViewListRetailer.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.recyclerViewListRetailer.setHasFixedSize(true);
         mBinding.recyclerViewListRetailer.setItemAnimator(new DefaultItemAnimator());
@@ -47,6 +61,17 @@ public class RetailerListFragment extends Fragment {
         mListener.showFabAddRetailer();
 
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_retailers, menu);
+        // Databinding werkt nog niet voor menu resources :(
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchView.setOnQueryTextListener(this);
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -69,6 +94,25 @@ public class RetailerListFragment extends Fragment {
         super.onPause();
 
         getContext().getContentResolver().unregisterContentObserver(myContentObserver);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (newText != null) {
+            // als de tekst verschillend is
+            if (!newText.equals(mRetailerListFragmentVM.mSearchQuery)) {
+                mRetailerListFragmentVM.mSearchQuery = newText;
+
+                mRetailerListFragmentVM.updateRecyclerView();
+            }
+        }
+
+        return false;
     }
 
     public interface RetailerListFragmentListener {

@@ -8,7 +8,6 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
-import be.nmct.unitycard.adapters.AddRetailerRecyclerViewAdapter;
 import be.nmct.unitycard.adapters.RetailerRecyclerViewAdapter;
 import be.nmct.unitycard.models.Retailer;
 

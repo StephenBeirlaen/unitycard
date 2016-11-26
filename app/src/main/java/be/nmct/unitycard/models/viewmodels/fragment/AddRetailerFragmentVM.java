@@ -15,6 +15,7 @@ import java.text.ParseException;
 import be.nmct.unitycard.BR;
 import be.nmct.unitycard.contracts.DatabaseContract;
 import be.nmct.unitycard.databinding.FragmentAddRetailerBinding;
+import be.nmct.unitycard.filters.FilterCursorWrapper;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.Retailer;
 
@@ -24,13 +25,17 @@ import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILERS_URI;
  * Created by Stephen on 8/11/2016.
  */
 
-public class AddRetailerFragmentVM extends BaseObservable {
+public class AddRetailerFragmentVM extends BaseObservable
+        implements FilterCursorWrapper.OnCursorFilterer {
 
     private FragmentAddRetailerBinding mBinding;
     private Context mContext;
 
     @Bindable
     private ObservableList<Retailer> retailerList;
+
+    private FilterCursorWrapper filterCursorWrapper;
+    public String mSearchQuery = "";
 
     public AddRetailerFragmentVM(FragmentAddRetailerBinding binding, Context context) {
         this.mBinding = binding;
@@ -59,7 +64,7 @@ public class AddRetailerFragmentVM extends BaseObservable {
         }
     }
 
-    public void loadRetailers() {
+    private void loadRetailers() {
         String[] columns = new String[] {
                 DatabaseContract.RetailerColumns.COLUMN_SERVER_ID,
                 DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID,
@@ -72,19 +77,26 @@ public class AddRetailerFragmentVM extends BaseObservable {
 
         Cursor data = mContext.getContentResolver().query(RETAILERS_URI, columns, null, null, null);
 
-        if (data != null) {
+        filterCursorWrapper = new FilterCursorWrapper(data, this);
+        updateRecyclerView();
+    }
+
+    public void updateRecyclerView() {
+        if (filterCursorWrapper != null) {
+            filterCursorWrapper.filter();
+
             retailerList = new ObservableArrayList<>();
-            while (data.moveToNext()) {
+            while (filterCursorWrapper.moveToNext()) {
                 Retailer retailer = null;
                 try {
                     retailer = new Retailer(
-                            data.getInt(data.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID)),
-                            data.getInt(data.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID)),
-                            data.getString(data.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME)),
-                            data.getString(data.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_TAGLINE)),
-                            data.getInt(data.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_CHAIN)) > 0,
-                            data.getString(data.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOGOURL)),
-                            TimestampHelper.convertStringToDate(data.getString(data.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP)))
+                            filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID)),
+                            filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID)),
+                            filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME)),
+                            filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_TAGLINE)),
+                            filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_CHAIN)) > 0,
+                            filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOGOURL)),
+                            TimestampHelper.convertStringToDate(filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP)))
                     );
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -93,12 +105,23 @@ public class AddRetailerFragmentVM extends BaseObservable {
             }
             mBinding.setRetailerList(retailerList);
             notifyPropertyChanged(BR.retailerList);
-
-            data.close();
         }
         else {
-            mBinding.setRetailerList(null); // todo: test this case
+            mBinding.setRetailerList(null);
             notifyPropertyChanged(BR.retailerList);
         }
+    }
+
+    @Override
+    public boolean retainsCurrent(Cursor cursor) {
+        int colnr1 = cursor.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME);
+        String retailerName = cursor.getString(colnr1);
+
+        // Filteren op retailer naam, non containing return false
+        if (!mSearchQuery.equals("")) {
+            if (!retailerName.toLowerCase().contains(mSearchQuery.toLowerCase())) return false;
+        }
+
+        return true;
     }
 }
