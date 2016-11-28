@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import be.nmct.unitycard.R;
+import be.nmct.unitycard.adapters.RetailerRecyclerViewAdapter;
 import be.nmct.unitycard.databinding.FragmentRetailerOffersBinding;
 import be.nmct.unitycard.models.viewmodels.fragment.RetailerOffersFragmentVM;
 
@@ -24,8 +25,14 @@ public class RetailerOffersFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static RetailerOffersFragment newInstance() {
-        return new RetailerOffersFragment();
+    public static RetailerOffersFragment newInstance(int retailerId) {
+        RetailerOffersFragment retailerOffersFragment = new RetailerOffersFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID, retailerId);
+        retailerOffersFragment.setArguments(args);
+
+        return retailerOffersFragment;
     }
 
     @Override
