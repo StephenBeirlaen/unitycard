@@ -8,6 +8,7 @@ import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.RetailerCategory;
 import be.nmct.unitycard.models.RetailerLocation;
 import be.nmct.unitycard.models.postmodels.AddLoyaltyCardRetailerBody;
+import be.nmct.unitycard.models.postmodels.PushAdvertisementNotificationBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -62,9 +63,16 @@ public interface ApiService {
     @GET("/api/offers/{retailerId}/{userId}")
     Observable<Response<List<Offer>>> getRetailerOffers(
             @Header("Authorization") String authorizationHeader,
-            @Path("retailerId") String retailerId,
+            @Path("retailerId") Integer retailerId,
             @Path("userId") String userId,
             @Query("lastUpdatedTimestamp") Long lastUpdatedTimestamp
+    );
+
+    @POST("/api/offers/{retailerId}/push")
+    Observable<Response<Void>> pushAdvertisementNotification(
+            @Header("Authorization") String authorizationHeader,
+            @Path("retailerId") int retailerId,
+            @Body PushAdvertisementNotificationBody body
     );
 
     // ----- Retailers -----
@@ -78,21 +86,21 @@ public interface ApiService {
     @GET("/api/retailers/{retailerId}")
     Observable<Response<Retailer>> getRetailer(
             @Header("Authorization") String authorizationHeader,
-            @Path("retailerId") String retailerId
+            @Path("retailerId") Integer retailerId
     );
 
     @GET("/api/retailers/{retailerId}/locations")
     Observable<Response<List<RetailerLocation>>> getRetailerLocations(
             @Header("Authorization") String authorizationHeader,
-            @Path("retailerId") String retailerId,
+            @Path("retailerId") Integer retailerId,
             @Query("lastUpdatedTimestamp") Long lastUpdatedTimestamp
     );
 
     @GET("/api/retailers/{retailerId}/locations/{locationId}")
     Observable<Response<RetailerLocation>> getRetailerLocation(
             @Header("Authorization") String authorizationHeader,
-            @Path("retailerId") String retailerId,
-            @Path("locationId") String locationId
+            @Path("retailerId") Integer retailerId,
+            @Path("locationId") Integer locationId
     );
 
     @GET("/api/retailers/categories")

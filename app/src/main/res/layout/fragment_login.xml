@@ -38,6 +38,7 @@
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:hint="@string/username"
+                    android:inputType="textEmailAddress"
                     style="@style/styleEditText">
 
                     <requestFocus />

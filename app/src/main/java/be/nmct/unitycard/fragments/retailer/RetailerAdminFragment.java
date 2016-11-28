@@ -31,14 +31,7 @@ public class RetailerAdminFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_retailer_admin, container, false);
-        mRetailerAdminFragmentVM = new RetailerAdminFragmentVM(mBinding, getActivity());
-
-        mBinding.btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mListener.requestLogOut();
-            }
-        });
+        mRetailerAdminFragmentVM = new RetailerAdminFragmentVM(mBinding, getActivity(), mListener);
 
         return mBinding.getRoot();
     }

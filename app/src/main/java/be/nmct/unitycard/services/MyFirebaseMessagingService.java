@@ -58,17 +58,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                             .setContentIntent(pendingIntent);
                     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
-
-                    sendListRefreshNotification();
                 }
             }
         }
-    }
-
-    // verwittig de TracksFragment (de listener) dat er nieuwe data is
-    private void sendListRefreshNotification() {
-        /*Intent intent = new Intent("NewDataAvailable");
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);*/
-        Log.d("logtag", "er is nieuwe GCM data!!!");
     }
 }

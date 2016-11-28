@@ -18,6 +18,7 @@ import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.RetailerCategory;
 import be.nmct.unitycard.models.RetailerLocation;
 import be.nmct.unitycard.models.postmodels.AddLoyaltyCardRetailerBody;
+import be.nmct.unitycard.models.postmodels.PushAdvertisementNotificationBody;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Response;
@@ -64,8 +65,12 @@ public class ApiRepository {
         subscribeApiCall(mRestClient.getApiService().getAllRetailerOffers(RestClient.getAuthorizationHeader(accessToken), userId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
-    public void getRetailerOffers(String accessToken, String retailerId, String userId, Date lastUpdatedTimestamp, final GetResultListener<List<Offer>> callback) {
+    public void getRetailerOffers(String accessToken, int retailerId, String userId, Date lastUpdatedTimestamp, final GetResultListener<List<Offer>> callback) {
         subscribeApiCall(mRestClient.getApiService().getRetailerOffers(RestClient.getAuthorizationHeader(accessToken), retailerId, userId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
+    }
+
+    public void pushAdvertisementNotification(String accessToken, int retailerId, PushAdvertisementNotificationBody pushAdvertisementNotificationBody, final GetResultListener<Void> callback) {
+        subscribeApiCall(mRestClient.getApiService().pushAdvertisementNotification(RestClient.getAuthorizationHeader(accessToken), retailerId, pushAdvertisementNotificationBody), callback);
     }
 
     // ----- Retailers -----
@@ -74,15 +79,15 @@ public class ApiRepository {
         subscribeApiCall(mRestClient.getApiService().getAllRetailers(RestClient.getAuthorizationHeader(accessToken), TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
-    public void getRetailer(String accessToken, String retailerId, final GetResultListener<Retailer> callback) {
+    public void getRetailer(String accessToken, int retailerId, final GetResultListener<Retailer> callback) {
         subscribeApiCall(mRestClient.getApiService().getRetailer(RestClient.getAuthorizationHeader(accessToken), retailerId), callback);
     }
 
-    public void getRetailerLocations(String accessToken, String retailerId, Date lastUpdatedTimestamp, final GetResultListener<List<RetailerLocation>> callback) {
+    public void getRetailerLocations(String accessToken, int retailerId, Date lastUpdatedTimestamp, final GetResultListener<List<RetailerLocation>> callback) {
         subscribeApiCall(mRestClient.getApiService().getRetailerLocations(RestClient.getAuthorizationHeader(accessToken), retailerId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
-    public void getRetailerLocation(String accessToken, String retailerId, String locationId, final GetResultListener<RetailerLocation> callback) {
+    public void getRetailerLocation(String accessToken, int retailerId, int locationId, final GetResultListener<RetailerLocation> callback) {
         subscribeApiCall(mRestClient.getApiService().getRetailerLocation(RestClient.getAuthorizationHeader(accessToken), retailerId, locationId), callback);
     }
 

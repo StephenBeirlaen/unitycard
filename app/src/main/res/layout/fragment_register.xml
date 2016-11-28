@@ -89,6 +89,7 @@
                         android:id="@+id/txt_Email"
                         android:maxLines="1"
                         android:hint="@string/email"
+                        android:inputType="textEmailAddress"
                         style="@style/styleEditText">
 
                     </android.support.v7.widget.AppCompatEditText>
