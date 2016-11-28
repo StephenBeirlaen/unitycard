@@ -15,12 +15,15 @@ import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.text.ParseException;
 import java.util.Date;
 
 import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.contracts.ContentProviderContract;
 import be.nmct.unitycard.helpers.ConnectionChecker;
+import be.nmct.unitycard.helpers.FcmTokenHelper;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.GetTokenResponse;
 import be.nmct.unitycard.repositories.AuthRepository;
@@ -97,7 +100,7 @@ public class AuthHelper {
         void handlePermissionRequest(final int permissionRequestCode);
     }
 
-    public static void addAccount(final String userName, String password, Context context, final AccountManager accountManager, final AddAccountListener callback) {
+    public static void addAccount(final String userName, String password, final Context context, final AccountManager accountManager, final AddAccountListener callback) {
         // Verify the user and return tokens
         AuthRepository authRepo = new AuthRepository(context);
         authRepo.requestToken(userName, password, new AuthRepository.TokenResponseListener() {
@@ -145,6 +148,10 @@ public class AuthHelper {
                     final long SYNC_INTERVAL_IN_MINUTES = 60L;
                     final long syncInterval = SYNC_INTERVAL_IN_MINUTES * SECONDS_PER_MINUTE;
                     ContentResolver.addPeriodicSync(account, ContentProviderContract.AUTHORITY, extras, syncInterval);
+
+                    // Set Firebase Cloud Messaging Token
+                    String fcmToken = FirebaseInstanceId.getInstance().getToken();
+                    FcmTokenHelper.sendRegistrationToServer(fcmToken, context);
 
                     callback.accountAdded(account);
                 }
@@ -305,10 +312,26 @@ public class AuthHelper {
         }
     }
 
-    public static void logUserOff(Context context) {
+    public static void logUserOff(final Context context) {
         // Wis alle cached data
         ContentProviderContract.clearAllContent(context);
 
+        getAccessToken(getUser(context), context, new GetAccessTokenListener() {
+            @Override
+            public void tokenReceived(String accessToken) {
+                FcmTokenHelper.removeRegistrationToken(context, accessToken);
+
+                clearAccounts(context);
+            }
+
+            @Override
+            public void requestNewLogin() {
+                clearAccounts(context);
+            }
+        });
+    }
+
+    private static void clearAccounts(Context context) {
         Account[] accounts = getStoredAccountsByType(context);
 
         if (accounts != null) {
