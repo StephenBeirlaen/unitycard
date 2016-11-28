@@ -5,9 +5,14 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -17,7 +22,8 @@ import be.nmct.unitycard.models.viewmodels.fragment.AddRetailerFragmentVM;
 
 import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILERS_URI;
 
-public class AddRetailerFragment extends Fragment {
+public class AddRetailerFragment extends Fragment
+        implements SearchView.OnQueryTextListener {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     private AddRetailerFragmentListener mListener;
@@ -36,14 +42,26 @@ public class AddRetailerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_retailer, container, false);
+        mAddRetailerFragmentVM = new AddRetailerFragmentVM(mBinding, getActivity());
 
-        mBinding.recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        setHasOptionsMenu(true); // voegt de search knop toe
+
+        mBinding.recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity())); // todo: naamgeving..?
         mBinding.recyclerViewAddRetailerList.setHasFixedSize(true);
         mBinding.recyclerViewAddRetailerList.setItemAnimator(new DefaultItemAnimator());
 
-        mAddRetailerFragmentVM = new AddRetailerFragmentVM(mBinding, getActivity());
-
         return mBinding.getRoot();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_retailers, menu);
+        // Databinding werkt nog niet voor menu resources :(
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+        SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchView.setOnQueryTextListener(this);
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -65,6 +83,25 @@ public class AddRetailerFragment extends Fragment {
         super.onPause();
 
         getContext().getContentResolver().unregisterContentObserver(myContentObserver);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        if (newText != null) {
+            // als de tekst verschillend is
+            if (!newText.equals(mAddRetailerFragmentVM.mSearchQuery)) {
+                mAddRetailerFragmentVM.mSearchQuery = newText;
+
+                mAddRetailerFragmentVM.updateRecyclerView();
+            }
+        }
+
+        return false;
     }
 
     public interface AddRetailerFragmentListener {

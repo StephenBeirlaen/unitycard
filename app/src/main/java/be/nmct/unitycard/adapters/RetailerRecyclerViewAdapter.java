@@ -27,7 +27,8 @@ import be.nmct.unitycard.repositories.ApiRepository;
  * Created by lorenzvercoutere on 22/11/16.
  */
 
-public class RetailerRecyclerViewAdapter extends RecyclerView.Adapter<RetailerRecyclerViewAdapter.RetailerViewHolder> {
+public class RetailerRecyclerViewAdapter
+        extends RecyclerView.Adapter<RetailerRecyclerViewAdapter.RetailerViewHolder> {
 
     private ObservableList<Retailer> mRetailers;
     private Context mContext;
@@ -39,28 +40,8 @@ public class RetailerRecyclerViewAdapter extends RecyclerView.Adapter<RetailerRe
         this.mRetailers = retailers;
     }
 
-    @Override
-    public RetailerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        RowRetailerBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.row_retailer, parent, false);
-        RetailerViewHolder retailerViewHolder = new RetailerViewHolder(binding);
-        return retailerViewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(RetailerViewHolder holder, int position) {
-        Retailer retailer = mRetailers.get(position);
-        holder.getBinding().setRetailer(retailer);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mRetailers.size();
-    }
-
     class RetailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-
         final RowRetailerBinding binding;
-
 
         public RetailerViewHolder(RowRetailerBinding binding) {
             super(binding.getRoot());
@@ -108,5 +89,23 @@ public class RetailerRecyclerViewAdapter extends RecyclerView.Adapter<RetailerRe
         public RowRetailerBinding getBinding() {
             return binding;
         }
+    }
+
+    @Override
+    public RetailerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        RowRetailerBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.row_retailer, parent, false);
+        RetailerViewHolder retailerViewHolder = new RetailerViewHolder(binding);
+        return retailerViewHolder;
+    }
+
+    @Override
+    public void onBindViewHolder(RetailerViewHolder holder, int position) {
+        Retailer retailer = mRetailers.get(position);
+        holder.getBinding().setRetailer(retailer);
+    }
+
+    @Override
+    public int getItemCount() {
+        return mRetailers.size();
     }
 }
