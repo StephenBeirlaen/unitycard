@@ -8,17 +8,20 @@ import be.nmct.unitycard.fragments.customer.RetailerInfoFragment;
 import be.nmct.unitycard.fragments.customer.RetailerOffersFragment;
 
 public class RetailerActivityPagerAdapter extends FragmentStatePagerAdapter {
-    public RetailerActivityPagerAdapter(FragmentManager fm) {
+    int mRetailerId;
+
+    public RetailerActivityPagerAdapter(FragmentManager fm, int retailerId) {
         super(fm);
+        this.mRetailerId = retailerId;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return RetailerInfoFragment.newInstance();
+                return RetailerInfoFragment.newInstance(mRetailerId);
             case 1:
-                return RetailerOffersFragment.newInstance();
+                return RetailerOffersFragment.newInstance(mRetailerId);
             default:
                 return null;
         }

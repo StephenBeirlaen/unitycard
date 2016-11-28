@@ -5,12 +5,15 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import be.nmct.unitycard.R;
+import be.nmct.unitycard.adapters.RetailerRecyclerViewAdapter;
 import be.nmct.unitycard.databinding.FragmentRetailerInfoBinding;
+import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.viewmodels.fragment.RetailerInfoFragmentVM;
 
 public class RetailerInfoFragment extends Fragment {
@@ -24,14 +27,40 @@ public class RetailerInfoFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static RetailerInfoFragment newInstance() {
-        return new RetailerInfoFragment();
+    public static RetailerInfoFragment newInstance(int retailerId) {
+        RetailerInfoFragment retailerInfoFragment = new RetailerInfoFragment();
+
+        Bundle args = new Bundle();
+        args.putInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID, retailerId);
+        retailerInfoFragment.setArguments(args);
+
+        return retailerInfoFragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_retailer_info, container, false);
-        mRetailerInfoFragmentVM = new RetailerInfoFragmentVM(mBinding, getActivity());
+
+        Integer retailerId = null;
+
+        Bundle args = getArguments();
+        if (args != null && args.containsKey(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID)){
+            retailerId = args.getInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID);
+
+            if (retailerId != null) {
+                Log.d(LOG_TAG, "showing retailer info, retailerid: " + retailerId);
+
+
+            }
+            else {
+                mListener.handleError("Retailer is null");
+            }
+        }
+        else {
+            mListener.handleError("Extras is null or doesn't contains EXTRA_RETAILER_ID key");
+        }
+
+        mRetailerInfoFragmentVM = new RetailerInfoFragmentVM(mBinding, getActivity(), retailerId);
 
         return mBinding.getRoot();
     }
@@ -44,7 +73,7 @@ public class RetailerInfoFragment extends Fragment {
     }
 
     public interface RetailerInfoFragmentListener {
-        // todo: events, indien er geen events zijn, onAttach en ondetach overrides wegdoen
+        void handleError(String error);
     }
 
     @Override

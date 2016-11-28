@@ -1,13 +1,17 @@
 package be.nmct.unitycard.activities.customer;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.adapters.RetailerActivityPagerAdapter;
+import be.nmct.unitycard.adapters.RetailerRecyclerViewAdapter;
 import be.nmct.unitycard.databinding.ActivityRetailerBinding;
 import be.nmct.unitycard.fragments.customer.RetailerInfoFragment;
 import be.nmct.unitycard.fragments.customer.RetailerOffersFragment;
@@ -34,7 +38,34 @@ public class RetailerActivity extends AppCompatActivity
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        RetailerActivityPagerAdapter pagerAdapter = new RetailerActivityPagerAdapter(getSupportFragmentManager());
+        Integer retailerId = null;
+
+        Intent intent = getIntent();
+        if(intent != null) {
+            Bundle extras = intent.getExtras();
+            if (extras != null && extras.containsKey(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID)){
+                retailerId = extras.getInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID);
+
+                if (retailerId != null) {
+                    Log.d(LOG_TAG, "showing retailer info, retailerid: " + retailerId);
+
+                }
+                else {
+                    finish();
+                    Log.d(LOG_TAG, "retailer is null");
+                }
+            }
+            else {
+                finish();
+                Log.d(LOG_TAG, "extras is null or doesn't contains EXTRA_RETAILER_ID key");
+            }
+        }
+        else {
+            finish();
+            Log.d(LOG_TAG, "intent is null");
+        }
+
+        RetailerActivityPagerAdapter pagerAdapter = new RetailerActivityPagerAdapter(getSupportFragmentManager(), retailerId);
         mBinding.viewpager.setAdapter(pagerAdapter);
         mBinding.tablayout.setupWithViewPager(mBinding.viewpager); // tabs instellen, o.a. de labels
         mBinding.tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -56,5 +87,10 @@ public class RetailerActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void handleError(String error) {
+        Snackbar.make(mBinding.retailerCoordinatorLayout, error, Snackbar.LENGTH_LONG).show();
     }
 }

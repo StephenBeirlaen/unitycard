@@ -24,7 +24,9 @@ import android.widget.LinearLayout;
 import java.util.List;
 
 import be.nmct.unitycard.R;
+import be.nmct.unitycard.adapters.RetailerRecyclerViewAdapter;
 import be.nmct.unitycard.databinding.FragmentRetailerListBinding;
+import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.viewmodels.fragment.RetailerListFragmentVM;
 
 import static be.nmct.unitycard.contracts.ContentProviderContract.ADDED_RETAILERS_URI;
