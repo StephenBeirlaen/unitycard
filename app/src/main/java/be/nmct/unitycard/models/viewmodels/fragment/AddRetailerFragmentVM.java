@@ -105,6 +105,8 @@ public class AddRetailerFragmentVM extends BaseObservable
             }
             mBinding.setRetailerList(retailerList);
             notifyPropertyChanged(BR.retailerList);
+
+
         }
         else {
             mBinding.setRetailerList(null);

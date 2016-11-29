@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="offer"
+            type="be.nmct.unitycard.models.Offer"/>
+    </data>
+
+
+
 <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,20 +26,22 @@
 
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
             android:id="@+id/textViewOfferVoorwaarde"
-            android:text="@string/OfferVoorwaarde"
-            android:textStyle="bold" />
+            android:text="@{offer.offerDemand}"
+            android:textStyle="bold"
+            android:layout_marginLeft="20dp"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
             android:id="@+id/textViewOffer"
-            android:text="@string/Offer"
-            android:layout_marginLeft="200dp"
+            android:text="@{offer.offerReceive}"
+            android:layout_marginLeft="20dp"
             />
 
         </LinearLayout>
 
 </android.support.v7.widget.CardView>
+</layout>

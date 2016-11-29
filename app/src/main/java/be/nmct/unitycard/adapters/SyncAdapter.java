@@ -22,6 +22,7 @@ import be.nmct.unitycard.contracts.ContentProviderContract;
 import be.nmct.unitycard.contracts.DatabaseContract;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.LoyaltyCard;
+import be.nmct.unitycard.models.Offer;
 import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.RetailerCategory;
 import be.nmct.unitycard.repositories.ApiRepository;
@@ -86,11 +87,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                 Date lastRetailersSyncTimestamp;
                 Date lastRetailerCategoriesSyncTimestamp;
                 Date lastAddedRetailersSyncTimestamp;
+                Date lastRetailerOffersSyncTimestamp;
                 try {
                     lastLoyaltyCardSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_LOYALTY_CARD);
                     lastAddedRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_ADDEDRETAILERS);
                     lastRetailerCategoriesSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES);
                     lastRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
+                    lastRetailerOffersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_OFFERS);
                 } catch (ParseException e) {
                     handleSyncError();
                     return;
@@ -212,6 +215,32 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
                         AuthHelper.invalidateAccessToken(accessToken, getContext());
 
+                        handleSyncError();
+                    }
+                });
+
+                apiRepo.getAllRetailerOffers(accessToken, AuthHelper.getUserId(getContext()), lastRetailerOffersSyncTimestamp, new ApiRepository.GetResultListener<List<Offer>>() {
+                    @Override
+                    public void resultReceived(List<Offer> offers) {
+                        Log.d(LOG_TAG, "Received all offers: " + offers);
+
+                        for(Offer offer : offers){
+                            ContentValues contentValues = new ContentValues();
+
+                            contentValues.put(DatabaseContract.OffersColumns.COLUMN_SERVER_ID, offer.getId());
+                            contentValues.put(DatabaseContract.OffersColumns.COLUMN_RETAILER_ID, offer.getRetailerId());
+                            contentValues.put(DatabaseContract.OffersColumns.COLUMN_OFFER_DEMAND, offer.getOfferDemand());
+                            contentValues.put(DatabaseContract.OffersColumns.COLUMN_OFFER_RECEIVE, offer.getOfferReceive());
+                            contentValues.put(DatabaseContract.OffersColumns.COLUMN_CREATED_TIMESTAMP, TimestampHelper.convertDateToString(offer.getCreatedTimestamp()));
+                            contentValues.put(DatabaseContract.OffersColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(offer.getUpdatedTimestamp()));
+
+                            mContentResolver.insert(ContentProviderContract.OFFERS_URI, contentValues);
+                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_OFFERS);
+                        }
+                    }
+
+                    @Override
+                    public void requestError(String error) {
                         handleSyncError();
                     }
                 });

@@ -32,7 +32,6 @@ public class RetailerRecyclerViewAdapter
 
     private ObservableList<Retailer> mRetailers;
     private Context mContext;
-    private ApiRepository apiRepo;
     public final static String EXTRA_RETAILER_ID = "RetailerID";
 
     public RetailerRecyclerViewAdapter(Context context, ObservableList<Retailer> retailers){

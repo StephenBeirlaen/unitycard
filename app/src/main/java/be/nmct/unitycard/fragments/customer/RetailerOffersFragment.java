@@ -5,6 +5,9 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +41,31 @@ public class RetailerOffersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_retailer_offers, container, false);
-        mRetailerOffersFragmentVM = new RetailerOffersFragmentVM(mBinding, getActivity());
+
+        Integer retailerId = null;
+
+        Bundle args = getArguments();
+        if (args != null && args.containsKey(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID)){
+            retailerId = args.getInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID);
+
+            if (retailerId != null) {
+                Log.d(LOG_TAG, "showing retailer offers, retailerid: " + retailerId);
+
+
+            }
+            else {
+                mListener.handleError("Retailer is null");
+            }
+        }
+        else {
+            mListener.handleError("Extras is null or doesn't contains EXTRA_RETAILER_ID key");
+        }
+
+        mRetailerOffersFragmentVM = new RetailerOffersFragmentVM(mBinding, getActivity(), retailerId);
+
+        mBinding.recyclerViewRetailerOffers.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.recyclerViewRetailerOffers.setHasFixedSize(true);
+        mBinding.recyclerViewRetailerOffers.setItemAnimator(new DefaultItemAnimator());
 
         return mBinding.getRoot();
     }
@@ -52,6 +79,7 @@ public class RetailerOffersFragment extends Fragment {
 
     public interface RetailerOffersFragmentListener {
         // todo: events, indien er geen events zijn, onAttach en ondetach overrides wegdoen
+        void handleError(String error);
     }
 
     @Override
