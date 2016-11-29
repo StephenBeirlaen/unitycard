@@ -13,6 +13,7 @@ import be.nmct.unitycard.UnityCardApplication;
 import be.nmct.unitycard.models.GetTokenErrorResponse;
 import be.nmct.unitycard.models.GetTokenResponse;
 import be.nmct.unitycard.models.RegisterUserErrorResponse;
+import be.nmct.unitycard.models.postmodels.ChangeFcmTokenBody;
 import be.nmct.unitycard.models.postmodels.RegisterUserBody;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -150,5 +151,39 @@ public class AuthRepository {
     public interface RegisterResponseListener {
         void userRegistered();
         void registerRequestError(String error);
+    }
+
+    public void changeUserFcmToken(String accessToken, ChangeFcmTokenBody changeFcmTokenBody, final ChangeFcmTokenResponseListener callback){
+        mRestClient.getAuthService().changeFcmToken(RestClient.getAuthorizationHeader(accessToken), changeFcmTokenBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Response<Void>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(LOG_TAG, "Error updating FCM token!");
+                        callback.fcmTokenChangeRequestError("Error updating FCM token!");
+                    }
+
+                    @Override
+                    public void onNext(Response<Void> response) {
+                        if (response.isSuccessful()) {
+                            callback.fcmTokenChanged();
+                        }
+                        else {
+                            Log.e(LOG_TAG, "Error updating FCM token!");
+                            callback.fcmTokenChangeRequestError("Error updating FCM token!");
+                        }
+                    }
+                });
+    }
+
+    public interface ChangeFcmTokenResponseListener {
+        void fcmTokenChanged();
+        void fcmTokenChangeRequestError(String error);
     }
 }

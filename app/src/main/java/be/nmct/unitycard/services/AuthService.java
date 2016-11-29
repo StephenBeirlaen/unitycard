@@ -1,11 +1,13 @@
 package be.nmct.unitycard.services;
 
 import be.nmct.unitycard.models.GetTokenResponse;
+import be.nmct.unitycard.models.postmodels.ChangeFcmTokenBody;
 import be.nmct.unitycard.models.postmodels.RegisterUserBody;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import rx.Observable;
 
@@ -27,6 +29,12 @@ public interface AuthService {
 
     @POST("/api/Account/Register")
     Observable<Response<Void>> registerUser(
-        @Body RegisterUserBody body
+            @Body RegisterUserBody body
+    );
+
+    @POST("/api/Account/ChangeFcmToken")
+    Observable<Response<Void>> changeFcmToken(
+            @Header("Authorization") String authorizationHeader,
+            @Body ChangeFcmTokenBody body
     );
 }

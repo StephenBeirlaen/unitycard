@@ -1,7 +1,9 @@
 {
   "project_info": {
     "project_number": "190077193197",
-    "project_id": "firebase-unitycard"
+    "firebase_url": "https://fir-unitycard.firebaseio.com",
+    "project_id": "firebase-unitycard",
+    "storage_bucket": "firebase-unitycard.appspot.com"
   },
   "client": [
     {
@@ -21,6 +23,10 @@
           }
         },
         {
+          "client_id": "190077193197-8236vjpi7ock4m6857e36ml128mmoocq.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
           "client_id": "190077193197-d64if6qkkqdca45q1o61ehfr634mqo41.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -35,11 +41,16 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "190077193197-8236vjpi7ock4m6857e36ml128mmoocq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

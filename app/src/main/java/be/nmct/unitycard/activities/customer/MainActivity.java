@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.activities.login.AccountActivity;
@@ -112,6 +113,9 @@ public class MainActivity extends AppCompatActivity
                     }
 
                     displayUsernameInSidebar(AuthHelper.getUser(this));
+
+                    // Registreren bij Firebase Cloud Messaging // todo: weg ?
+                    //FirebaseMessaging.getInstance().subscribeToTopic("advertisements/1");
                 }
                 else if (role.equals(AccountContract.ROLE_RETAILER)) {
                     showRetailerAdminActivity();
