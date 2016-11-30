@@ -1,11 +1,20 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="be.nmct.unitycard.fragments.customer.AdvertisingFragment">
 
     <data>
         <variable
             name="viewmodel"
             type="be.nmct.unitycard.models.viewmodels.fragment.AdvertisingFragmentVM" />
+
+        <import type="android.databinding.ObservableList"/>
+
+        <import type="be.nmct.unitycard.models.Offer"/>
+
+        <variable
+            name="offerList"
+            type="ObservableList&lt;Offer&gt;"/>
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -17,6 +26,7 @@
             android:layout_height="match_parent"
             android:id="@+id/recyclerViewAdvertising"
             android:scrollbars="vertical"
+            app:offers="@{offerList}"
             />
 
     </android.support.v4.widget.NestedScrollView>

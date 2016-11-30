@@ -17,7 +17,7 @@ import be.nmct.unitycard.models.Offer;
  * Created by lorenzvercoutere on 28/11/16.
  */
 
-public class RetailerOffersRecyclerViewAdapter extends RecyclerView.Adapter<RetailerOffersRecyclerViewAdapter.OfferViewHolder> {
+public class RetailerOffersRecyclerViewAdapter extends RecyclerView.Adapter<RetailerOffersRecyclerViewAdapter.RetailerOfferViewHolder> {
 
     private ObservableList<Offer> mOffers;
     private Context mContext;
@@ -27,11 +27,11 @@ public class RetailerOffersRecyclerViewAdapter extends RecyclerView.Adapter<Reta
         this.mOffers = offers;
     }
 
-    class OfferViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class RetailerOfferViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         final RowRetailerOfferBinding binding;
 
-        public OfferViewHolder(RowRetailerOfferBinding binding) {
+        public RetailerOfferViewHolder(RowRetailerOfferBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 
@@ -49,14 +49,14 @@ public class RetailerOffersRecyclerViewAdapter extends RecyclerView.Adapter<Reta
     }
 
     @Override
-    public OfferViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RetailerOfferViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RowRetailerOfferBinding binding = DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()), R.layout.row_retailer_offer, parent, false);
-        OfferViewHolder offerViewHolder = new OfferViewHolder(binding);
-        return offerViewHolder;
+        RetailerOfferViewHolder retailerOfferViewHolder = new RetailerOfferViewHolder(binding);
+        return retailerOfferViewHolder;
     }
 
     @Override
-    public void onBindViewHolder(OfferViewHolder holder, int position) {
+    public void onBindViewHolder(RetailerOfferViewHolder holder, int position) {
         Offer offer = mOffers.get(position);
         holder.getBinding().setOffer(offer);
     }

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +34,10 @@ public class AdvertisingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_advertising, container, false);
         mAdvertisingFragmentVM = new AdvertisingFragmentVM(mBinding, getActivity());
+
+        mBinding.recyclerViewAdvertising.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mBinding.recyclerViewAdvertising.setHasFixedSize(true);
+        mBinding.recyclerViewAdvertising.setItemAnimator(new DefaultItemAnimator());
 
         return mBinding.getRoot();
     }
