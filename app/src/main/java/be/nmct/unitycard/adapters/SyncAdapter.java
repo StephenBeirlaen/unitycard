@@ -16,15 +16,18 @@ import java.util.Date;
 import java.util.List;
 
 import be.nmct.unitycard.activities.customer.MainActivity;
+import be.nmct.unitycard.activities.customer.RetailerActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.contracts.ContentProviderContract;
 import be.nmct.unitycard.contracts.DatabaseContract;
+import be.nmct.unitycard.fragments.customer.RetailerInfoFragment;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.LoyaltyCard;
 import be.nmct.unitycard.models.Offer;
 import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.RetailerCategory;
+import be.nmct.unitycard.models.RetailerLocation;
 import be.nmct.unitycard.repositories.ApiRepository;
 
 /**
@@ -35,6 +38,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
     private ContentResolver mContentResolver;
+
+    public static final int RESULT_SYNC_SUCCESS = 1;
+    public static final int RESULT_SYNC_FAILED = -1;
+
+    public static final String KEY_SYNC_REQUEST_GET_RETAILER_LOCATIONS = "be.nmct.unitycard.key_sync_request_get_retailer_locations";
 
     public SyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
@@ -67,7 +75,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     @Override
-    public void onPerformSync(final Account account, Bundle extras, String authority, ContentProviderClient providerClient, SyncResult syncResult) {
+    public void onPerformSync(final Account account, final Bundle extras, String authority, ContentProviderClient providerClient, SyncResult syncResult) {
         // Om de debugger te attachen:
         //android.os.Debug.waitForDebugger();
 
@@ -82,186 +90,224 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
                 final ApiRepository apiRepo = new ApiRepository(getContext());
 
-                // Get the last sync timestamps
-                Date lastLoyaltyCardSyncTimestamp;
-                Date lastRetailersSyncTimestamp;
-                Date lastRetailerCategoriesSyncTimestamp;
-                Date lastAddedRetailersSyncTimestamp;
-                Date lastRetailerOffersSyncTimestamp;
-                try {
-                    lastLoyaltyCardSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_LOYALTY_CARD);
-                    lastAddedRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_ADDEDRETAILERS);
-                    lastRetailerCategoriesSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES);
-                    lastRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
-                    lastRetailerOffersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_OFFERS);
-                } catch (ParseException e) {
-                    handleSyncError();
-                    return;
+                int retailerId = extras.getInt(KEY_SYNC_REQUEST_GET_RETAILER_LOCATIONS, -1);
+
+                if (retailerId != -1) {
+                    apiRepo.getRetailerLocations(accessToken, retailerId, new Date(0), new ApiRepository.GetResultListener<List<RetailerLocation>>() {
+                        @Override
+                        public void resultReceived(List<RetailerLocation> retailerLocations) {
+                            Log.d(LOG_TAG, "Received retailer locations: " + retailerLocations);
+
+                            for (RetailerLocation retailerLocation : retailerLocations) {
+                                ContentValues contentValues = new ContentValues();
+
+                                contentValues.put(DatabaseContract.RetailerLocationsColumns.COLUMN_SERVER_ID, retailerLocation.getId());
+                                contentValues.put(DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID, retailerLocation.getRetailerId());
+                                contentValues.put(DatabaseContract.RetailerLocationsColumns.COLUMN_NAME, retailerLocation.getName());
+                                contentValues.put(DatabaseContract.RetailerLocationsColumns.COLUMN_STREET, retailerLocation.getStreet());
+                                contentValues.put(DatabaseContract.RetailerLocationsColumns.COLUMN_NUMBER, retailerLocation.getNumber());
+                                contentValues.put(DatabaseContract.RetailerLocationsColumns.COLUMN_ZIPCODE, retailerLocation.getZipcode());
+                                contentValues.put(DatabaseContract.RetailerLocationsColumns.COLUMN_CITY, retailerLocation.getCity());
+                                contentValues.put(DatabaseContract.RetailerLocationsColumns.COLUMN_COUNTRY, retailerLocation.getCountry());
+                                contentValues.put(DatabaseContract.RetailerLocationsColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailerLocation.getUpdatedTimestamp()));
+
+                                mContentResolver.insert(ContentProviderContract.RETAILER_LOCATIONS_URI, contentValues);
+                            }
+
+                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_LOCATIONS, RetailerInfoFragment.ACTION_FINISHED_RETAILER_LOCATIONS_SYNC, RetailerInfoFragment.ACTION_FINISHED_RETAILER_LOCATIONS_SYNC_RESULT);
+                        }
+
+                        @Override
+                        public void requestError(String error) {
+                            handleSyncError(RetailerInfoFragment.ACTION_FINISHED_RETAILER_LOCATIONS_SYNC, RetailerInfoFragment.ACTION_FINISHED_RETAILER_LOCATIONS_SYNC_RESULT);
+                        }
+                    });
                 }
+                else {
+                    // geen specifieke Sync request opgegeven, refresh dus de overige data
 
-                apiRepo.getLoyaltyCard(accessToken, AuthHelper.getUserId(getContext()), lastLoyaltyCardSyncTimestamp, new ApiRepository.GetResultListener<LoyaltyCard>() {
-                    @Override
-                    public void resultReceived(LoyaltyCard loyaltyCard) {
-                        Log.d(LOG_TAG, "Received loyalty card: " + loyaltyCard);
+                    // Get the last sync timestamps
+                    Date lastLoyaltyCardSyncTimestamp;
+                    Date lastRetailersSyncTimestamp;
+                    Date lastRetailerCategoriesSyncTimestamp;
+                    Date lastAddedRetailersSyncTimestamp;
+                    Date lastRetailerOffersSyncTimestamp;
+                    try {
+                        lastLoyaltyCardSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_LOYALTY_CARD);
+                        lastAddedRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_ADDEDRETAILERS);
+                        lastRetailerCategoriesSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES);
+                        lastRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
+                        lastRetailerOffersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_OFFERS);
+                    } catch (ParseException e) {
+                        handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
+                        return;
+                    }
 
-                        // todo: temporary
-                        if (loyaltyCard != null) {
-                            ContentValues contentValues = new ContentValues();
+                    apiRepo.getLoyaltyCard(accessToken, AuthHelper.getUserId(getContext()), lastLoyaltyCardSyncTimestamp, new ApiRepository.GetResultListener<LoyaltyCard>() {
+                        @Override
+                        public void resultReceived(LoyaltyCard loyaltyCard) {
+                            Log.d(LOG_TAG, "Received loyalty card: " + loyaltyCard);
 
-                            contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID, loyaltyCard.getId());
-                            contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID, loyaltyCard.getUserId());
-                            contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP, TimestampHelper.convertDateToString(loyaltyCard.getCreatedTimestamp()));
-                            contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(loyaltyCard.getUpdatedTimestamp()));
+                            // todo: temporary
+                            if (loyaltyCard != null) {
+                                ContentValues contentValues = new ContentValues();
 
-                            mContentResolver.insert(ContentProviderContract.LOYALTYCARDS_URI, contentValues);
+                                contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_SERVER_ID, loyaltyCard.getId());
+                                contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_USER_ID, loyaltyCard.getUserId());
+                                contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_CREATED_TIMESTAMP, TimestampHelper.convertDateToString(loyaltyCard.getCreatedTimestamp()));
+                                contentValues.put(DatabaseContract.LoyaltyCardColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(loyaltyCard.getUpdatedTimestamp()));
+
+                                mContentResolver.insert(ContentProviderContract.LOYALTYCARDS_URI, contentValues);
+                            }
+
+                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_LOYALTY_CARD, MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
                         }
 
-                        handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_LOYALTY_CARD);
-                    }
+                        @Override
+                        public void requestError(String error) {
+                            // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
+                            AuthHelper.invalidateAccessToken(accessToken, getContext());
 
-                    @Override
-                    public void requestError(String error) {
-                        // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
-                        AuthHelper.invalidateAccessToken(accessToken, getContext());
-
-                        handleSyncError();
-                    }
-                });
-
-                apiRepo.getLoyaltyCardRetailers(accessToken, AuthHelper.getUserId(getContext()), lastAddedRetailersSyncTimestamp, new ApiRepository.GetResultListener<List<Retailer>>() {
-                    @Override
-                    public void resultReceived(List<Retailer> retailers) {
-                        Log.d(LOG_TAG, "Received all retailers by loyaltycard: " + retailers);
-
-                        // todo: temporary, met contentprovideroperation werken (batch access)
-                        for (Retailer retailer : retailers) {
-                            ContentValues contentValues = new ContentValues();
-
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID, retailer.getId());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID, retailer.getRetailerCategoryId());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME, retailer.getName());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_TAGLINE, retailer.getTagline());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailer.getUpdatedTimestamp()));
-
-                            mContentResolver.insert(ContentProviderContract.ADDED_RETAILERS_URI, contentValues);
-
-                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_ADDEDRETAILERS);
+                            handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
                         }
-                    }
+                    });
 
-                    @Override
-                    public void requestError(String error) {
-                        AuthHelper.invalidateAccessToken(accessToken, getContext());
+                    apiRepo.getLoyaltyCardRetailers(accessToken, AuthHelper.getUserId(getContext()), lastAddedRetailersSyncTimestamp, new ApiRepository.GetResultListener<List<Retailer>>() {
+                        @Override
+                        public void resultReceived(List<Retailer> retailers) {
+                            Log.d(LOG_TAG, "Received all retailers by loyaltycard: " + retailers);
 
-                        handleSyncError();
-                    }
-                });
+                            // todo: temporary, met contentprovideroperation werken (batch access)
+                            for (Retailer retailer : retailers) {
+                                ContentValues contentValues = new ContentValues();
 
-                apiRepo.getAllRetailerCategories(lastRetailerCategoriesSyncTimestamp, new ApiRepository.GetResultListener<List<RetailerCategory>>() {
-                    @Override
-                    public void resultReceived(List<RetailerCategory> retailerCategories) {
-                        Log.d(LOG_TAG, "Received all retailer categories: " + retailerCategories);
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID, retailer.getId());
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID, retailer.getRetailerCategoryId());
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME, retailer.getName());
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_TAGLINE, retailer.getTagline());
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailer.getUpdatedTimestamp()));
 
-                        // todo: temporary, met contentprovideroperation werken (batch access)
-                        for (RetailerCategory retailerCategory : retailerCategories) {
-                            ContentValues contentValues = new ContentValues();
+                                mContentResolver.insert(ContentProviderContract.ADDED_RETAILERS_URI, contentValues);
 
-                            contentValues.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_SERVER_ID, retailerCategory.getId());
-                            contentValues.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_NAME, retailerCategory.getName());
-                            contentValues.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailerCategory.getUpdatedTimestamp()));
-
-                            mContentResolver.insert(ContentProviderContract.RETAILER_CATEGORIES_URI, contentValues);
-
-                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES);
+                                handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_ADDEDRETAILERS, MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void requestError(String error) {
-                        // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
-                        AuthHelper.invalidateAccessToken(accessToken, getContext());
+                        @Override
+                        public void requestError(String error) {
+                            AuthHelper.invalidateAccessToken(accessToken, getContext());
 
-                        handleSyncError();
-                    }
-                });
-
-                apiRepo.getAllRetailers(accessToken, lastRetailersSyncTimestamp, new ApiRepository.GetResultListener<List<Retailer>>() {
-                    @Override
-                    public void resultReceived(List<Retailer> retailers) {
-                        Log.d(LOG_TAG, "Received all retailers: " + retailers);
-
-                        // todo: temporary, met contentprovideroperation werken (batch access)
-                        for (Retailer retailer : retailers) {
-                            ContentValues contentValues = new ContentValues();
-
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID, retailer.getId());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID, retailer.getRetailerCategoryId());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME, retailer.getName());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_TAGLINE, retailer.getTagline());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
-                            contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailer.getUpdatedTimestamp()));
-
-                            mContentResolver.insert(ContentProviderContract.RETAILERS_URI, contentValues);
-
-                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
+                            handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
                         }
-                    }
+                    });
 
-                    @Override
-                    public void requestError(String error) {
-                        // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
-                        AuthHelper.invalidateAccessToken(accessToken, getContext());
+                    apiRepo.getAllRetailerCategories(lastRetailerCategoriesSyncTimestamp, new ApiRepository.GetResultListener<List<RetailerCategory>>() {
+                        @Override
+                        public void resultReceived(List<RetailerCategory> retailerCategories) {
+                            Log.d(LOG_TAG, "Received all retailer categories: " + retailerCategories);
 
-                        handleSyncError();
-                    }
-                });
+                            // todo: temporary, met contentprovideroperation werken (batch access)
+                            for (RetailerCategory retailerCategory : retailerCategories) {
+                                ContentValues contentValues = new ContentValues();
 
-                apiRepo.getAllRetailerOffers(accessToken, AuthHelper.getUserId(getContext()), lastRetailerOffersSyncTimestamp, new ApiRepository.GetResultListener<List<Offer>>() {
-                    @Override
-                    public void resultReceived(List<Offer> offers) {
-                        Log.d(LOG_TAG, "Received all offers: " + offers);
+                                contentValues.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_SERVER_ID, retailerCategory.getId());
+                                contentValues.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_NAME, retailerCategory.getName());
+                                contentValues.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailerCategory.getUpdatedTimestamp()));
 
-                        for(Offer offer : offers){
-                            ContentValues contentValues = new ContentValues();
+                                mContentResolver.insert(ContentProviderContract.RETAILER_CATEGORIES_URI, contentValues);
 
-                            contentValues.put(DatabaseContract.OffersColumns.COLUMN_SERVER_ID, offer.getId());
-                            contentValues.put(DatabaseContract.OffersColumns.COLUMN_RETAILER_ID, offer.getRetailerId());
-                            contentValues.put(DatabaseContract.OffersColumns.COLUMN_OFFER_DEMAND, offer.getOfferDemand());
-                            contentValues.put(DatabaseContract.OffersColumns.COLUMN_OFFER_RECEIVE, offer.getOfferReceive());
-                            contentValues.put(DatabaseContract.OffersColumns.COLUMN_CREATED_TIMESTAMP, TimestampHelper.convertDateToString(offer.getCreatedTimestamp()));
-                            contentValues.put(DatabaseContract.OffersColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(offer.getUpdatedTimestamp()));
-
-                            mContentResolver.insert(ContentProviderContract.OFFERS_URI, contentValues);
-                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_OFFERS);
+                                handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES, MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void requestError(String error) {
-                        handleSyncError();
-                    }
-                });
+                        @Override
+                        public void requestError(String error) {
+                            // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
+                            AuthHelper.invalidateAccessToken(accessToken, getContext());
+
+                            handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
+                        }
+                    });
+
+                    apiRepo.getAllRetailers(accessToken, lastRetailersSyncTimestamp, new ApiRepository.GetResultListener<List<Retailer>>() {
+                        @Override
+                        public void resultReceived(List<Retailer> retailers) {
+                            Log.d(LOG_TAG, "Received all retailers: " + retailers);
+
+                            // todo: temporary, met contentprovideroperation werken (batch access)
+                            for (Retailer retailer : retailers) {
+                                ContentValues contentValues = new ContentValues();
+
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID, retailer.getId());
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID, retailer.getRetailerCategoryId());
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME, retailer.getName());
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_TAGLINE, retailer.getTagline());
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailer.getUpdatedTimestamp()));
+
+                                mContentResolver.insert(ContentProviderContract.RETAILERS_URI, contentValues);
+
+                                handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS, MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
+                            }
+                        }
+
+                        @Override
+                        public void requestError(String error) {
+                            // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
+                            AuthHelper.invalidateAccessToken(accessToken, getContext());
+
+                            handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
+                        }
+                    });
+
+                    apiRepo.getAllRetailerOffers(accessToken, AuthHelper.getUserId(getContext()), lastRetailerOffersSyncTimestamp, new ApiRepository.GetResultListener<List<Offer>>() {
+                        @Override
+                        public void resultReceived(List<Offer> offers) {
+                            Log.d(LOG_TAG, "Received all offers: " + offers);
+
+                            for(Offer offer : offers){
+                                ContentValues contentValues = new ContentValues();
+
+                                contentValues.put(DatabaseContract.OffersColumns.COLUMN_SERVER_ID, offer.getId());
+                                contentValues.put(DatabaseContract.OffersColumns.COLUMN_RETAILER_ID, offer.getRetailerId());
+                                contentValues.put(DatabaseContract.OffersColumns.COLUMN_OFFER_DEMAND, offer.getOfferDemand());
+                                contentValues.put(DatabaseContract.OffersColumns.COLUMN_OFFER_RECEIVE, offer.getOfferReceive());
+                                contentValues.put(DatabaseContract.OffersColumns.COLUMN_CREATED_TIMESTAMP, TimestampHelper.convertDateToString(offer.getCreatedTimestamp()));
+                                contentValues.put(DatabaseContract.OffersColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(offer.getUpdatedTimestamp()));
+
+                                mContentResolver.insert(ContentProviderContract.OFFERS_URI, contentValues);
+                                handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_OFFERS, MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
+                            }
+                        }
+
+                        @Override
+                        public void requestError(String error) {
+                            handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
+                        }
+                    });
+                }
             }
 
             @Override
             public void requestNewLogin() {
-                handleSyncError();
+                handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
             }
         });
     }
 
-    private void handleSyncSuccess(Account account, String timestampTypeKey) {
+    private void handleSyncSuccess(Account account, String timestampTypeKey, String action, String syncResultType) {
         AuthHelper.setLastSyncTimestamp(getContext(), account, timestampTypeKey, new Date()); // Date object has the current date and time on init
 
-        getContext().sendBroadcast(new Intent(MainActivity.ACTION_FINISHED_SYNC));
+        getContext().sendBroadcast(new Intent(action)
+                .putExtra(syncResultType, RESULT_SYNC_SUCCESS));
     }
 
-    private void handleSyncError() {
-        getContext().sendBroadcast(new Intent(MainActivity.ACTION_FINISHED_SYNC)
-                .putExtra(MainActivity.ACTION_FINISHED_SYNC_RESULT, MainActivity.RESULT_SYNC_FAILED)
+    private void handleSyncError(String action, String syncResultType) {
+        getContext().sendBroadcast(new Intent(action)
+                .putExtra(syncResultType, RESULT_SYNC_FAILED)
         );
     }
 }

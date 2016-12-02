@@ -3,7 +3,8 @@ package be.nmct.unitycard.models.viewmodels.fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.databinding.BaseObservable;
-import android.net.ParseException;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import be.nmct.unitycard.BR;
 import be.nmct.unitycard.contracts.DatabaseContract;
 import be.nmct.unitycard.databinding.FragmentRetailerInfoBinding;
 import be.nmct.unitycard.fragments.customer.RetailerInfoFragment;
+import be.nmct.unitycard.helpers.SyncHelper;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.RetailerLocation;
@@ -30,18 +32,67 @@ public class RetailerInfoFragmentVM extends BaseObservable {
     private RetailerInfoFragment.RetailerInfoFragmentListener mListener;
     private Context mContext;
 
+    private Integer mRetailerId;
+    public Integer getRetailerId() {
+        return mRetailerId;
+    }
+
+    private ObservableList<RetailerLocation> retailerLocations;
+    public ObservableList<RetailerLocation> getRetailerLocations() {
+        return retailerLocations;
+    }
+
+    private RetailerLocation closestRetailerLocation;
+    public RetailerLocation getClosestRetailerLocation() {
+        return closestRetailerLocation;
+    }
+
     public RetailerInfoFragmentVM(FragmentRetailerInfoBinding binding, Context context, RetailerInfoFragment.RetailerInfoFragmentListener listener, Integer retailerId) {
         this.mBinding = binding;
         this.mListener = listener;
         this.mContext = context;
-
-        loadRetailer(retailerId);
+        this.mRetailerId = retailerId;
 
         mBinding.setViewmodel(this);
+
+        mBinding.buttonOpenKaart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                /*if (retailerLocations != null && retailerLocations.size() > 0) {
+                    RetailerLocation loc = retailerLocations.get(0);
+                    if (loc != null) {
+                        String address = loc.getStreet() + " "
+                                + loc.getNumber() + " "
+                                + loc.getZipcode() + " "
+                                + loc.getCity() + " "
+                                + loc.getCountry();
+                        mListener.showRetailerMap(loc.getName(), address);
+                    }
+                    else {
+                        mListener.handleError("No retailer location found!");
+                    }
+                }
+                else {
+                    mListener.handleError("No retailer locations found!");
+                }*/ // todo: all retaielrs
+
+                if (closestRetailerLocation != null) {
+                    String address = closestRetailerLocation.getStreet() + " "
+                            + closestRetailerLocation.getNumber() + " "
+                            + closestRetailerLocation.getZipcode() + " "
+                            + closestRetailerLocation.getCity() + " "
+                            + closestRetailerLocation.getCountry();
+                    mListener.showRetailerMap(closestRetailerLocation.getName(), address);
+                }
+                else {
+                    mListener.handleError("No closest retailer location found!");
+                }
+            }
+        });
     }
 
-    public void loadRetailer(int retailerId){
-        String[] retailerColumns = new String[]{
+    public void loadRetailerInfo() {
+        String[] retailerColumns = new String[] {
                 DatabaseContract.RetailerColumns.COLUMN_SERVER_ID,
                 DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID,
                 DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME,
@@ -52,7 +103,7 @@ public class RetailerInfoFragmentVM extends BaseObservable {
         };
 
         Cursor retailerData = mContext.getContentResolver().query(RETAILERS_ITEM_URI, retailerColumns,
-                DatabaseContract.RetailerColumns.COLUMN_SERVER_ID + "=?", new String[] { Integer.toString(retailerId) }, null);
+                DatabaseContract.RetailerColumns.COLUMN_SERVER_ID + "=?", new String[] { Integer.toString(mRetailerId) }, null);
 
         if (retailerData != null){
             Retailer retailer = null;
@@ -76,75 +127,68 @@ public class RetailerInfoFragmentVM extends BaseObservable {
 
             retailerData.close();
 
-            String[] retailerLocationsColumns = new String[]{
-                    DatabaseContract.RetailerLocationsColumns.COLUMN_SERVER_ID,
-                    DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID,
-                    DatabaseContract.RetailerLocationsColumns.COLUMN_NAME,
-                    DatabaseContract.RetailerLocationsColumns.COLUMN_STREET,
-                    DatabaseContract.RetailerLocationsColumns.COLUMN_NUMBER,
-                    DatabaseContract.RetailerLocationsColumns.COLUMN_ZIPCODE,
-                    DatabaseContract.RetailerLocationsColumns.COLUMN_CITY,
-                    DatabaseContract.RetailerLocationsColumns.COLUMN_COUNTRY,
-                    DatabaseContract.RetailerLocationsColumns.COLUMN_UPDATED_TIMESTAMP
-            };
+            updateRetailerLocationsInfo(retailer.getId());
 
-            Cursor retailerLocationsData = mContext.getContentResolver().query(RETAILER_LOCATIONS_ITEM_URI, retailerLocationsColumns,
-                    DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID + "=?", new String[] { Integer.toString(retailerId) }, null);
+            // Refresh de cached retailer locations voor deze retailer
+            SyncHelper.refreshCachedRetailerLocations(mContext, mRetailerId);
 
-            if (retailerLocationsData != null) {
-                final List<RetailerLocation> retailerLocations = new ArrayList<>();
-
-                while (retailerLocationsData.moveToNext()) {
-                    try {
-                        RetailerLocation retailerLocation = new RetailerLocation(
-                                retailerData.getInt(retailerData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID)),
-                                retailerData.getString(retailerData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_NAME)),
-                                retailerData.getString(retailerData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_STREET)),
-                                retailerData.getString(retailerData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_NUMBER)),
-                                retailerData.getInt(retailerData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_ZIPCODE)),
-                                retailerData.getString(retailerData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_CITY)),
-                                retailerData.getString(retailerData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_COUNTRY)),
-                                TimestampHelper.convertStringToDate(retailerData.getString(retailerData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_UPDATED_TIMESTAMP)))
-                        );
-                        retailerLocations.add(retailerLocation);
-                    } catch (java.text.ParseException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                final Retailer finalRetailer = retailer;
-
-                mBinding.buttonOpenKaart.setEnabled(true);
-                mBinding.buttonOpenKaart.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (retailerLocations != null && retailerLocations.size() > 0) {
-                            RetailerLocation loc = retailerLocations.get(0);
-                            if (loc != null) {
-                                String address = loc.getStreet() + " "
-                                        + loc.getNumber() + " "
-                                        + loc.getZipcode() + " "
-                                        + loc.getCity() + " "
-                                        + loc.getCountry();
-                                mListener.showRetailerMap(finalRetailer.getName(), address); // todo: dichtste locatie pakken
-                            }
-                            else {
-                                mListener.handleError("No retailer location found!");
-                            }
-                        }
-                        else {
-                            mListener.handleError("No retailer locations found!");
-                        }
-                    }
-                });
-
-                retailerData.close();
-            }
+            mListener.showRefreshingIndicator(true);
         }
         else {
             mBinding.setRetailer(null);
             notifyPropertyChanged(BR.retailer);
         }
+    }
 
+    public void updateRetailerLocationsInfo(int retailerId) {
+        String[] retailerLocationsColumns = new String[] {
+                DatabaseContract.RetailerLocationsColumns.COLUMN_SERVER_ID,
+                DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID,
+                DatabaseContract.RetailerLocationsColumns.COLUMN_NAME,
+                DatabaseContract.RetailerLocationsColumns.COLUMN_STREET,
+                DatabaseContract.RetailerLocationsColumns.COLUMN_NUMBER,
+                DatabaseContract.RetailerLocationsColumns.COLUMN_ZIPCODE,
+                DatabaseContract.RetailerLocationsColumns.COLUMN_CITY,
+                DatabaseContract.RetailerLocationsColumns.COLUMN_COUNTRY,
+                DatabaseContract.RetailerLocationsColumns.COLUMN_UPDATED_TIMESTAMP
+        };
+
+        Cursor retailerLocationsData = mContext.getContentResolver().query(RETAILER_LOCATIONS_ITEM_URI, retailerLocationsColumns,
+                DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID + "=?", new String[] { Integer.toString(retailerId) }, null);
+
+        if (retailerLocationsData != null) {
+            final ObservableList<RetailerLocation> retailerLocations = new ObservableArrayList<>();
+
+            while (retailerLocationsData.moveToNext()) {
+                try {
+                    RetailerLocation retailerLocation = new RetailerLocation(
+                            retailerLocationsData.getInt(retailerLocationsData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID)),
+                            retailerLocationsData.getString(retailerLocationsData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_NAME)),
+                            retailerLocationsData.getString(retailerLocationsData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_STREET)),
+                            retailerLocationsData.getString(retailerLocationsData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_NUMBER)),
+                            retailerLocationsData.getInt(retailerLocationsData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_ZIPCODE)),
+                            retailerLocationsData.getString(retailerLocationsData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_CITY)),
+                            retailerLocationsData.getString(retailerLocationsData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_COUNTRY)),
+                            TimestampHelper.convertStringToDate(retailerLocationsData.getString(retailerLocationsData.getColumnIndex(DatabaseContract.RetailerLocationsColumns.COLUMN_UPDATED_TIMESTAMP)))
+                    );
+                    retailerLocations.add(retailerLocation);
+                } catch (java.text.ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (retailerLocations.size() > 0) {
+                this.retailerLocations = retailerLocations;
+                this.closestRetailerLocation = retailerLocations.get(0);
+
+                mBinding.setRetailerLocationList(this.retailerLocations);
+                notifyPropertyChanged(BR.retailerLocationList);
+
+                mBinding.setClosestRetailerLocation(this.closestRetailerLocation); // todo: dichtste locatie pakken
+                notifyPropertyChanged(BR.closestRetailerLocation);
+            }
+
+            retailerLocationsData.close();
+        }
     }
 }

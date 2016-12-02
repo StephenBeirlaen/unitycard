@@ -76,6 +76,7 @@ public class GeoCodeRepository {
 
                                             if (lat != 0 && lng != 0) {
                                                 callback.latLongReceived(lat, lng);
+                                                return;
                                             }
                                         }
                                     }

@@ -8,11 +8,23 @@
             name="viewmodel"
             type="be.nmct.unitycard.models.viewmodels.fragment.RetailerInfoFragmentVM" />
 
+        <import type="android.databinding.ObservableList"/>
+
         <import type="be.nmct.unitycard.models.Retailer" />
+
+        <import type="be.nmct.unitycard.models.RetailerLocation" />
 
         <variable
             name="retailer"
             type="Retailer" />
+
+        <variable
+            name="retailerLocationList"
+            type="ObservableList&lt;RetailerLocation&gt;" />
+
+        <variable
+            name="closestRetailerLocation"
+            type="RetailerLocation" />
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -58,7 +70,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/buttonToonAlleWinkels"
                     android:text="@string/toonAlleWinkels"
-                    android:enabled="false"
                     style="@style/ButtonTheme" />
 
                 <TextView
@@ -87,7 +98,6 @@
                         android:layout_marginLeft="200dp"
                         android:text="@string/OpenKaart"
                         android:id="@+id/buttonOpenKaart"
-                        android:enabled="false"
                         style="@style/ButtonTheme" />
 
                 </LinearLayout>

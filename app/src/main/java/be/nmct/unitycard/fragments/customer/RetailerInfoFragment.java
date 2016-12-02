@@ -1,7 +1,10 @@
 package be.nmct.unitycard.fragments.customer;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -15,6 +18,9 @@ import be.nmct.unitycard.adapters.RetailerRecyclerViewAdapter;
 import be.nmct.unitycard.databinding.FragmentRetailerInfoBinding;
 import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.viewmodels.fragment.RetailerInfoFragmentVM;
+
+import static be.nmct.unitycard.activities.customer.MainActivity.ACTION_FINISHED_SYNC;
+import static be.nmct.unitycard.adapters.SyncAdapter.RESULT_SYNC_SUCCESS;
 
 public class RetailerInfoFragment extends Fragment {
 
@@ -70,9 +76,58 @@ public class RetailerInfoFragment extends Fragment {
         // todo: perform load actions here
     }
 
+    // Listener for synchronization changes
+    public static final String ACTION_FINISHED_RETAILER_LOCATIONS_SYNC = "be.nmct.unitycard.ACTION_FINISHED_RETAILER_LOCATIONS_SYNC";
+    public static final String ACTION_FINISHED_RETAILER_LOCATIONS_SYNC_RESULT = "be.nmct.unitycard.ACTION_FINISHED_RETAILER_LOCATIONS_SYNC_RESULT";
+
+    private static IntentFilter syncIntentFilter = new IntentFilter(ACTION_FINISHED_RETAILER_LOCATIONS_SYNC);
+    private BroadcastReceiver syncBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Hide the refreshing indicator
+            mListener.showRefreshingIndicator(false);
+
+            // Check if there was an error
+            if (intent.getAction().equals(ACTION_FINISHED_RETAILER_LOCATIONS_SYNC)) {
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    int result = extras.getInt(ACTION_FINISHED_RETAILER_LOCATIONS_SYNC_RESULT, RESULT_SYNC_SUCCESS);
+                    if (result == RESULT_SYNC_SUCCESS) { // als er geen error was
+                        // Update retailer location data
+                        mRetailerInfoFragmentVM.updateRetailerLocationsInfo(mRetailerInfoFragmentVM.getRetailerId());
+
+                        return;
+                    }
+                }
+            }
+
+            mListener.requestNewLogin(); // nieuwe login aanvragen
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // Register broadcastreceiver for synchronization changes
+        getActivity().registerReceiver(syncBroadcastReceiver, syncIntentFilter);
+
+        mRetailerInfoFragmentVM.loadRetailerInfo();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // Unregister broadcastreceiver for synchronization changes
+        getActivity().unregisterReceiver(syncBroadcastReceiver);
+    }
+
     public interface RetailerInfoFragmentListener {
+        void requestNewLogin();
         void handleError(String error);
         void showRetailerMap(String retailerName, String address);
+        void showRefreshingIndicator(Boolean refreshing);
     }
 
     @Override

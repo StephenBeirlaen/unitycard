@@ -37,7 +37,10 @@ import be.nmct.unitycard.databinding.ActivityMainBinding;
 import be.nmct.unitycard.fragments.customer.AdvertisingFragment;
 import be.nmct.unitycard.fragments.customer.MyLoyaltyCardFragment;
 import be.nmct.unitycard.fragments.customer.RetailerListFragment;
+import be.nmct.unitycard.helpers.SyncHelper;
 import be.nmct.unitycard.models.viewmodels.activities.MainActivityVM;
+
+import static be.nmct.unitycard.adapters.SyncAdapter.RESULT_SYNC_SUCCESS;
 
 public class MainActivity extends AppCompatActivity
         implements
@@ -80,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         mBinding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                refreshCachedData();
+                SyncHelper.refreshCachedData(MainActivity.this);
             }
         });
 
@@ -139,8 +142,7 @@ public class MainActivity extends AppCompatActivity
     // Listener for synchronization changes
     public static final String ACTION_FINISHED_SYNC = "be.nmct.unitycard.ACTION_FINISHED_SYNC";
     public static final String ACTION_FINISHED_SYNC_RESULT = "be.nmct.unitycard.ACTION_FINISHED_SYNC_RESULT";
-    private static final int RESULT_SYNC_SUCCESS = 1;
-    public static final int RESULT_SYNC_FAILED = -1;
+
     private static IntentFilter syncIntentFilter = new IntentFilter(ACTION_FINISHED_SYNC);
     private BroadcastReceiver syncBroadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -149,15 +151,17 @@ public class MainActivity extends AppCompatActivity
             mBinding.swipeRefreshLayout.setRefreshing(false);
 
             // Check if there was an error
-            Bundle extras = intent.getExtras();
-            if (extras != null) {
-                int result = extras.getInt(ACTION_FINISHED_SYNC_RESULT, RESULT_SYNC_SUCCESS);
-                if (result == RESULT_SYNC_SUCCESS) { // als er geen error was
-                    return; // niets doen
+            if (intent.getAction().equals(ACTION_FINISHED_SYNC)) {
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    int result = extras.getInt(ACTION_FINISHED_SYNC_RESULT, RESULT_SYNC_SUCCESS);
+                    if (result == RESULT_SYNC_SUCCESS) { // als er geen error was
+                        return; // niets doen
+                    }
                 }
-
-                requestNewLogin(); // nieuwe login aanvragen
             }
+
+            requestNewLogin(); // nieuwe login aanvragen
         }
     };
 
@@ -175,21 +179,6 @@ public class MainActivity extends AppCompatActivity
 
         // Unregister broadcastreceiver for synchronization changes
         unregisterReceiver(syncBroadcastReceiver);
-    }
-
-    private void refreshCachedData() { // Vernieuw de cached data
-        // Pass the settings flags by inserting them in a bundle
-        Bundle settingsBundle = new Bundle();
-        // Forces a manual sync. The sync adapter framework ignores the existing settings,
-        // such as the flag set by setSyncAutomatically().
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-        // Forces the sync to start immediately. If you don't set this, the system may wait
-        // several seconds before running the sync request, because it tries to optimize
-        // battery use by scheduling many requests in a short period of time.
-        settingsBundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-
-        // Request Synchronization
-        ContentResolver.requestSync(AuthHelper.getUser(MainActivity.this), ContentProviderContract.AUTHORITY, settingsBundle);
     }
 
     private void displayUsernameInSidebar(Account user) {
@@ -238,7 +227,7 @@ public class MainActivity extends AppCompatActivity
                         // logged in successfully
 
                         // De eerste keer een sync forceren
-                        refreshCachedData();
+                        SyncHelper.refreshCachedData(this);
                         break;
                     case RESULT_CANCELED:
                         finish(); // afsluiten

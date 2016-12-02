@@ -1,5 +1,9 @@
 package be.nmct.unitycard.activities.customer;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -12,6 +16,7 @@ import be.nmct.unitycard.databinding.ActivityRetailerMapBinding;
 import be.nmct.unitycard.fragments.customer.RetailerMapFragment;
 import be.nmct.unitycard.models.viewmodels.activities.RetailerMapActivityVM;
 
+import static be.nmct.unitycard.adapters.SyncAdapter.RESULT_SYNC_SUCCESS;
 import static be.nmct.unitycard.fragments.customer.RetailerMapFragment.ARG_ADDRESS;
 import static be.nmct.unitycard.fragments.customer.RetailerMapFragment.ARG_RETAILER_NAME;
 

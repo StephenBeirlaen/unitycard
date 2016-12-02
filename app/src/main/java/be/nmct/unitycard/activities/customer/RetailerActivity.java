@@ -1,15 +1,20 @@
 package be.nmct.unitycard.activities.customer;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
 import be.nmct.unitycard.R;
+import be.nmct.unitycard.activities.login.AccountActivity;
 import be.nmct.unitycard.adapters.RetailerActivityPagerAdapter;
 import be.nmct.unitycard.adapters.RetailerRecyclerViewAdapter;
 import be.nmct.unitycard.databinding.ActivityRetailerBinding;
@@ -17,6 +22,8 @@ import be.nmct.unitycard.fragments.customer.RetailerInfoFragment;
 import be.nmct.unitycard.fragments.customer.RetailerOffersFragment;
 import be.nmct.unitycard.models.viewmodels.activities.RetailerActivityVM;
 
+import static be.nmct.unitycard.activities.customer.MainActivity.REQUEST_LOGIN;
+import static be.nmct.unitycard.adapters.SyncAdapter.RESULT_SYNC_SUCCESS;
 import static be.nmct.unitycard.fragments.customer.RetailerMapFragment.ARG_ADDRESS;
 import static be.nmct.unitycard.fragments.customer.RetailerMapFragment.ARG_RETAILER_NAME;
 
@@ -80,6 +87,13 @@ public class RetailerActivity extends AppCompatActivity
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
+
+        mBinding.swipeRefreshLayoutRetailer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                showRefreshingIndicator(false);
+            }
+        });
     }
 
     @Override
@@ -102,6 +116,17 @@ public class RetailerActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    private void showAccountActivity() {
+        Intent intent = new Intent(this, AccountActivity.class);
+        startActivityForResult(intent, REQUEST_LOGIN);
+    }
+
+    @Override
+    public void requestNewLogin() {
+        // Something went wrong, toon login scherm
+        showAccountActivity();
+    }
+
     @Override
     public void handleError(String error) {
         Snackbar.make(mBinding.retailerCoordinatorLayout, error, Snackbar.LENGTH_LONG).show();
@@ -110,5 +135,10 @@ public class RetailerActivity extends AppCompatActivity
     @Override
     public void showRetailerMap(String retailerName, String address) {
         showRetailerMapActivity(retailerName, address);
+    }
+
+    @Override
+    public void showRefreshingIndicator(Boolean refreshing) {
+        mBinding.swipeRefreshLayoutRetailer.setRefreshing(refreshing);
     }
 }

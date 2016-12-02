@@ -28,6 +28,7 @@ import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.databinding.FragmentLoginBinding;
 import be.nmct.unitycard.helpers.ConnectionChecker;
+import be.nmct.unitycard.helpers.HideKeyboardHelper;
 import be.nmct.unitycard.models.viewmodels.fragment.LoginFragmentVM;
 
 public class LoginFragment extends Fragment {
@@ -84,9 +85,8 @@ public class LoginFragment extends Fragment {
                 }
                 else {
                     // hide keyboard
-                    InputMethodManager inputManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                            InputMethodManager.HIDE_NOT_ALWAYS);
+                    HideKeyboardHelper.hideKeyboard(getActivity());
+
                     // show progress scroller
                     mBinding.progressCircleLogin.setVisibility(View.VISIBLE);
 

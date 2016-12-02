@@ -22,6 +22,7 @@ import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.databinding.FragmentRegisterBinding;
 import be.nmct.unitycard.helpers.ConnectionChecker;
+import be.nmct.unitycard.helpers.HideKeyboardHelper;
 import be.nmct.unitycard.models.postmodels.RegisterUserBody;
 import be.nmct.unitycard.models.viewmodels.fragment.RegisterFragmentVM;
 import be.nmct.unitycard.repositories.AuthRepository;
@@ -106,9 +107,8 @@ public class RegisterFragment extends Fragment {
                 }
                 else {
                     // hide keyboard
-                    InputMethodManager inputManager = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),
-                            InputMethodManager.HIDE_NOT_ALWAYS);
+                    HideKeyboardHelper.hideKeyboard(getActivity());
+
                     // show progress scroller
                     mBinding.progressCircleRegister.setVisibility(View.VISIBLE);
 
