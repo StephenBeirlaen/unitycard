@@ -18,12 +18,6 @@ public class RetailerLocation {
     @SerializedName("Name")
     private String name;
 
-    @SerializedName("Latitude")
-    private double latitude;
-
-    @SerializedName("Longitude")
-    private double longitude;
-
     @SerializedName("Street")
     private String street;
 
@@ -42,13 +36,11 @@ public class RetailerLocation {
     @SerializedName("UpdatedTimestamp")
     private Date updatedTimestamp;
 
-    public RetailerLocation(int retailerId, String name, double latitude, double longitude,
+    public RetailerLocation(int retailerId, String name,
                             String street, String number, int zipcode, String city, String country,
                             Date updatedTimestamp) {
         this.retailerId = retailerId;
         this.name = name;
-        this.latitude = latitude;
-        this.longitude = longitude;
         this.street = street;
         this.number = number;
         this.zipcode = zipcode;
@@ -76,20 +68,6 @@ public class RetailerLocation {
     }
     public void setRetailerId(int retailerId) {
         this.retailerId = retailerId;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    public double getLongitude() {
-        return longitude;
-    }
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
     }
 
     public String getNumber() {

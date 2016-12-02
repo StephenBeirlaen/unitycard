@@ -63,6 +63,15 @@
         </activity><!-- todo: multi language label -->
 
         <activity
+            android:name=".activities.customer.RetailerMapActivity"
+            android:label="Retailer Map">
+        </activity><!-- todo: multi language label -->
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDEl8Ty1e7ZkEIGphrMA_XKH0n9FE2AE5w" />
+
+        <activity
             android:name=".activities.retailer.RetailerAdminActivity"
             android:label="Retailer Test">
         </activity><!-- todo: multi language label -->

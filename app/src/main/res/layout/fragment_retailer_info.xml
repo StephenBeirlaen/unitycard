@@ -58,6 +58,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/buttonToonAlleWinkels"
                     android:text="@string/toonAlleWinkels"
+                    android:enabled="false"
                     style="@style/ButtonTheme" />
 
                 <TextView
@@ -85,7 +86,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="200dp"
                         android:text="@string/OpenKaart"
-                        android:id="@+id/buttonOpenKaart"/>
+                        android:id="@+id/buttonOpenKaart"
+                        android:enabled="false"
+                        style="@style/ButtonTheme" />
 
                 </LinearLayout>
 

@@ -17,6 +17,9 @@ import be.nmct.unitycard.fragments.customer.RetailerInfoFragment;
 import be.nmct.unitycard.fragments.customer.RetailerOffersFragment;
 import be.nmct.unitycard.models.viewmodels.activities.RetailerActivityVM;
 
+import static be.nmct.unitycard.fragments.customer.RetailerMapFragment.ARG_ADDRESS;
+import static be.nmct.unitycard.fragments.customer.RetailerMapFragment.ARG_RETAILER_NAME;
+
 public class RetailerActivity extends AppCompatActivity
         implements
         RetailerInfoFragment.RetailerInfoFragmentListener,
@@ -48,7 +51,6 @@ public class RetailerActivity extends AppCompatActivity
 
                 if (retailerId != null) {
                     Log.d(LOG_TAG, "showing retailer info, retailerid: " + retailerId);
-
                 }
                 else {
                     finish();
@@ -89,8 +91,24 @@ public class RetailerActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    private void showRetailerMapActivity(String retailerName, String address) {
+        Intent intent = new Intent(this, RetailerMapActivity.class);
+
+        Bundle extras = new Bundle();
+        extras.putString(ARG_RETAILER_NAME, retailerName);
+        extras.putString(ARG_ADDRESS, address);
+        intent.putExtras(extras);
+
+        startActivity(intent);
+    }
+
     @Override
     public void handleError(String error) {
         Snackbar.make(mBinding.retailerCoordinatorLayout, error, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showRetailerMap(String retailerName, String address) {
+        showRetailerMapActivity(retailerName, address);
     }
 }

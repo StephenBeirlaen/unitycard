@@ -105,8 +105,6 @@ public class DatabaseContract {
         String COLUMN_SERVER_ID = "ServerId";
         String COLUMN_RETAILER_ID = "RetailerId";
         String COLUMN_NAME = "Name";
-        String COLUMN_LATITUDE = "Latitude";
-        String COLUMN_LONGITUDE = "Longitude";
         String COLUMN_STREET = "Street";
         String COLUMN_NUMBER = "Number";
         String COLUMN_ZIPCODE = "ZipCode";
@@ -122,8 +120,6 @@ public class DatabaseContract {
                 + COLUMN_SERVER_ID + " integer not null unique, "
                 + COLUMN_RETAILER_ID + " integer, "
                 + COLUMN_NAME + " text not null, "
-                + COLUMN_LATITUDE + " double, "
-                + COLUMN_LONGITUDE + " double, "
                 + COLUMN_STREET + " text not null, "
                 + COLUMN_NUMBER + " text not null, "
                 + COLUMN_ZIPCODE + " integer, "

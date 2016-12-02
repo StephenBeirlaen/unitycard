@@ -4,6 +4,7 @@ import javax.inject.Singleton;
 
 import be.nmct.unitycard.repositories.ApiRepository;
 import be.nmct.unitycard.repositories.AuthRepository;
+import be.nmct.unitycard.repositories.GeoCodeRepository;
 import dagger.Component;
 
 @Singleton // Constraints this component to one-per-application or unscoped bindings.
@@ -13,4 +14,5 @@ public interface ApplicationComponent {
     // the activities, services, or fragments that will can be added should be declared in this class with individual inject() methods:
     void inject(AuthRepository authRepository);
     void inject(ApiRepository apiRepository);
+    void inject(GeoCodeRepository geoCodeRepository);
 }

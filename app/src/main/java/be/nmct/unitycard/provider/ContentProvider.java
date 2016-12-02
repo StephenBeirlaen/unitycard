@@ -110,8 +110,6 @@ public class ContentProvider extends android.content.ContentProvider {
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_SERVER_ID, DatabaseContract.RetailerLocationsColumns.COLUMN_SERVER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID, DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_NAME, DatabaseContract.RetailerLocationsColumns.COLUMN_NAME);
-        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_LATITUDE, DatabaseContract.RetailerLocationsColumns.COLUMN_LATITUDE);
-        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_LONGITUDE, DatabaseContract.RetailerLocationsColumns.COLUMN_LONGITUDE);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_STREET, DatabaseContract.RetailerLocationsColumns.COLUMN_STREET);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_NUMBER, DatabaseContract.RetailerLocationsColumns.COLUMN_NUMBER);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerLocationsColumns.COLUMN_ZIPCODE, DatabaseContract.RetailerLocationsColumns.COLUMN_ZIPCODE);

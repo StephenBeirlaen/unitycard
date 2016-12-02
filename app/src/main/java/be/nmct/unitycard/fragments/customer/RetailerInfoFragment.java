@@ -49,8 +49,6 @@ public class RetailerInfoFragment extends Fragment {
 
             if (retailerId != null) {
                 Log.d(LOG_TAG, "showing retailer info, retailerid: " + retailerId);
-
-
             }
             else {
                 mListener.handleError("Retailer is null");
@@ -60,7 +58,7 @@ public class RetailerInfoFragment extends Fragment {
             mListener.handleError("Extras is null or doesn't contains EXTRA_RETAILER_ID key");
         }
 
-        mRetailerInfoFragmentVM = new RetailerInfoFragmentVM(mBinding, getActivity(), retailerId);
+        mRetailerInfoFragmentVM = new RetailerInfoFragmentVM(mBinding, getActivity(), mListener, retailerId);
 
         return mBinding.getRoot();
     }
@@ -74,6 +72,7 @@ public class RetailerInfoFragment extends Fragment {
 
     public interface RetailerInfoFragmentListener {
         void handleError(String error);
+        void showRetailerMap(String retailerName, String address);
     }
 
     @Override

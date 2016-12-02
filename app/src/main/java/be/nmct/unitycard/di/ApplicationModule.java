@@ -4,6 +4,7 @@ import android.app.Application;
 
 import javax.inject.Singleton;
 
+import be.nmct.unitycard.repositories.GeoCodeClient;
 import be.nmct.unitycard.repositories.RestClient;
 import dagger.Module;
 import dagger.Provides;
@@ -27,4 +28,8 @@ public class ApplicationModule {
     RestClient provideRestClient() {
         return new RestClient();
     }
+
+    @Provides
+    @Singleton
+    GeoCodeClient provideGeoCodeClient() { return new GeoCodeClient(); }
 }

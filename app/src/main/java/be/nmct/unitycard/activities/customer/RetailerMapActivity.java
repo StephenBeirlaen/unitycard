@@ -2,6 +2,7 @@ package be.nmct.unitycard.activities.customer;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -10,6 +11,9 @@ import be.nmct.unitycard.R;
 import be.nmct.unitycard.databinding.ActivityRetailerMapBinding;
 import be.nmct.unitycard.fragments.customer.RetailerMapFragment;
 import be.nmct.unitycard.models.viewmodels.activities.RetailerMapActivityVM;
+
+import static be.nmct.unitycard.fragments.customer.RetailerMapFragment.ARG_ADDRESS;
+import static be.nmct.unitycard.fragments.customer.RetailerMapFragment.ARG_RETAILER_NAME;
 
 public class RetailerMapActivity extends AppCompatActivity
         implements
@@ -29,13 +33,22 @@ public class RetailerMapActivity extends AppCompatActivity
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        showFragmentRetailerMap();
+        Bundle extras = getIntent().getExtras();
+        String retailerName = extras.getString(ARG_RETAILER_NAME);
+        String address = extras.getString(ARG_ADDRESS);
+
+        if (retailerName != null && address != null) {
+            showFragmentRetailerMap(retailerName, address);
+        }
+        else {
+            finish();
+        }
     }
 
-    private void showFragmentRetailerMap() {
+    private void showFragmentRetailerMap(String retailerName, String address) {
         getSupportFragmentManager().beginTransaction()
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .replace(R.id.content_frame, RetailerMapFragment.newInstance(), RetailerMapFragment.class.getSimpleName()) // replace = remove + add
+                .replace(R.id.content_frame, RetailerMapFragment.newInstance(retailerName, address), RetailerMapFragment.class.getSimpleName()) // replace = remove + add
                 .commit();
     }
 
@@ -46,5 +59,10 @@ public class RetailerMapActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void handleError(String error) {
+        Snackbar.make(mBinding.contentFrame, error, Snackbar.LENGTH_LONG).show();
     }
 }
