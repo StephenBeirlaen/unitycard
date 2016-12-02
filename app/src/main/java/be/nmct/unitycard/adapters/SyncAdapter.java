@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.List;
 
 import be.nmct.unitycard.activities.customer.MainActivity;
-import be.nmct.unitycard.activities.customer.RetailerActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.contracts.ContentProviderContract;

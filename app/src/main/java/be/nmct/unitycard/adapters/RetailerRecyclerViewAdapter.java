@@ -1,27 +1,18 @@
 package be.nmct.unitycard.adapters;
 
-import android.accounts.Account;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableList;
-import android.net.Uri;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.activities.customer.RetailerActivity;
-import be.nmct.unitycard.auth.AuthHelper;
-import be.nmct.unitycard.contracts.ContentProviderContract;
-import be.nmct.unitycard.databinding.RowAddRetailerBinding;
 import be.nmct.unitycard.databinding.RowRetailerBinding;
-import be.nmct.unitycard.fragments.customer.RetailerInfoFragment;
 import be.nmct.unitycard.models.Retailer;
-import be.nmct.unitycard.repositories.ApiRepository;
 
 /**
  * Created by lorenzvercoutere on 22/11/16.

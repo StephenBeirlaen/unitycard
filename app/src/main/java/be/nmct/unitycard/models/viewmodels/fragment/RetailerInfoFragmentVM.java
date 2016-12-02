@@ -4,11 +4,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.databinding.BaseObservable;
 import android.databinding.ObservableArrayList;
-import android.databinding.ObservableList;
 import android.view.View;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import be.nmct.unitycard.BR;
 import be.nmct.unitycard.contracts.DatabaseContract;
@@ -37,8 +35,8 @@ public class RetailerInfoFragmentVM extends BaseObservable {
         return mRetailerId;
     }
 
-    private ObservableList<RetailerLocation> retailerLocations;
-    public ObservableList<RetailerLocation> getRetailerLocations() {
+    private ArrayList<RetailerLocation> retailerLocations;
+    public ArrayList<RetailerLocation> getRetailerLocations() {
         return retailerLocations;
     }
 
@@ -55,34 +53,23 @@ public class RetailerInfoFragmentVM extends BaseObservable {
 
         mBinding.setViewmodel(this);
 
-        mBinding.buttonOpenKaart.setOnClickListener(new View.OnClickListener() {
+        mBinding.buttonToonAlleWinkels.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*if (retailerLocations != null && retailerLocations.size() > 0) {
-                    RetailerLocation loc = retailerLocations.get(0);
-                    if (loc != null) {
-                        String address = loc.getStreet() + " "
-                                + loc.getNumber() + " "
-                                + loc.getZipcode() + " "
-                                + loc.getCity() + " "
-                                + loc.getCountry();
-                        mListener.showRetailerMap(loc.getName(), address);
-                    }
-                    else {
-                        mListener.handleError("No retailer location found!");
-                    }
+                if (retailerLocations != null && retailerLocations.size() > 0) {
+                    mListener.showAllRetailersMap(retailerLocations);
                 }
                 else {
                     mListener.handleError("No retailer locations found!");
-                }*/ // todo: all retaielrs
+                }
+            }
+        });
 
+        mBinding.buttonOpenKaart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 if (closestRetailerLocation != null) {
-                    String address = closestRetailerLocation.getStreet() + " "
-                            + closestRetailerLocation.getNumber() + " "
-                            + closestRetailerLocation.getZipcode() + " "
-                            + closestRetailerLocation.getCity() + " "
-                            + closestRetailerLocation.getCountry();
-                    mListener.showRetailerMap(closestRetailerLocation.getName(), address);
+                    mListener.showRetailerMap(closestRetailerLocation);
                 }
                 else {
                     mListener.handleError("No closest retailer location found!");
@@ -157,7 +144,7 @@ public class RetailerInfoFragmentVM extends BaseObservable {
                 DatabaseContract.RetailerLocationsColumns.COLUMN_RETAILER_ID + "=?", new String[] { Integer.toString(retailerId) }, null);
 
         if (retailerLocationsData != null) {
-            final ObservableList<RetailerLocation> retailerLocations = new ObservableArrayList<>();
+            final ArrayList<RetailerLocation> retailerLocations = new ObservableArrayList<>();
 
             while (retailerLocationsData.moveToNext()) {
                 try {
@@ -180,9 +167,6 @@ public class RetailerInfoFragmentVM extends BaseObservable {
             if (retailerLocations.size() > 0) {
                 this.retailerLocations = retailerLocations;
                 this.closestRetailerLocation = retailerLocations.get(0);
-
-                mBinding.setRetailerLocationList(this.retailerLocations);
-                notifyPropertyChanged(BR.retailerLocationList);
 
                 mBinding.setClosestRetailerLocation(this.closestRetailerLocation); // todo: dichtste locatie pakken
                 notifyPropertyChanged(BR.closestRetailerLocation);

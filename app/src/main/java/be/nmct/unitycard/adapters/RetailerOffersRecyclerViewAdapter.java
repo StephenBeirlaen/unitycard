@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import be.nmct.unitycard.R;
-import be.nmct.unitycard.binders.RetailerOffersBinder;
 import be.nmct.unitycard.databinding.RowRetailerOfferBinding;
 import be.nmct.unitycard.models.Offer;
 

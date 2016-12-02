@@ -1,9 +1,6 @@
 package be.nmct.unitycard.activities.customer;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -13,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.activities.login.AccountActivity;
 import be.nmct.unitycard.adapters.RetailerActivityPagerAdapter;
@@ -20,12 +19,12 @@ import be.nmct.unitycard.adapters.RetailerRecyclerViewAdapter;
 import be.nmct.unitycard.databinding.ActivityRetailerBinding;
 import be.nmct.unitycard.fragments.customer.RetailerInfoFragment;
 import be.nmct.unitycard.fragments.customer.RetailerOffersFragment;
+import be.nmct.unitycard.models.RetailerLocation;
 import be.nmct.unitycard.models.viewmodels.activities.RetailerActivityVM;
 
 import static be.nmct.unitycard.activities.customer.MainActivity.REQUEST_LOGIN;
-import static be.nmct.unitycard.adapters.SyncAdapter.RESULT_SYNC_SUCCESS;
-import static be.nmct.unitycard.fragments.customer.RetailerMapFragment.ARG_ADDRESS;
-import static be.nmct.unitycard.fragments.customer.RetailerMapFragment.ARG_RETAILER_NAME;
+import static be.nmct.unitycard.fragments.customer.RetailerMapFragment.ARG_RETAILER_LOCATION;
+import static be.nmct.unitycard.fragments.customer.RetailerMapFragment.ARG_RETAILER_LOCATION_LIST;
 
 public class RetailerActivity extends AppCompatActivity
         implements
@@ -105,12 +104,21 @@ public class RetailerActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void showRetailerMapActivity(String retailerName, String address) {
+    private void showRetailerMapActivity(RetailerLocation retailerLocation) {
         Intent intent = new Intent(this, RetailerMapActivity.class);
 
         Bundle extras = new Bundle();
-        extras.putString(ARG_RETAILER_NAME, retailerName);
-        extras.putString(ARG_ADDRESS, address);
+        extras.putParcelable(ARG_RETAILER_LOCATION, retailerLocation);
+        intent.putExtras(extras);
+
+        startActivity(intent);
+    }
+
+    private void showAllRetailersMapActivity(ArrayList<RetailerLocation> retailerLocations) {
+        Intent intent = new Intent(this, RetailerMapActivity.class);
+
+        Bundle extras = new Bundle();
+        extras.putParcelableArrayList(ARG_RETAILER_LOCATION_LIST, retailerLocations);
         intent.putExtras(extras);
 
         startActivity(intent);
@@ -133,8 +141,13 @@ public class RetailerActivity extends AppCompatActivity
     }
 
     @Override
-    public void showRetailerMap(String retailerName, String address) {
-        showRetailerMapActivity(retailerName, address);
+    public void showRetailerMap(RetailerLocation retailerLocation) {
+        showRetailerMapActivity(retailerLocation);
+    }
+
+    @Override
+    public void showAllRetailersMap(ArrayList<RetailerLocation> retailerLocations) {
+        showAllRetailersMapActivity(retailerLocations);
     }
 
     @Override

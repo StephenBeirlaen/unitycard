@@ -13,13 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.adapters.RetailerRecyclerViewAdapter;
 import be.nmct.unitycard.databinding.FragmentRetailerInfoBinding;
-import be.nmct.unitycard.models.Retailer;
+import be.nmct.unitycard.models.RetailerLocation;
 import be.nmct.unitycard.models.viewmodels.fragment.RetailerInfoFragmentVM;
 
-import static be.nmct.unitycard.activities.customer.MainActivity.ACTION_FINISHED_SYNC;
 import static be.nmct.unitycard.adapters.SyncAdapter.RESULT_SYNC_SUCCESS;
 
 public class RetailerInfoFragment extends Fragment {
@@ -126,7 +127,8 @@ public class RetailerInfoFragment extends Fragment {
     public interface RetailerInfoFragmentListener {
         void requestNewLogin();
         void handleError(String error);
-        void showRetailerMap(String retailerName, String address);
+        void showRetailerMap(RetailerLocation retailerLocation);
+        void showAllRetailersMap(ArrayList<RetailerLocation> retailerLocations);
         void showRefreshingIndicator(Boolean refreshing);
     }
 

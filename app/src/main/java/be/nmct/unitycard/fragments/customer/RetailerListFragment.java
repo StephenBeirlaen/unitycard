@@ -1,9 +1,6 @@
 package be.nmct.unitycard.fragments.customer;
 
 
-import android.animation.LayoutTransition;
-import android.app.SearchManager;
-import android.app.SearchableInfo;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -19,18 +16,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-
-import java.util.List;
 
 import be.nmct.unitycard.R;
-import be.nmct.unitycard.adapters.RetailerRecyclerViewAdapter;
 import be.nmct.unitycard.databinding.FragmentRetailerListBinding;
-import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.viewmodels.fragment.RetailerListFragmentVM;
 
 import static be.nmct.unitycard.contracts.ContentProviderContract.ADDED_RETAILERS_URI;
-import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILERS_URI;
 
 public class RetailerListFragment extends Fragment
         implements SearchView.OnQueryTextListener {

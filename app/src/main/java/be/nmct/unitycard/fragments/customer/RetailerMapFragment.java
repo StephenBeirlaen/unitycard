@@ -2,8 +2,6 @@ package be.nmct.unitycard.fragments.customer;
 
 
 import android.content.Context;
-import android.databinding.DataBindingUtil;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +12,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
-import be.nmct.unitycard.R;
+import be.nmct.unitycard.models.RetailerLocation;
 import be.nmct.unitycard.repositories.GeoCodeRepository;
 
 public class RetailerMapFragment extends SupportMapFragment
@@ -28,22 +29,19 @@ public class RetailerMapFragment extends SupportMapFragment
     private final String LOG_TAG = this.getClass().getSimpleName();
     private RetailerMapFragmentListener mListener;
     private GoogleMap mGoogleMap;
-    private String mRetailerName;
-    private String mAdres;
+    private ArrayList<RetailerLocation> mRetailerLocations;
+    private RetailerLocation mClosestRetailerLocation;
 
     public RetailerMapFragment() {
         // Required empty public constructor
     }
 
-    public static final String ARG_RETAILER_NAME = "be.howest.nmct.kotwest.ARG_RETAILER_NAME";
-    public static final String ARG_ADDRESS = "be.howest.nmct.kotwest.ARG_ADDRESS";
+    public static final String ARG_RETAILER_LOCATION = "be.nmct.unitycard.ARG_RETAILER_LOCATION";
+    public static final String ARG_RETAILER_LOCATION_LIST = "be.nmct.unitycard.ARG_RETAILER_LOCATION_LIST";
 
-    public static RetailerMapFragment newInstance(String retailerName, String address) {
+    public static RetailerMapFragment newInstance(Bundle args) {
         RetailerMapFragment fragment = new RetailerMapFragment();
 
-        Bundle args = new Bundle();
-        args.putString(ARG_RETAILER_NAME, retailerName);
-        args.putString(ARG_ADDRESS, address);
         fragment.setArguments(args);
 
         return fragment;
@@ -54,8 +52,9 @@ public class RetailerMapFragment extends SupportMapFragment
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
         Bundle args = getArguments();
-        mRetailerName = args.getString(ARG_RETAILER_NAME);
-        mAdres = args.getString(ARG_ADDRESS);
+
+        mClosestRetailerLocation = args.getParcelable(ARG_RETAILER_LOCATION);
+        mRetailerLocations = args.getParcelableArrayList(ARG_RETAILER_LOCATION_LIST);
 
         getMapAsync(this);
 
@@ -75,29 +74,84 @@ public class RetailerMapFragment extends SupportMapFragment
 
         GeoCodeRepository geoCodeRepository = new GeoCodeRepository(getContext());
         try {
-            geoCodeRepository.requestLatLong(URLEncoder.encode(mAdres, "utf-8"), new GeoCodeRepository.GeoCodeResponseListener() {
-                @Override
-                public void latLongReceived(double lat, double lng) {
-                    toonLocatie(lat, lng);
-                }
+            if (mClosestRetailerLocation != null) {
+                final String address = mClosestRetailerLocation.getStreet() + " "
+                        + mClosestRetailerLocation.getNumber() + " "
+                        + mClosestRetailerLocation.getZipcode() + " "
+                        + mClosestRetailerLocation.getCity() + " "
+                        + mClosestRetailerLocation.getCountry();
 
-                @Override
-                public void geoCodeRequestError(String error) {
-                    mListener.handleError(error);
+                geoCodeRepository.requestLatLong(URLEncoder.encode(address, "utf-8"), new GeoCodeRepository.GeoCodeResponseListener() {
+                    @Override
+                    public void latLongReceived(double lat, double lng) {
+                        toonLocatie(lat, lng, mClosestRetailerLocation.getName(), address, true);
+                        moveCamera(lat, lng);
+                    }
+
+                    @Override
+                    public void geoCodeRequestError(String error) {
+                        mListener.handleError(error);
+                    }
+                });
+            }
+            else if (mRetailerLocations != null && mRetailerLocations.size() > 0) {
+                final int locationCount = mRetailerLocations.size();
+
+                final LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+
+                for (final RetailerLocation loc: mRetailerLocations) {
+                    final String address = loc.getStreet() + " "
+                            + loc.getNumber() + " "
+                            + loc.getZipcode() + " "
+                            + loc.getCity() + " "
+                            + loc.getCountry();
+
+                    geoCodeRepository.requestLatLong(URLEncoder.encode(address, "utf-8"), new GeoCodeRepository.GeoCodeResponseListener() {
+                        @Override
+                        public void latLongReceived(double lat, double lng) {
+                            toonLocatie(lat, lng, loc.getName(), address, false);
+                            boundsBuilder.include(new LatLng(lat, lng));
+
+                            // Is dit het laatste element in de lijst?
+                            if (mRetailerLocations.indexOf(loc) == locationCount - 1) {
+                                LatLngBounds bounds = boundsBuilder.build();
+                                moveCameraCenteredAroundBounds(bounds);
+                            }
+                        }
+
+                        @Override
+                        public void geoCodeRequestError(String error) {
+                            mListener.handleError(error);
+                        }
+                    });
                 }
-            });
+            }
+            else {
+                mListener.handleError("Error opening map!");
+            }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
 
-    private void toonLocatie(double latitude, double longitude) {
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15.0f));
-        mGoogleMap.addMarker(new MarkerOptions()
+    private void toonLocatie(double latitude, double longitude, String retailerName, String address, Boolean showInfoWindow) {
+        Marker marker = mGoogleMap.addMarker(new MarkerOptions()
                 .position(new LatLng(latitude, longitude))
-                .title(mRetailerName)
-                .snippet(mAdres)
-        ).showInfoWindow();
+                .title(retailerName)
+                .snippet(address)
+        );
+
+        if (showInfoWindow) {
+            marker.showInfoWindow();
+        }
+    }
+
+    private void moveCamera(double latitude, double longitude) {
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), 15.0f));
+    }
+
+    private void moveCameraCenteredAroundBounds(LatLngBounds latLngBounds) {
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBounds, 30));
     }
 
     public interface RetailerMapFragmentListener {

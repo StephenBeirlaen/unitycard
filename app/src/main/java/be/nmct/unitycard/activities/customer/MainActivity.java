@@ -2,7 +2,6 @@ package be.nmct.unitycard.activities.customer;
 
 import android.accounts.Account;
 import android.content.BroadcastReceiver;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -25,14 +24,12 @@ import android.widget.TextView;
 
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.activities.login.AccountActivity;
 import be.nmct.unitycard.activities.retailer.RetailerAdminActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.AccountContract;
-import be.nmct.unitycard.contracts.ContentProviderContract;
 import be.nmct.unitycard.databinding.ActivityMainBinding;
 import be.nmct.unitycard.fragments.customer.AdvertisingFragment;
 import be.nmct.unitycard.fragments.customer.MyLoyaltyCardFragment;

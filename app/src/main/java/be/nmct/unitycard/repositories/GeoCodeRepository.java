@@ -1,28 +1,15 @@
 package be.nmct.unitycard.repositories;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
 
-import org.w3c.dom.Text;
-
-import java.lang.annotation.Annotation;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import be.nmct.unitycard.UnityCardApplication;
 import be.nmct.unitycard.models.GeoCodeResponse;
-import be.nmct.unitycard.models.GetTokenErrorResponse;
-import be.nmct.unitycard.models.GetTokenResponse;
-import be.nmct.unitycard.models.RegisterUserErrorResponse;
-import be.nmct.unitycard.models.postmodels.ChangeFcmTokenBody;
-import be.nmct.unitycard.models.postmodels.RegisterUserBody;
-import okhttp3.ResponseBody;
-import retrofit2.Converter;
 import retrofit2.Response;
-import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

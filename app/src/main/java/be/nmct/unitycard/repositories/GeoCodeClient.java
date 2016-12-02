@@ -7,8 +7,6 @@ import com.google.gson.GsonBuilder;
 import javax.inject.Singleton;
 
 import be.nmct.unitycard.contracts.ApiContract;
-import be.nmct.unitycard.services.ApiService;
-import be.nmct.unitycard.services.AuthService;
 import be.nmct.unitycard.services.GeoCodeService;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;

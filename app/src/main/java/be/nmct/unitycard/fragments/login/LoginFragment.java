@@ -1,19 +1,15 @@
 package be.nmct.unitycard.fragments.login;
 
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 
 import com.facebook.CallbackManager;
 import com.facebook.Profile;
@@ -27,7 +23,6 @@ import be.nmct.unitycard.R;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.databinding.FragmentLoginBinding;
-import be.nmct.unitycard.helpers.ConnectionChecker;
 import be.nmct.unitycard.helpers.HideKeyboardHelper;
 import be.nmct.unitycard.models.viewmodels.fragment.LoginFragmentVM;
 

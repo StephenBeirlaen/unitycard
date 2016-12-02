@@ -6,7 +6,6 @@ import android.util.Log;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.models.postmodels.ChangeFcmTokenBody;
 import be.nmct.unitycard.repositories.AuthRepository;
-import be.nmct.unitycard.services.MyFirebaseInstanceIdListenerService;
 
 /**
  * Created by Stephen on 28/11/2016.

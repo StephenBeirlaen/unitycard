@@ -3,10 +3,6 @@ package be.nmct.unitycard.binders;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.widget.ImageView;
-
-import com.squareup.picasso.Picasso;
 
 import be.nmct.unitycard.adapters.OffersRecyclerViewAdapter;
 import be.nmct.unitycard.models.Offer;

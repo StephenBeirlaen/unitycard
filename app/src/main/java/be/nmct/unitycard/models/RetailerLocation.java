@@ -1,5 +1,8 @@
 package be.nmct.unitycard.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Date;
@@ -8,7 +11,7 @@ import java.util.Date;
  * Created by lorenzvercoutere on 30/10/16.
  */
 
-public class RetailerLocation {
+public class RetailerLocation implements Parcelable {
     @SerializedName("Id")
     private int id;
 
@@ -111,4 +114,48 @@ public class RetailerLocation {
     public void setUpdatedTimestamp(Date updatedTimestamp) {
         this.updatedTimestamp = updatedTimestamp;
     }
+
+    protected RetailerLocation(Parcel in) {
+        id = in.readInt();
+        retailerId = in.readInt();
+        name = in.readString();
+        street = in.readString();
+        number = in.readString();
+        zipcode = in.readInt();
+        city = in.readString();
+        country = in.readString();
+        long tmpUpdatedTimestamp = in.readLong();
+        updatedTimestamp = tmpUpdatedTimestamp != -1 ? new Date(tmpUpdatedTimestamp) : null;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int i) {
+        dest.writeInt(id);
+        dest.writeInt(retailerId);
+        dest.writeString(name);
+        dest.writeString(street);
+        dest.writeString(number);
+        dest.writeInt(zipcode);
+        dest.writeString(city);
+        dest.writeString(country);
+        dest.writeLong(updatedTimestamp != null ? updatedTimestamp.getTime() : -1L);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<RetailerLocation> CREATOR = new Parcelable.Creator<RetailerLocation>() {
+        @Override
+        public RetailerLocation createFromParcel(Parcel in) {
+            return new RetailerLocation(in);
+        }
+
+        @Override
+        public RetailerLocation[] newArray(int size) {
+            return new RetailerLocation[size];
+        }
+    };
 }

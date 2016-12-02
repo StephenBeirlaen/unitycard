@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Bundle;
 
-import be.nmct.unitycard.activities.customer.MainActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.ContentProviderContract;
 
