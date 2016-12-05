@@ -6,13 +6,19 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.Profile;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -141,6 +147,31 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+
+        this.mBinding.buttonLoginFacebook.setReadPermissions("email");
+        this.mBinding.buttonLoginFacebook.setFragment(this);
+
+        this.mBinding.buttonLoginFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                // TODO: Navigate to MyLoyaltyCard (from Facebook)
+
+                Log.d(LOG_TAG, "hallo");
+            }
+
+            @Override
+            public void onCancel() {
+                Log.d(LOG_TAG, "Facebook login error");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(LOG_TAG, "Facebook login error");
+            }
+        });
+
 
         return mBinding.getRoot();
     }
@@ -152,39 +183,6 @@ public class LoginFragment extends Fragment {
         // todo: perform load actions here
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        /**FacebookSdk.sdkInitialize(getContext());
-        callbackManager = CallbackManager.Factory.create();
-
-        this.mBinding.buttonLoginFacebook.setReadPermissions("email");
-        this.mBinding.buttonLoginFacebook.setFragment(this);
-
-        this.mBinding.buttonLoginFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                // TODO: Navigate to MyLoyaltyCard (from Facebook)
-
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-            }
-        });
-         **/
-
-        //Profile profile = Profile.getCurrentProfile();
-
-    }
-
     private void signInWithGoogle(){
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -194,6 +192,7 @@ public class LoginFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        callbackManager.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);

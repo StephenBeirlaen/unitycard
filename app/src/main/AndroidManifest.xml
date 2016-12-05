@@ -31,6 +31,7 @@
 
         <activity
             android:name=".activities.login.AccountActivity"
+            android:noHistory="false"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 

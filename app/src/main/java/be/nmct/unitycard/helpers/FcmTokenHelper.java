@@ -1,5 +1,6 @@
 package be.nmct.unitycard.helpers;
 
+import android.accounts.Account;
 import android.content.Context;
 import android.util.Log;
 
@@ -15,18 +16,22 @@ public class FcmTokenHelper {
     private final static String LOG_TAG = FcmTokenHelper.class.getSimpleName();
 
     public static void sendRegistrationToServer(final String fcmToken, final Context context) {
-        // Get access token
-        AuthHelper.getAccessToken(AuthHelper.getUser(context), context, new AuthHelper.GetAccessTokenListener() {
-            @Override
-            public void tokenReceived(String accessToken) {
-                sendToServer(fcmToken, context, accessToken);
-            }
+        Account account = AuthHelper.getUser(context);
 
-            @Override
-            public void requestNewLogin() {
-                Log.e(LOG_TAG, "Token error!");
-            }
-        });
+        if (account != null) {
+            // Get access token
+            AuthHelper.getAccessToken(account, context, new AuthHelper.GetAccessTokenListener() {
+                @Override
+                public void tokenReceived(String accessToken) {
+                    sendToServer(fcmToken, context, accessToken);
+                }
+
+                @Override
+                public void requestNewLogin() {
+                    Log.e(LOG_TAG, "Token error!");
+                }
+            });
+        }
     }
 
     // voor het verwijderen
