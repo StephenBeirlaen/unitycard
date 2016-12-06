@@ -4,13 +4,19 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableList;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.auth.api.Auth;
+
 import be.nmct.unitycard.R;
+import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.databinding.RowAddRetailerBinding;
 import be.nmct.unitycard.models.Retailer;
+import be.nmct.unitycard.models.postmodels.AddLoyaltyCardRetailerBody;
+import be.nmct.unitycard.repositories.ApiRepository;
 
 /**
  * Created by Stephen on 6/11/2016.
@@ -40,6 +46,29 @@ public class AddRetailerRecyclerViewAdapter
         @Override
         public void onClick(View view) {
             // todo
+            final AddLoyaltyCardRetailerBody addLoyaltyCardRetailerBody = new AddLoyaltyCardRetailerBody(binding.getRetailer().getId());
+            final ApiRepository apiRepository = new ApiRepository(mContext);
+            AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
+                @Override
+                public void tokenReceived(String accessToken) {
+                    apiRepository.addLoyaltyCardRetailer(accessToken, AuthHelper.getUserId(mContext), addLoyaltyCardRetailerBody, new ApiRepository.GetResultListener<Void>() {
+                        @Override
+                        public void resultReceived(Void result) {
+                            Log.d("","");
+                        }
+
+                        @Override
+                        public void requestError(String error) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void requestNewLogin() {
+
+                }
+            });
         }
 
         private RowAddRetailerBinding getBinding() {
