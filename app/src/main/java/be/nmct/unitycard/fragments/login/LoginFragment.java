@@ -120,6 +120,20 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        mBinding.btnLoginFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.btnLoginFacebookClicked();
+            }
+        });
+
+        mBinding.btnLoginGoogle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.btnLoginGoogleClicked();
+            }
+        });
+
         if (savedInstanceState != null) {
             String username = savedInstanceState.getString(STATE_TXT_USERNAME);
             String password = savedInstanceState.getString(STATE_TXT_PASSWORD);
@@ -215,6 +229,8 @@ public class LoginFragment extends Fragment {
 
     public interface LoginFragmentListener {
         void btnRegisterClicked();
+        void btnLoginFacebookClicked();
+        void btnLoginGoogleClicked();
         void onLoginSuccessful(String userNameString);
         void handleError(String error);
         void handlePermissionRequest(final int permissionRequestCode);

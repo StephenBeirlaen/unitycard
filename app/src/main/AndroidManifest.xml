@@ -8,16 +8,16 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
     <application
+        android:name=".UnityCardApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".UnityCardApplication">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activities.customer.MainActivity"
             android:label="@string/app_name"
@@ -28,12 +28,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.login.AccountActivity"
             android:noHistory="false"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <service
             android:name=".auth.AccountAuthenticatorService"
@@ -50,23 +48,18 @@
 
         <activity
             android:name=".activities.customer.AddRetailerActivity"
-            android:label="Winkel toevoegen">
-        </activity><!-- todo: multi language label -->
+            android:label="Winkel toevoegen"></activity> <!-- todo: multi language label -->
 
         <activity
             android:name=".activities.customer.RetailerActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".activities.customer.SettingsActivity"
-            android:label="Instellingen">
-        </activity><!-- todo: multi language label -->
+            android:label="Instellingen"></activity> <!-- todo: multi language label -->
 
         <activity
             android:name=".activities.customer.RetailerMapActivity"
-            android:label="Retailer Map">
-        </activity><!-- todo: multi language label -->
+            android:label="Retailer Map"></activity> <!-- todo: multi language label -->
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -74,39 +67,42 @@
 
         <activity
             android:name=".activities.retailer.RetailerAdminActivity"
-            android:label="Retailer Test">
-        </activity><!-- todo: multi language label -->
+            android:label="Retailer Test"></activity> <!-- todo: multi language label -->
 
         <provider
-            android:authorities="be.nmct.unitycard.provider"
             android:name=".provider.ContentProvider"
+            android:authorities="be.nmct.unitycard.provider"
             android:exported="false" />
 
         <service
-            android:name="be.nmct.unitycard.adapters.SyncAdapterService"
+            android:name=".adapters.SyncAdapterService"
             android:exported="false"
             android:process=":sync">
             <intent-filter>
-                <action android:name="android.content.SyncAdapter"/>
+                <action android:name="android.content.SyncAdapter" />
             </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter"
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
-        <service
-            android:name=".services.MyFirebaseMessagingService">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <service android:name=".services.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service
-            android:name=".services.MyFirebaseInstanceIdListenerService">
+        <service android:name=".services.MyFirebaseInstanceIdListenerService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
+
+        <activity android:name=".activities.login.ExternalAuthenticationActivity"></activity>
     </application>
 
 </manifest>

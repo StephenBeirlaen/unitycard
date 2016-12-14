@@ -83,6 +83,22 @@
                 android:text="Register"
                 style="@style/ButtonTheme" />
 
+            <Button
+                android:id="@+id/btn_login_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Log in with Facebook"
+                style="@style/ButtonTheme" />
+
+            <Button
+                android:id="@+id/btn_login_google"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Log in with Google"
+                style="@style/ButtonTheme" />
+
             <com.facebook.login.widget.LoginButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

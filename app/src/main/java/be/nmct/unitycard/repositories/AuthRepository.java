@@ -14,6 +14,7 @@ import be.nmct.unitycard.models.GetTokenErrorResponse;
 import be.nmct.unitycard.models.GetTokenResponse;
 import be.nmct.unitycard.models.RegisterUserErrorResponse;
 import be.nmct.unitycard.models.postmodels.ChangeFcmTokenBody;
+import be.nmct.unitycard.models.postmodels.RegisterExternalBindingBody;
 import be.nmct.unitycard.models.postmodels.RegisterUserBody;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
@@ -185,5 +186,79 @@ public class AuthRepository {
     public interface ChangeFcmTokenResponseListener {
         void fcmTokenChanged();
         void fcmTokenChangeRequestError(String error);
+    }
+
+    public void obtainLocalAccessToken(String provider, String externalAccessToken, final TokenResponseListener callback){
+        mRestClient.getAuthService().obtainLocalAccessToken(provider, externalAccessToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Response<GetTokenResponse>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(LOG_TAG, "Error obtaining local access token");
+                        callback.tokenRequestError("Error obtaining local access token");
+                    }
+
+                    @Override
+                    public void onNext(Response<GetTokenResponse> response) {
+                        if (response.isSuccessful()) {
+                            GetTokenResponse getTokenResponse = response.body();
+
+                            if (TextUtils.isEmpty(getTokenResponse.getAccessToken()) || TextUtils.isEmpty(getTokenResponse.getRefreshToken())) { // Login invalid
+                                callback.tokenRequestError("Invalid login");
+                            }
+                            else { // OK
+                                Log.d(LOG_TAG, "Received new access token: " + getTokenResponse.getAccessToken());
+                                callback.tokenReceived(getTokenResponse);
+                            }
+                        }
+                        else {
+                            Log.e(LOG_TAG, "Error obtaining local access token");
+                            callback.tokenRequestError("Error obtaining local access token");
+                        }
+                    }
+                });
+    }
+
+    public void associateExternalUser(RegisterExternalBindingBody registerExternalBindingBody, final TokenResponseListener callback){
+        mRestClient.getAuthService().registerExternal(registerExternalBindingBody)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Response<GetTokenResponse>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.e(LOG_TAG, "Error associating external user!");
+                        callback.tokenRequestError("Error associating external user!");
+                    }
+
+                    @Override
+                    public void onNext(Response<GetTokenResponse> response) {
+                        if (response.isSuccessful()) {
+                            GetTokenResponse getTokenResponse = response.body();
+
+                            if (TextUtils.isEmpty(getTokenResponse.getAccessToken()) || TextUtils.isEmpty(getTokenResponse.getRefreshToken())) { // Login invalid
+                                callback.tokenRequestError("Invalid login");
+                            }
+                            else { // OK
+                                Log.d(LOG_TAG, "Received new access token: " + getTokenResponse.getAccessToken());
+                                callback.tokenReceived(getTokenResponse);
+                            }
+                        }
+                        else {
+                            Log.e(LOG_TAG, "Error associating external user!");
+                            callback.tokenRequestError("Error associating external user!");
+                        }
+                    }
+                });
     }
 }
