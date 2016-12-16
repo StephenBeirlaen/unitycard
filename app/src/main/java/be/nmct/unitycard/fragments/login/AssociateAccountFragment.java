@@ -240,7 +240,7 @@ public class AssociateAccountFragment extends Fragment {
         }
         else {
             // De eventuele vorige account uitloggen
-            AuthHelper.logUserOff(activity);
+            AuthHelper.logUserOff(activity, null);
 
             // Extra info vragen aan de user (suggesties worden meegegeven, moeten bevestigd worden)
             this.mBinding.txtEmail.setText(email);
