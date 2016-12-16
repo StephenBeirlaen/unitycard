@@ -17,8 +17,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="64dp"
-            android:layout_marginRight="64dp">
+            android:layout_marginLeft="32dp"
+            android:layout_marginRight="32dp">
 
             <ImageView
                 android:layout_width="150dp"
@@ -27,79 +27,108 @@
                 android:layout_gravity="center_horizontal"
                 android:src="@drawable/ic_logo"/>
 
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppCompatEditText">
+                android:layout_height="match_parent"
+                style="@style/LandscapeTwoColumns">
 
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/txt_username"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:hint="@string/username"
-                    android:inputType="textEmailAddress"
-                    style="@style/styleEditText">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_gravity="center_vertical">
 
-                    <requestFocus />
-                </android.support.v7.widget.AppCompatEditText>
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/AppCompatEditText">
 
-            </android.support.design.widget.TextInputLayout>
+                        <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/txt_username"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:hint="@string/username"
+                            android:inputType="textEmailAddress"
+                            style="@style/styleEditText">
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppCompatEditText">
+                            <requestFocus />
+                        </android.support.v7.widget.AppCompatEditText>
 
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/txt_password"
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:theme="@style/AppCompatEditText">
+
+                        <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/txt_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:fontFamily="sans-serif"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:hint="@string/password"
+                            style="@style/styleEditText">
+
+                        </android.support.v7.widget.AppCompatEditText>
+
+                    </android.support.design.widget.TextInputLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPassword"
-                    android:fontFamily="sans-serif"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:hint="@string/password"
-                    style="@style/styleEditText">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_gravity="center_vertical">
 
-                </android.support.v7.widget.AppCompatEditText>
+                    <Button
+                        android:id="@+id/btn_login"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Log in"
+                        style="@style/ButtonTheme" />
 
-            </android.support.design.widget.TextInputLayout>
+                    <Button
+                        android:id="@+id/btn_register"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Register"
+                        style="@style/ButtonTheme" />
 
-            <Button
-                android:id="@+id/btn_login"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Log in"
-                style="@style/ButtonTheme" />
+                    <Button
+                        android:id="@+id/btn_login_facebook"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/facebookBlue"
+                        android:text="Log in with Facebook"
+                        style="@style/ButtonTheme" />
 
-            <Button
-                android:id="@+id/btn_register"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Register"
-                style="@style/ButtonTheme" />
+                    <Button
+                        android:id="@+id/btn_login_google"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/googleRed"
+                        android:text="Log in with Google"
+                        style="@style/ButtonTheme" />
 
-            <Button
-                android:id="@+id/btn_login_facebook"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@color/facebookBlue"
-                android:text="Log in with Facebook"
-                style="@style/ButtonTheme" />
+                </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_login_google"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:backgroundTint="@color/googleRed"
-                android:text="Log in with Google"
-                style="@style/ButtonTheme" />
+            </LinearLayout>
 
             <ProgressBar
                 android:id="@+id/progress_circle_login"
