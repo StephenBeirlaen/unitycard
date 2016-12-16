@@ -22,9 +22,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.activities.login.AccountActivity;
 import be.nmct.unitycard.activities.retailer.RetailerAdminActivity;
@@ -85,10 +82,6 @@ public class MainActivity extends AppCompatActivity
         });
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
     }
 
     @Override

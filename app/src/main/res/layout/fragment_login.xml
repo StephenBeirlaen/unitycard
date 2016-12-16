@@ -88,6 +88,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="@color/facebookBlue"
                 android:text="Log in with Facebook"
                 style="@style/ButtonTheme" />
 
@@ -96,25 +97,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:backgroundTint="@color/googleRed"
                 android:text="Log in with Google"
                 style="@style/ButtonTheme" />
-
-            <com.facebook.login.widget.LoginButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/buttonLoginFacebook"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/com_facebook_loginview_log_in_button_long"
-                style="@style/FbLoginButtonTheme" />
-
-            <com.google.android.gms.common.SignInButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/common_signin_button_text_long"
-                android:id="@+id/buttonLoginGoogle" />
 
             <ProgressBar
                 android:id="@+id/progress_circle_login"

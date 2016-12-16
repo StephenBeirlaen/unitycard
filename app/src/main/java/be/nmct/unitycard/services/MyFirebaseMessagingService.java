@@ -25,7 +25,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private final String LOG_TAG = this.getClass().getSimpleName();
 
-
     @Override
     public void onMessageReceived(RemoteMessage message){
         String from = message.getFrom();
