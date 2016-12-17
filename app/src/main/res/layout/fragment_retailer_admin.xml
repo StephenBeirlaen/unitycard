@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="?android:attr/listSeparatorTextViewStyle"
-            android:text="Geselecteerde winkel" />
+            android:text="@string/geselecteerde_winkel" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,13 +28,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Geen"/>
+                android:text="@string/geen"
+                android:layout_marginLeft="5dp" />
 
             <Button
                 android:id="@+id/btn_choose_retailer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Kies winkel"/>
+                android:text="@string/kies_winkel"/>
 
         </LinearLayout>
 
@@ -42,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="?android:attr/listSeparatorTextViewStyle"
-            android:text="Klant" />
+            android:text="@string/klant" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,14 +54,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Geen"/>
+                android:text="@string/geen"
+                android:layout_marginLeft="5dp" />
 
             <Button
                 android:id="@+id/btn_scan_loyaltycard"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="Scan klantenkaart" />
+                android:text="@string/scan_klantenkaart" />
 
         </LinearLayout>
 
@@ -68,7 +70,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="?android:attr/listSeparatorTextViewStyle"
-            android:text="Spaarpunten toevoegen" />
+            android:text="@string/spaarpunten_toevoegen" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,7 +81,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Aantal:" />
+                android:text="@string/aantal"
+                android:layout_marginLeft="5dp" />
 
             <EditText
                 android:id="@+id/txt_loyaltypoint_count"
@@ -92,7 +95,7 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Voeg toe" />
+                android:text="@string/voeg_toe" />
 
         </LinearLayout>
 
@@ -100,7 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="?android:attr/listSeparatorTextViewStyle"
-            android:text="Advertentie verzenden" />
+            android:text="@string/advertentie_verzenden" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -111,7 +114,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Boodschap:" />
+                android:text="@string/boodschap"
+                android:layout_marginLeft="5dp" />
 
             <EditText
                 android:id="@+id/txt_advertisement_description"
@@ -124,7 +128,7 @@
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Verzend" />
+                android:text="@string/verzend" />
 
         </LinearLayout>
 
@@ -132,13 +136,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="?android:attr/listSeparatorTextViewStyle"
-            android:text="Acties" />
+            android:text="@string/acties" />
 
         <Button
             android:id="@+id/btn_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log out" />
+            android:text="@string/log_out" />
 
     </LinearLayout>
 
