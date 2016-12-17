@@ -50,7 +50,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
                     NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.ic_credit_card_black_24dp)
-                            .setContentTitle(posterUsername + " heeft een nieuwe aanbieding geplaatst") // todo: multi language
+                            .setContentTitle(posterUsername + getString(R.string.retailer_placed_new_offer))
                             .setContentText(title)
                             .setAutoCancel(true)
                             .setSound(defaultSoundUri)

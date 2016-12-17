@@ -44,7 +44,6 @@ public class RetailerAdminFragment extends Fragment {
     public interface RetailerAdminFragmentListener {
         void requestLogOut();
         void handleError(String error);
-        // todo: weg indien geen events?
     }
 
     @Override

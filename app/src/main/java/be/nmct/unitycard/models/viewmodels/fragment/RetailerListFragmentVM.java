@@ -18,11 +18,9 @@ import be.nmct.unitycard.databinding.FragmentRetailerListBinding;
 import be.nmct.unitycard.filters.FilterCursorWrapper;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.Retailer;
-import be.nmct.unitycard.repositories.ApiRepository;
 
 import static be.nmct.unitycard.contracts.ContentProviderContract.ADDED_RETAILERS_URI;
 import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYPOINTS_ITEM_URI;
-import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYPOINTS_URI;
 
 /**
  * Created by Stephen on 9/11/2016.

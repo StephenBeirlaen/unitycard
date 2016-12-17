@@ -1,13 +1,25 @@
 <resources>
     <string name="app_name">UnityCard</string>
 
+    <string name="ActivityLabelAddRetailer">Winkel toevoegen</string>
+    <string name="ActivityLabelSettings">Instellingen</string>
+    <string name="ActivityLabelRetailerMap">Retailer Map</string>
+    <string name="ActivityLabelRetailerAdmin">Retailer Test</string>
+
+    <string name="FragmentLabelRegister">Register</string>
+    <string name="FragmentLabelAssociateAccount">Associate account</string>
+    <string name="FragmentLabelAssociateAccountLoggingIn">Logging in</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="navigation_drawer_my_loyalty_card">Mijn klantenkaart</string>
+    <string name="navigation_drawer_my_retailers">Mijn winkels</string>
+    <string name="navigation_drawer_offers">Aanbiedingen</string>
+    <string name="navigation_drawer_settings">Settings</string>
+    <string name="navigation_drawer_log_out">Log out</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_settings">Settings</string>
 
     <string name="username">Username</string>
     <string name="password">Password</string>
@@ -35,4 +47,29 @@
     <string name="zelfstandig">Zelfstandig</string>
 
     <string name="email">Email</string>
+    <string name="permission_required_accounts">Access to your accounts is required to log in.</string>
+    <string name="permission_request_ok">Permission OK, you can now continue.</string>
+    <string name="permission_required_app_usage">Permission is required to use this app.</string>
+    <string name="log_in_with_external_auth_provider">"Log in with "</string>
+    <string name="first_name_empty">First name is empty</string>
+    <string name="first_name_min_chars">"First name must have a minimum of "</string>
+    <string name="first_name_max_chars">"First name must have a maximum of "</string>
+    <string name="last_name_empty">Last name is empty</string>
+    <string name="last_name_min_chars">"Last name must have a minimum of "</string>
+    <string name="last_name_max_chars">"Last name must have a maximum of "</string>
+    <string name="email_empty">Email is empty</string>
+    <string name="email_min_chars">"Email must have a minimum of "</string>
+    <string name="email_max_chars">"Email must have a maximum of "</string>
+    <string name="password_empty">Password is empty</string>
+    <string name="password_min_chars">"Password must have a minimum of "</string>
+    <string name="password_max_chars">"Password must have a maximum of "</string>
+    <string name="passwords_not_matching">Passwords do not match</string>
+    <string name="password_invalid_format">Passwords must have at least one non letter or digit character, one digit (\'0\'-\'9\') and one uppercase (\'A\'-\'Z\').</string>
+    <string name="characters">" characters"</string>
+
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="retailer_placed_new_offer">" heeft een nieuwe aanbieding geplaatst"</string>
+
+
+
 </resources>

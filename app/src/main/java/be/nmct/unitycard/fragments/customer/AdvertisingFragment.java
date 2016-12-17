@@ -47,13 +47,6 @@ public class AdvertisingFragment extends Fragment {
         return mBinding.getRoot();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // todo: perform load actions here
-    }
-
     public interface AdvertisingFragmentListener {
         // todo: events
     }

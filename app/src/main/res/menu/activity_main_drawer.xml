@@ -5,26 +5,26 @@
         <item
             android:id="@+id/nav_my_loyalty_card"
             android:icon="@drawable/ic_credit_card_black_24dp"
-            android:title="Mijn klantenkaart" /><!-- todo: vertalen -->
+            android:title="@string/navigation_drawer_my_loyalty_card" />
         <item
             android:id="@+id/nav_retailers"
             android:icon="@drawable/ic_local_grocery_store_black_24dp"
-            android:title="Mijn winkels" />
+            android:title="@string/navigation_drawer_my_retailers" />
         <item
             android:id="@+id/nav_advertising"
             android:icon="@drawable/ic_announcement_black_24dp"
-            android:title="Aanbiedingen" />
+            android:title="@string/navigation_drawer_offers" />
     </group>
 
     <group android:id="@+id/nav_group_actions">
         <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black_24dp"
-            android:title="Settings" />
+            android:title="@string/navigation_drawer_settings" />
         <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_input_black_24dp"
-            android:title="Logout" />
+            android:title="@string/navigation_drawer_log_out" />
     </group>
 
 </menu>

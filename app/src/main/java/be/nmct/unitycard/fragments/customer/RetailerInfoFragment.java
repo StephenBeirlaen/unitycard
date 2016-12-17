@@ -70,13 +70,6 @@ public class RetailerInfoFragment extends Fragment {
         return mBinding.getRoot();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // todo: perform load actions here
-    }
-
     // Listener for synchronization changes
     public static final String ACTION_FINISHED_RETAILER_LOCATIONS_SYNC = "be.nmct.unitycard.ACTION_FINISHED_RETAILER_LOCATIONS_SYNC";
     public static final String ACTION_FINISHED_RETAILER_LOCATIONS_SYNC_RESULT = "be.nmct.unitycard.ACTION_FINISHED_RETAILER_LOCATIONS_SYNC_RESULT";

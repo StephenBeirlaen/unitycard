@@ -8,7 +8,6 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 
 import java.util.HashMap;
@@ -79,7 +78,7 @@ public class ContentProvider extends android.content.ContentProvider {
     @Override
     public boolean onCreate() {
         dataBaseHelper = DatabaseHelper.getInstance(getContext());
-        UNITYCARD_PROJECTION_MAP = new HashMap<>(); // todo: voor wat is dit??
+        UNITYCARD_PROJECTION_MAP = new HashMap<>();
 
         //inladen Retailers
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns._ID, DatabaseContract.RetailerColumns._ID);
