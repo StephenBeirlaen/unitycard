@@ -63,7 +63,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDEl8Ty1e7ZkEIGphrMA_XKH0n9FE2AE5w" />
+            android:value="AIzaSyDeXMb6weBEtES6dx3E6FLE6qGc1K63RTI" />
 
         <activity
             android:name=".activities.retailer.RetailerAdminActivity"
