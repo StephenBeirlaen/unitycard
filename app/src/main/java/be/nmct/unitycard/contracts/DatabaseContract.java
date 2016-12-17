@@ -22,6 +22,7 @@ public class DatabaseContract {
         String COLUMN_CHAIN = "Chain";
         String COLUMN_LOGOURL= "LogoUrl";
         String COLUMN_UPDATED_TIMESTAMP = "UpdatedTimestamp";
+        String COLUMN_LOYALTYPOINT = "LoyaltyPoint";
     }
 
     public static abstract class RetailersDB implements RetailerColumns {
@@ -34,7 +35,8 @@ public class DatabaseContract {
                 + COLUMN_TAGLINE + " text not null, "
                 + COLUMN_CHAIN + " real, "
                 + COLUMN_LOGOURL + " text not null, "
-                + COLUMN_UPDATED_TIMESTAMP + " text not null"
+                + COLUMN_UPDATED_TIMESTAMP + " text not null, "
+                + COLUMN_LOYALTYPOINT + " integer "
                 + ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME_ALL_RETAILERS;
@@ -50,7 +52,8 @@ public class DatabaseContract {
                 + COLUMN_TAGLINE + " text not null, "
                 + COLUMN_CHAIN + " real, "
                 + COLUMN_LOGOURL + " text not null, "
-                + COLUMN_UPDATED_TIMESTAMP + " text not null"
+                + COLUMN_UPDATED_TIMESTAMP + " text not null, "
+                + COLUMN_LOYALTYPOINT + " integer "
                 + ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME_ADDED_RETAILERS;

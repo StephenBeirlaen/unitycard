@@ -187,6 +187,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                                 contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
                                 contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
                                 contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailer.getUpdatedTimestamp()));
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT, retailer.getLoyaltyPoint());
 
                                 mContentResolver.insert(ContentProviderContract.ADDED_RETAILERS_URI, contentValues);
 
@@ -246,6 +247,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                                 contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
                                 contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
                                 contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailer.getUpdatedTimestamp()));
+                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT, retailer.getLoyaltyPoint());
 
                                 mContentResolver.insert(ContentProviderContract.RETAILERS_URI, contentValues);
 

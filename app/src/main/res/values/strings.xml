@@ -30,6 +30,9 @@
     <string name="retailerDichtsbijzijndeWinkel">Dichtsbijzijnde winkel:</string>
     <string name="retailerDichtsbijzijndeWinkelValue">Value</string>
     <string name="OpenKaart">Open kaart</string>
+    <string name="waar">true</string>
+    <string name="winkelketen">Winkelketen</string>
+    <string name="zelfstandig">Zelfstandig</string>
 
     <string name="facebook_app_id">339748679723003</string>
     <string name="email">Email</string>

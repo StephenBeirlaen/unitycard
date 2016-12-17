@@ -13,6 +13,7 @@ import be.nmct.unitycard.UnityCardApplication;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.AuthErrorResponse;
 import be.nmct.unitycard.models.LoyaltyCard;
+import be.nmct.unitycard.models.LoyaltyPoint;
 import be.nmct.unitycard.models.Offer;
 import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.RetailerCategory;
@@ -57,6 +58,10 @@ public class ApiRepository {
 
     public void getTotalLoyaltyPoints(String accessToken, String userId, Date lastUpdatedTimestamp, final GetResultListener<Integer> callback) {
         subscribeApiCall(mRestClient.getApiService().getTotalLoyaltyPoints(RestClient.getAuthorizationHeader(accessToken), userId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
+    }
+
+    public void getLoyaltyPointByRetailer(String accesssToken, String userId, int retailerId, final GetResultListener<LoyaltyPoint> callback){
+        subscribeApiCall(mRestClient.getApiService().getLoyaltyPointByRetailer(RestClient.getAuthorizationHeader(accesssToken), userId, retailerId), callback);
     }
 
     // ----- Offers -----

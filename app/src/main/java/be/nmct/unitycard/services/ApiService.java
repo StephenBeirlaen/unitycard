@@ -1,8 +1,11 @@
 package be.nmct.unitycard.services;
 
+import android.databinding.ObservableList;
+
 import java.util.List;
 
 import be.nmct.unitycard.models.LoyaltyCard;
+import be.nmct.unitycard.models.LoyaltyPoint;
 import be.nmct.unitycard.models.Offer;
 import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.RetailerCategory;
@@ -49,6 +52,13 @@ public interface ApiService {
             @Header("Authorization") String authorizationHeader,
             @Path("userId") String userId,
             @Query("lastUpdatedTimestamp") Long lastUpdatedTimestamp
+    );
+
+    @GET("/api/loyaltypoints/{userId}/{retailerId}")
+    Observable<Response<LoyaltyPoint>> getLoyaltyPointByRetailer(
+            @Header("Authorization") String authorizationHeader,
+            @Path("userId") String userId,
+            @Path("retailerId") Integer retailerId
     );
 
     // ----- Offers -----

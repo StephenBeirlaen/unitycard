@@ -8,6 +8,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 
 import java.util.HashMap;
@@ -89,6 +90,7 @@ public class ContentProvider extends android.content.ContentProvider {
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, DatabaseContract.RetailerColumns.COLUMN_CHAIN);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, DatabaseContract.RetailerColumns.COLUMN_LOGOURL);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT, DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT);
 
         //inladen LoyaltyCards
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyCardColumns._ID, DatabaseContract.LoyaltyCardColumns._ID);

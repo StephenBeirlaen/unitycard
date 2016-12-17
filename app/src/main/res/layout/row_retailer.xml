@@ -6,6 +6,7 @@
         <variable
             name="retailer"
             type="be.nmct.unitycard.models.Retailer" />
+
     </data>
 
 
@@ -61,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/textViewRetailerType"
-                    android:text="@{String.valueOf(retailer.retailerCategoryId)}" />
+                    android:text="@{retailer.chain ? @string/winkelketen : @string/zelfstandig}" />
 
             </LinearLayout>
 
@@ -73,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="150dp"
             android:id="@+id/textViewRetailerPoints"
-            android:text="@{String.valueOf(retailer.id)}"
+            android:text="@{String.valueOf(retailer.loyaltyPoint)}"
             android:layout_gravity="center_vertical"/>
 
     </LinearLayout>

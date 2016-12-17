@@ -86,7 +86,8 @@ public class RetailerInfoFragmentVM extends BaseObservable {
                 DatabaseContract.RetailerColumns.COLUMN_TAGLINE,
                 DatabaseContract.RetailerColumns.COLUMN_CHAIN,
                 DatabaseContract.RetailerColumns.COLUMN_LOGOURL,
-                DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP
+                DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP,
+                DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT
         };
 
         Cursor retailerData = mContext.getContentResolver().query(RETAILERS_ITEM_URI, retailerColumns,
@@ -103,7 +104,8 @@ public class RetailerInfoFragmentVM extends BaseObservable {
                             retailerData.getString(retailerData.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_TAGLINE)),
                             retailerData.getInt(retailerData.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_CHAIN)) > 0,
                             retailerData.getString(retailerData.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOGOURL)),
-                            TimestampHelper.convertStringToDate(retailerData.getString(retailerData.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP)))
+                            TimestampHelper.convertStringToDate(retailerData.getString(retailerData.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP))),
+                            retailerData.getInt(retailerData.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT))
                     );
                 } catch (java.text.ParseException e) {
                     e.printStackTrace();
