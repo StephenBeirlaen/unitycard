@@ -9,8 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.auth.api.Auth;
-
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.databinding.RowAddRetailerBinding;

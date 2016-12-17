@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -49,6 +50,10 @@ public class AddRetailerFragment extends Fragment
         mBinding.recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity())); // todo: naamgeving..?
         mBinding.recyclerViewAddRetailerList.setHasFixedSize(true);
         mBinding.recyclerViewAddRetailerList.setItemAnimator(new DefaultItemAnimator());
+        // aantal kolommen instellen
+        mBinding.recyclerViewAddRetailerList.setLayoutManager(new GridLayoutManager(getContext(),
+                getResources().getInteger(R.integer.retailerListColumnCount)
+        ));
 
         return mBinding.getRoot();
     }

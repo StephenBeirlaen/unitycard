@@ -2,12 +2,14 @@ package be.nmct.unitycard.fragments.customer;
 
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
@@ -50,6 +52,10 @@ public class RetailerListFragment extends Fragment
         mBinding.recyclerViewListRetailer.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.recyclerViewListRetailer.setHasFixedSize(true);
         mBinding.recyclerViewListRetailer.setItemAnimator(new DefaultItemAnimator());
+        // aantal kolommen instellen
+        mBinding.recyclerViewListRetailer.setLayoutManager(new GridLayoutManager(getContext(),
+                getResources().getInteger(R.integer.retailerListColumnCount)
+        ));
 
         mListener.showFabAddRetailer();
 

@@ -1,6 +1,7 @@
 package be.nmct.unitycard.activities.customer;
 
 import android.accounts.Account;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -21,9 +22,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.activities.login.AccountActivity;
@@ -85,10 +83,6 @@ public class MainActivity extends AppCompatActivity
         });
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        AppEventsLogger.activateApp(this);
     }
 
     @Override
@@ -205,13 +199,29 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void logOut() {
-        AuthHelper.logUserOff(this);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("");
+        progressDialog.setMessage("Logging out...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
 
-        // Clean up backstack
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        progressDialog.show();
 
-        showAccountActivity();
+        AuthHelper.logUserOff(this, new AuthHelper.LogUserOffListener() {
+            @Override
+            public void userLoggedOut() {
+                if (progressDialog.isShowing())
+                {
+                    progressDialog.dismiss();
+                }
+
+                // Clean up backstack
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                showAccountActivity();
+            }
+        });
     }
 
     @Override

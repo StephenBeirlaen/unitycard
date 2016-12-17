@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,10 @@ public class AdvertisingFragment extends Fragment {
         mBinding.recyclerViewAdvertising.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.recyclerViewAdvertising.setHasFixedSize(true);
         mBinding.recyclerViewAdvertising.setItemAnimator(new DefaultItemAnimator());
+        // aantal kolommen instellen
+        mBinding.recyclerViewAdvertising.setLayoutManager(new GridLayoutManager(getContext(),
+                getResources().getInteger(R.integer.retailerListColumnCount)
+        ));
 
         return mBinding.getRoot();
     }

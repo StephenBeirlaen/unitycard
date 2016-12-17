@@ -315,7 +315,7 @@ public class AuthHelper {
         }
     }
 
-    public static void logUserOff(final Context context) {
+    public static void logUserOff(final Context context, final LogUserOffListener callback) {
         // Wis alle cached data
         ContentProviderContract.clearAllContent(context);
 
@@ -327,17 +327,27 @@ public class AuthHelper {
                     FcmTokenHelper.removeRegistrationToken(context, accessToken);
 
                     clearAccounts(context);
+
+                    callback.userLoggedOut();
                 }
 
                 @Override
                 public void requestNewLogin() {
                     clearAccounts(context);
+
+                    callback.userLoggedOut();
                 }
             });
         }
         else {
             clearAccounts(context);
+
+            callback.userLoggedOut();
         }
+    }
+
+    public interface LogUserOffListener {
+        void userLoggedOut();
     }
 
     private static void clearAccounts(Context context) {

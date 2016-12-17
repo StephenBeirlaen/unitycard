@@ -1,5 +1,6 @@
 package be.nmct.unitycard.activities.retailer;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import be.nmct.unitycard.R;
+import be.nmct.unitycard.activities.customer.MainActivity;
 import be.nmct.unitycard.activities.login.AccountActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.databinding.ActivityRetailerAdminBinding;
@@ -75,13 +77,35 @@ public class RetailerAdminActivity extends AppCompatActivity
     }
 
     private void logOut() {
-        AuthHelper.logUserOff(this);
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("");
+        progressDialog.setMessage("Logging out...");
+        progressDialog.setIndeterminate(true);
+        progressDialog.setCancelable(false);
 
-        // Clean up backstack
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        progressDialog.show();
 
-        showAccountActivity();
+        AuthHelper.logUserOff(this, new AuthHelper.LogUserOffListener() {
+            @Override
+            public void userLoggedOut() {
+                if (progressDialog.isShowing())
+                {
+                    progressDialog.dismiss();
+                }
+
+                // Clean up backstack
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+                showMainActivity();
+                finish();
+            }
+        });
+    }
+
+    private void showMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 
     @Override
