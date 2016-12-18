@@ -107,9 +107,6 @@ public class MainActivity extends AppCompatActivity
                     }
 
                     displayUsernameInSidebar(AuthHelper.getUser(this));
-
-                    // Registreren bij Firebase Cloud Messaging // todo: weg ?
-                    //FirebaseMessaging.getInstance().subscribeToTopic("advertisements/1");
                 }
                 else if (role.equals(AccountContract.ROLE_RETAILER)) {
                     showRetailerAdminActivity();
@@ -294,7 +291,7 @@ public class MainActivity extends AppCompatActivity
         mBinding.swipeRefreshLayout.setRefreshing(false);
     }
 
-    public void requestNewLogin() { // todo: dit callen of rechtstreeks showaccountactivity() callen?
+    public void requestNewLogin() {
         // Something went wrong, toon login scherm
         showAccountActivity();
     }

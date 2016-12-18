@@ -75,15 +75,7 @@ public class RetailerOffersFragment extends Fragment {
         return mBinding.getRoot();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // todo: perform load actions here
-    }
-
     public interface RetailerOffersFragmentListener {
-        // todo: events, indien er geen events zijn, onAttach en ondetach overrides wegdoen
         void handleError(String error);
     }
 

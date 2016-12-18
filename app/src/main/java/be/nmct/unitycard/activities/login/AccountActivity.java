@@ -3,12 +3,9 @@ package be.nmct.unitycard.activities.login;
 import android.Manifest;
 import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
-import android.net.UrlQuerySanitizer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -16,45 +13,17 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceError;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Toast;
-
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import be.nmct.unitycard.R;
-import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.contracts.ApiContract;
 import be.nmct.unitycard.databinding.ActivityAccountBinding;
 import be.nmct.unitycard.fragments.login.AssociateAccountFragment;
 import be.nmct.unitycard.fragments.login.LoginFragment;
 import be.nmct.unitycard.fragments.login.RegisterFragment;
-import be.nmct.unitycard.models.postmodels.RegisterExternalBindingBody;
 import be.nmct.unitycard.models.viewmodels.activities.AccountActivityVM;
-import be.nmct.unitycard.repositories.AuthRepository;
-import okhttp3.HttpUrl;
-
-import static be.nmct.unitycard.activities.login.ExternalAuthenticationActivity.EXTERNAL_AUTHENTICATION_RESPONSE_URL;
 
 public class AccountActivity extends AppCompatActivity
         implements
@@ -141,7 +110,7 @@ public class AccountActivity extends AppCompatActivity
         switch (permissionRequestCode) { // Zoek uit welke permission
             case REQUEST_PERMISSION_GET_ACCOUNTS:
                 permission = Manifest.permission.GET_ACCOUNTS;
-                reason = "Access to your accounts is required to log in."; // todo: multi language
+                reason = getString(R.string.permission_required_accounts);
                 break;
             default:
                 finish();
@@ -178,12 +147,12 @@ public class AccountActivity extends AppCompatActivity
             case REQUEST_PERMISSION_GET_ACCOUNTS: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission ok
-                    handleError("Permission OK, you can now continue."); // todo: multi language
+                    handleError(getString(R.string.permission_request_ok));
                     // todo: hier doorgeven aan fragment dat we klaar zijn? automatisch doordoen ipv user nog eens laten drukken. systeem voor vinden
                 }
                 else {
                     // no permission
-                    handleError("Permission is required to use this app."); // todo: multi language
+                    handleError(getString(R.string.permission_required_app_usage));
                 }
                 break;
             }

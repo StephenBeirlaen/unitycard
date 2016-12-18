@@ -43,7 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/SpaarpuntenVerdiendValue"
+                android:text="0"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="25dp"
                 android:id="@+id/textViewSpaarpuntenVerdiendValue"/>

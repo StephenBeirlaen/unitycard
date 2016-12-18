@@ -2,7 +2,6 @@ package be.nmct.unitycard.fragments.customer;
 
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Handler;
@@ -71,13 +70,6 @@ public class RetailerListFragment extends Fragment
         mSearchView.setOnQueryTextListener(this);
 
         super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // todo: perform load actions here
-
     }
 
     @Override

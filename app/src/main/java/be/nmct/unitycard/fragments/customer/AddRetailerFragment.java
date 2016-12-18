@@ -47,7 +47,7 @@ public class AddRetailerFragment extends Fragment
 
         setHasOptionsMenu(true); // voegt de search knop toe
 
-        mBinding.recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity())); // todo: naamgeving..?
+        mBinding.recyclerViewAddRetailerList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mBinding.recyclerViewAddRetailerList.setHasFixedSize(true);
         mBinding.recyclerViewAddRetailerList.setItemAnimator(new DefaultItemAnimator());
         // aantal kolommen instellen

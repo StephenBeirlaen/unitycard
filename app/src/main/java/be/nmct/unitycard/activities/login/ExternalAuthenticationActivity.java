@@ -2,23 +2,19 @@ package be.nmct.unitycard.activities.login;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.AttributeSet;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
-import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
+
+import be.nmct.unitycard.R;
 
 import static be.nmct.unitycard.activities.login.AccountActivity.EXTERNAL_AUTHENTICATION_PROVIDER;
 
@@ -105,7 +101,7 @@ public class ExternalAuthenticationActivity extends AppCompatActivity {
 
         setContentView(webview);
 
-        setTitle("Log in with " + provider); // todo: multi lang
+        setTitle(getString(R.string.log_in_with_external_auth_provider) + provider);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 

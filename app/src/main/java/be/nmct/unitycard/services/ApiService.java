@@ -1,7 +1,5 @@
 package be.nmct.unitycard.services;
 
-import android.databinding.ObservableList;
-
 import java.util.List;
 
 import be.nmct.unitycard.models.LoyaltyCard;

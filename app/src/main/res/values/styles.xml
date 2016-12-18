@@ -13,7 +13,6 @@
         <item name="android:textColor">#fff</item>
     </style>
 
-    <!-- todo: colors instellen -->
     <style name="AppCompatEditText" parent="TextAppearance.AppCompat">
         <item name="android:textColorHint">@color/colorWhite</item>
         <item name="colorControlNormal">@color/colorWhite</item>

@@ -44,7 +44,7 @@ public class RegisterFragment extends Fragment {
         mRegisterFragmentVM = new RegisterFragmentVM(mBinding, getActivity());
 
         ((AppCompatActivity)getActivity()).setSupportActionBar(mBinding.toolbar);
-        ((AppCompatActivity)getActivity()).setTitle("Register"); // todo: multi lang
+        ((AppCompatActivity)getActivity()).setTitle(getString(R.string.FragmentLabelRegister));
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -60,46 +60,46 @@ public class RegisterFragment extends Fragment {
                 Matcher passwordMatcher = AccountContract.POLICY_PASSWORD_PATTERN.matcher(password1);
 
                 if (firstName.length() == 0) {
-                    mListener.handleError("First name is empty"); // todo: multi language
+                    mListener.handleError(getString(R.string.first_name_empty));
                 }
                 else if (firstName.length() < AccountContract.POLICY_FIRSTNAME_MIN_LENGTH) {
-                    mListener.handleError("First name must have a minimum of " + AccountContract.POLICY_FIRSTNAME_MIN_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.first_name_min_chars) + AccountContract.POLICY_FIRSTNAME_MIN_LENGTH + getString(R.string.characters));
                 }
                 else if (firstName.length() > AccountContract.POLICY_FIRSTNAME_MAX_LENGTH) {
-                    mListener.handleError("First name must have a maximum of " + AccountContract.POLICY_FIRSTNAME_MAX_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.first_name_max_chars) + AccountContract.POLICY_FIRSTNAME_MAX_LENGTH + getString(R.string.characters));
                 }
                 else if (lastName.length() == 0) {
-                    mListener.handleError("Last name is empty");
+                    mListener.handleError(getString(R.string.last_name_empty));
                 }
                 else if (lastName.length() < AccountContract.POLICY_LASTNAME_MIN_LENGTH) {
-                    mListener.handleError("Last name must have a minimum of " + AccountContract.POLICY_LASTNAME_MIN_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.last_name_min_chars) + AccountContract.POLICY_LASTNAME_MIN_LENGTH + getString(R.string.characters));
                 }
                 else if (lastName.length() > AccountContract.POLICY_LASTNAME_MAX_LENGTH) {
-                    mListener.handleError("Last name must have a maximum of " + AccountContract.POLICY_LASTNAME_MAX_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.last_name_max_chars) + AccountContract.POLICY_LASTNAME_MAX_LENGTH + getString(R.string.characters));
                 }
                 else if (email.length() == 0) { // een basic client side validatie
-                    mListener.handleError("Email is empty");
+                    mListener.handleError(getString(R.string.email_empty));
                 }
                 else if (email.length() < AccountContract.POLICY_EMAIL_MIN_LENGTH) {
-                    mListener.handleError("Email must have a minimum of " + AccountContract.POLICY_EMAIL_MIN_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.email_min_chars) + AccountContract.POLICY_EMAIL_MIN_LENGTH + getString(R.string.characters));
                 }
                 else if (email.length() > AccountContract.POLICY_EMAIL_MAX_LENGTH) {
-                    mListener.handleError("Email must have a maximum of " + AccountContract.POLICY_EMAIL_MAX_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.email_max_chars) + AccountContract.POLICY_EMAIL_MAX_LENGTH + getString(R.string.characters));
                 }
                 else if (password1.length() == 0) {
-                    mListener.handleError("Password is empty");
+                    mListener.handleError(getString(R.string.password_empty));
                 }
                 else if (password1.length() < AccountContract.POLICY_PASSWORD_MIN_LENGTH) {
-                    mListener.handleError("Password must have a minimum of " + AccountContract.POLICY_PASSWORD_MIN_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.password_min_chars) + AccountContract.POLICY_PASSWORD_MIN_LENGTH + getString(R.string.characters));
                 }
                 else if (password1.length() > AccountContract.POLICY_PASSWORD_MAX_LENGTH) {
-                    mListener.handleError("Password must have a maximum of " + AccountContract.POLICY_PASSWORD_MAX_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.password_max_chars) + AccountContract.POLICY_PASSWORD_MAX_LENGTH + getString(R.string.characters));
                 }
                 else if (!password1.equals(password2)) {
-                    mListener.handleError("Passwords do not match");
+                    mListener.handleError(getString(R.string.passwords_not_matching));
                 }
                 else if (!passwordMatcher.matches()) {
-                    mListener.handleError("Passwords must have at least one non letter or digit character, one digit ('0'-'9') and one uppercase ('A'-'Z').");
+                    mListener.handleError(getString(R.string.password_invalid_format));
                 }
                 else {
                     // hide keyboard
@@ -150,7 +150,7 @@ public class RegisterFragment extends Fragment {
                         });
                     }
                     else {
-                        mListener.handleError("No internet connection");
+                        mListener.handleError(getString(R.string.no_internet_connection));
                         mBinding.progressCircleRegister.setVisibility(View.INVISIBLE);
                     }
                 }
@@ -158,12 +158,6 @@ public class RegisterFragment extends Fragment {
         });
 
         return mBinding.getRoot();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // todo: perform load actions here
     }
 
     public interface RegisterFragmentListener {

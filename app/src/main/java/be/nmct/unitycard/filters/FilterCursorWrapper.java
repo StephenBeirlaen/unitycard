@@ -18,7 +18,7 @@ public class FilterCursorWrapper extends CursorWrapper {
     private OnCursorFilterer filterer;
 
     // een collectie dat gefilterde rijnummer linkt aan oorspronkelijk rijnummer
-    private HashMap<Integer,Integer> mRowToRowMap = new HashMap<Integer,Integer>();    //mapt filtered posities (key) naar originele posities // todo sparseintarray??
+    private HashMap<Integer,Integer> mRowToRowMap = new HashMap<Integer,Integer>();    //mapt filtered posities (key) naar originele posities
     private int mPos = -1;
 
     public FilterCursorWrapper(Cursor cursor, OnCursorFilterer filterer) {

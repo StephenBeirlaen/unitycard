@@ -7,30 +7,21 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Toast;
 
 import java.util.Locale;
-import java.util.regex.Matcher;
 
 import be.nmct.unitycard.R;
-import be.nmct.unitycard.activities.login.AccountActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.databinding.FragmentAssociateAccountBinding;
-import be.nmct.unitycard.databinding.FragmentRegisterBinding;
 import be.nmct.unitycard.helpers.ConnectionChecker;
 import be.nmct.unitycard.helpers.HideKeyboardHelper;
 import be.nmct.unitycard.models.GetTokenResponse;
 import be.nmct.unitycard.models.postmodels.RegisterExternalBindingBody;
-import be.nmct.unitycard.models.postmodels.RegisterUserBody;
 import be.nmct.unitycard.models.viewmodels.fragment.AssociateAccountFragmentVM;
-import be.nmct.unitycard.models.viewmodels.fragment.RegisterFragmentVM;
 import be.nmct.unitycard.repositories.AuthRepository;
 import okhttp3.HttpUrl;
 
@@ -63,7 +54,7 @@ public class AssociateAccountFragment extends Fragment {
         mAssociateAccountFragmentVM = new AssociateAccountFragmentVM(mBinding, getActivity());
 
         ((AppCompatActivity)getActivity()).setSupportActionBar(mBinding.toolbar);
-        ((AppCompatActivity)getActivity()).setTitle("Associate account"); // todo: multi lang
+        ((AppCompatActivity)getActivity()).setTitle(getString(R.string.FragmentLabelAssociateAccount));
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -79,31 +70,31 @@ public class AssociateAccountFragment extends Fragment {
                 final String email = mBinding.txtEmail.getText().toString();
 
                 if (firstName.length() == 0) {
-                    mListener.handleError("First name is empty"); // todo: multi language
+                    mListener.handleError(getString(R.string.first_name_empty));
                 }
                 else if (firstName.length() < AccountContract.POLICY_FIRSTNAME_MIN_LENGTH) {
-                    mListener.handleError("First name must have a minimum of " + AccountContract.POLICY_FIRSTNAME_MIN_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.first_name_min_chars) + AccountContract.POLICY_FIRSTNAME_MIN_LENGTH + getString(R.string.characters));
                 }
                 else if (firstName.length() > AccountContract.POLICY_FIRSTNAME_MAX_LENGTH) {
-                    mListener.handleError("First name must have a maximum of " + AccountContract.POLICY_FIRSTNAME_MAX_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.first_name_max_chars) + AccountContract.POLICY_FIRSTNAME_MAX_LENGTH + getString(R.string.characters));
                 }
                 else if (lastName.length() == 0) {
-                    mListener.handleError("Last name is empty");
+                    mListener.handleError(getString(R.string.last_name_empty));
                 }
                 else if (lastName.length() < AccountContract.POLICY_LASTNAME_MIN_LENGTH) {
-                    mListener.handleError("Last name must have a minimum of " + AccountContract.POLICY_LASTNAME_MIN_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.last_name_min_chars) + AccountContract.POLICY_LASTNAME_MIN_LENGTH + getString(R.string.characters));
                 }
                 else if (lastName.length() > AccountContract.POLICY_LASTNAME_MAX_LENGTH) {
-                    mListener.handleError("Last name must have a maximum of " + AccountContract.POLICY_LASTNAME_MAX_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.last_name_max_chars) + AccountContract.POLICY_LASTNAME_MAX_LENGTH + getString(R.string.characters));
                 }
                 else if (email.length() == 0) { // een basic client side validatie
-                    mListener.handleError("Email is empty");
+                    mListener.handleError(getString(R.string.email_empty));
                 }
                 else if (email.length() < AccountContract.POLICY_EMAIL_MIN_LENGTH) {
-                    mListener.handleError("Email must have a minimum of " + AccountContract.POLICY_EMAIL_MIN_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.email_min_chars) + AccountContract.POLICY_EMAIL_MIN_LENGTH + getString(R.string.characters));
                 }
                 else if (email.length() > AccountContract.POLICY_EMAIL_MAX_LENGTH) {
-                    mListener.handleError("Email must have a maximum of " + AccountContract.POLICY_EMAIL_MAX_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.email_max_chars) + AccountContract.POLICY_EMAIL_MAX_LENGTH + getString(R.string.characters));
                 }
                 else {
                     // hide keyboard
@@ -161,7 +152,7 @@ public class AssociateAccountFragment extends Fragment {
                         });
                     }
                     else {
-                        mListener.handleError("No internet connection");
+                        mListener.handleError(getString(R.string.no_internet_connection));
                         mBinding.progressCircleRegister.setVisibility(View.INVISIBLE);
                     }
                 }
@@ -169,12 +160,6 @@ public class AssociateAccountFragment extends Fragment {
         });
 
         return mBinding.getRoot();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // todo: perform load actions here
     }
 
     private void parseExternalAuthResponse(String url, Activity activity) {
@@ -194,7 +179,7 @@ public class AssociateAccountFragment extends Fragment {
             mBinding.txtFirstName.setVisibility(View.GONE);
             mBinding.txtLastName.setVisibility(View.GONE);
             mBinding.buttonRegister.setVisibility(View.GONE);
-            ((AppCompatActivity)getActivity()).setTitle("Logging in"); // todo: multi lang
+            ((AppCompatActivity)getActivity()).setTitle(getString(R.string.FragmentLabelAssociateAccountLoggingIn));
 
             // show progress scroller
             mBinding.progressCircleRegister.setVisibility(View.VISIBLE);
@@ -234,7 +219,7 @@ public class AssociateAccountFragment extends Fragment {
                 });
             }
             else {
-                mListener.handleError("No internet connection");
+                mListener.handleError(getString(R.string.no_internet_connection));
                 mBinding.progressCircleRegister.setVisibility(View.INVISIBLE);
             }
         }

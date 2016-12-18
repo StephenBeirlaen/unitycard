@@ -1,10 +1,6 @@
 package be.nmct.unitycard.models.postmodels;
 
-import android.content.Context;
-
 import com.google.gson.annotations.SerializedName;
-
-import be.nmct.unitycard.repositories.ApiRepository;
 
 /**
  * Created by Stephen on 5/11/2016.

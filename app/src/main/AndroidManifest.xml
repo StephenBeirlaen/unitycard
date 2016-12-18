@@ -31,7 +31,7 @@
         <activity
             android:name=".activities.login.AccountActivity"
             android:noHistory="false"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".auth.AccountAuthenticatorService"
@@ -48,26 +48,27 @@
 
         <activity
             android:name=".activities.customer.AddRetailerActivity"
-            android:label="Winkel toevoegen"></activity> <!-- todo: multi language label -->
+            android:label="@string/ActivityLabelAddRetailer" />
 
         <activity
             android:name=".activities.customer.RetailerActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".activities.customer.SettingsActivity"
-            android:label="Instellingen"></activity> <!-- todo: multi language label -->
+            android:label="@string/ActivityLabelSettings" />
 
         <activity
             android:name=".activities.customer.RetailerMapActivity"
-            android:label="Retailer Map"></activity> <!-- todo: multi language label -->
+            android:label="@string/ActivityLabelRetailerMap" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyDEl8Ty1e7ZkEIGphrMA_XKH0n9FE2AE5w" />
+            android:value="AIzaSyDeXMb6weBEtES6dx3E6FLE6qGc1K63RTI" />
 
         <activity
             android:name=".activities.retailer.RetailerAdminActivity"
-            android:label="Retailer Test"></activity> <!-- todo: multi language label -->
+            android:label="@string/ActivityLabelRetailerAdmin" />
 
         <provider
             android:name=".provider.ContentProvider"
@@ -98,7 +99,7 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".activities.login.ExternalAuthenticationActivity"></activity>
+        <activity android:name=".activities.login.ExternalAuthenticationActivity" />
     </application>
 
 </manifest>

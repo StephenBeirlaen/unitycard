@@ -43,7 +43,6 @@ public class AddRetailerRecyclerViewAdapter
 
         @Override
         public void onClick(View view) {
-            // todo
             final AddLoyaltyCardRetailerBody addLoyaltyCardRetailerBody = new AddLoyaltyCardRetailerBody(binding.getRetailer().getId());
             final ApiRepository apiRepository = new ApiRepository(mContext);
             AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {

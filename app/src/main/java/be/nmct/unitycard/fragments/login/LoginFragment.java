@@ -2,13 +2,9 @@ package be.nmct.unitycard.fragments.login;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,22 +45,22 @@ public class LoginFragment extends Fragment {
                 String password = mBinding.txtPassword.getText().toString();
 
                 if (username.length() == 0) { // een basic client side validatie
-                    mListener.handleError("Email is empty");
+                    mListener.handleError(getString(R.string.email_empty));
                 }
                 else if (username.length() < AccountContract.POLICY_EMAIL_MIN_LENGTH) {
-                    mListener.handleError("Email must have a minimum of " + AccountContract.POLICY_EMAIL_MIN_LENGTH + " characters"); // todo: multi language
+                    mListener.handleError(getString(R.string.email_min_chars) + AccountContract.POLICY_EMAIL_MIN_LENGTH + getString(R.string.characters));
                 }
                 else if (username.length() > AccountContract.POLICY_EMAIL_MAX_LENGTH) {
-                    mListener.handleError("Email must have a maximum of " + AccountContract.POLICY_EMAIL_MAX_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.email_max_chars) + AccountContract.POLICY_EMAIL_MAX_LENGTH + getString(R.string.characters));
                 }
                 else if (password.length() == 0) {
-                    mListener.handleError("Password is empty");
+                    mListener.handleError(getString(R.string.password_empty));
                 }
                 else if (password.length() < AccountContract.POLICY_PASSWORD_MIN_LENGTH) {
-                    mListener.handleError("Password must have a minimum of " + AccountContract.POLICY_PASSWORD_MIN_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.password_min_chars) + AccountContract.POLICY_PASSWORD_MIN_LENGTH + getString(R.string.characters));
                 }
                 else if (password.length() > AccountContract.POLICY_PASSWORD_MAX_LENGTH) {
-                    mListener.handleError("Password must have a maximum of " + AccountContract.POLICY_PASSWORD_MAX_LENGTH + " characters");
+                    mListener.handleError(getString(R.string.password_max_chars) + AccountContract.POLICY_PASSWORD_MAX_LENGTH + getString(R.string.characters));
                 }
                 else {
                     // hide keyboard
@@ -127,13 +123,6 @@ public class LoginFragment extends Fragment {
         return mBinding.getRoot();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // todo: perform load actions here
-    }
-
     public interface LoginFragmentListener {
         void btnRegisterClicked();
         void btnLoginFacebookClicked();
@@ -166,9 +155,9 @@ public class LoginFragment extends Fragment {
         String username = mBinding.txtUsername.getText().toString();
         String password = mBinding.txtPassword.getText().toString();
 
-        if (!username.equals(""))
+        if (!username.isEmpty())
             outState.putString(STATE_TXT_USERNAME, username);
-        if (!password.equals(""))
+        if (!password.isEmpty())
             outState.putString(STATE_TXT_PASSWORD, password);
 
         super.onSaveInstanceState(outState);

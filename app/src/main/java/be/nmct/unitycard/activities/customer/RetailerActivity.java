@@ -73,7 +73,7 @@ public class RetailerActivity extends AppCompatActivity
             Log.d(LOG_TAG, "intent is null");
         }
 
-        RetailerActivityPagerAdapter pagerAdapter = new RetailerActivityPagerAdapter(getSupportFragmentManager(), retailerId);
+        RetailerActivityPagerAdapter pagerAdapter = new RetailerActivityPagerAdapter(getSupportFragmentManager(), retailerId, this);
         mBinding.viewpager.setAdapter(pagerAdapter);
         mBinding.tablayout.setupWithViewPager(mBinding.viewpager); // tabs instellen, o.a. de labels
         mBinding.tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

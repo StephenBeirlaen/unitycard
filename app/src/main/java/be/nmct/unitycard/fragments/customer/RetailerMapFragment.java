@@ -62,13 +62,6 @@ public class RetailerMapFragment extends SupportMapFragment
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-
-        // todo: perform load actions here
-    }
-
-    @Override
     public void onMapReady(GoogleMap googleMap) {
         this.mGoogleMap = googleMap;
 

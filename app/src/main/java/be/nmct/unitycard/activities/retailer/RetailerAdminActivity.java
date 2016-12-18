@@ -142,11 +142,6 @@ public class RetailerAdminActivity extends AppCompatActivity
                 .commit();
     }
 
-    public void requestNewLogin() { // todo: dit callen of rechtstreeks showaccountactivity() callen?
-        // Something went wrong, toon login scherm
-        showAccountActivity();
-    }
-
     @Override
     public void onBackPressed() {
         FragmentManager fragmentManager = getSupportFragmentManager();

@@ -1,38 +1,87 @@
 <resources>
-    <string name="app_name">UnityCard</string>
+    <string name="app_name" translatable="false">UnityCard</string>
+
+    <string name="ActivityLabelAddRetailer">Add retailer</string>
+    <string name="ActivityLabelSettings">Settings</string>
+    <string name="ActivityLabelRetailerMap">Retailer Map</string>
+    <string name="ActivityLabelRetailerAdmin">Retailer Test Menu</string>
+
+    <string name="FragmentLabelRegister">Register</string>
+    <string name="FragmentLabelAssociateAccount">Associate account</string>
+    <string name="FragmentLabelAssociateAccountLoggingIn">Logging in</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="navigation_drawer_my_loyalty_card">My loyalty card</string>
+    <string name="navigation_drawer_my_retailers">My retailers</string>
+    <string name="navigation_drawer_offers">Offers</string>
+    <string name="navigation_drawer_settings">Settings</string>
+    <string name="navigation_drawer_log_out">Log out</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_settings">Settings</string>
 
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="YourLoyaltyCard">Your loyalty card:</string>
-    <string name="SpaarpuntenVerdiend">Totaal aantal spaarpunten verdiend:</string>
-    <string name="SpaarpuntenVerdiendValue">0</string>
-    <string name="retailerName">Naam</string>
+    <string name="SpaarpuntenVerdiend">Total amount of loyalty points earned:</string>
+    <string name="retailerName">Name</string>
     <string name="retailerType">Type</string>
-    <string name="retailerLocatie">Locatie</string>
-    <string name="buttonToevoegen">+</string>
+    <string name="retailerLocatie">Location</string>
+    <string name="buttonToevoegen" translatable="false">+</string>
     <string name="firstName">First name</string>
     <string name="LastName">Last name</string>
     <string name="repeatpassword">Repeat password</string>
     <string name="register">Register</string>
-    <string name="OfferVoorwaarde">Voorwaarde</string>
+    <string name="OfferVoorwaarde">Condition</string>
     <string name="Offer">Offer</string>
-    <string name="retailerPoints">Points</string>
-    <string name="OfferEnVoorwaarde">Offer en voorwaarde</string>
-    <string name="toonAlleWinkels">Toon alle winkels</string>
-    <string name="retailerDichtsbijzijndeWinkel">Dichtsbijzijnde winkel:</string>
+    <string name="OfferEnVoorwaarde">Offer and condition</string>
+    <string name="toonAlleWinkels">Show all retailers</string>
+    <string name="retailerDichtsbijzijndeWinkel">Closest retailer:</string>
     <string name="retailerDichtsbijzijndeWinkelValue">Value</string>
-    <string name="OpenKaart">Open kaart</string>
-    <string name="waar">true</string>
-    <string name="winkelketen">Winkelketen</string>
-    <string name="zelfstandig">Zelfstandig</string>
+    <string name="OpenKaart">Open map</string>
+    <string name="winkelketen">Retail chain</string>
+    <string name="zelfstandig">Independent</string>
 
     <string name="email">Email</string>
+    <string name="permission_required_accounts">Access to your accounts is required to log in.</string>
+    <string name="permission_request_ok">Permission OK, you can now continue.</string>
+    <string name="permission_required_app_usage">Permission is required to use this app.</string>
+    <string name="log_in_with_external_auth_provider">"Log in with "</string>
+    <string name="first_name_empty">First name is empty</string>
+    <string name="first_name_min_chars">"First name must have a minimum of "</string>
+    <string name="first_name_max_chars">"First name must have a maximum of "</string>
+    <string name="last_name_empty">Last name is empty</string>
+    <string name="last_name_min_chars">"Last name must have a minimum of "</string>
+    <string name="last_name_max_chars">"Last name must have a maximum of "</string>
+    <string name="email_empty">Email is empty</string>
+    <string name="email_min_chars">"Email must have a minimum of "</string>
+    <string name="email_max_chars">"Email must have a maximum of "</string>
+    <string name="password_empty">Password is empty</string>
+    <string name="password_min_chars">"Password must have a minimum of "</string>
+    <string name="password_max_chars">"Password must have a maximum of "</string>
+    <string name="passwords_not_matching">Passwords do not match</string>
+    <string name="password_invalid_format">Passwords must have at least one non letter or digit character, one digit (\'0\'-\'9\') and one uppercase (\'A\'-\'Z\').</string>
+    <string name="characters">" characters"</string>
+
+    <string name="no_internet_connection">No internet connection</string>
+    <string name="retailer_placed_new_offer">\" added a new offer\"</string>
+    <string name="retailerPoints">Points</string>
+    <string name="scan_klantenkaart">Scan loyalty card</string>
+    <string name="geselecteerde_winkel">Selected retailer</string>
+    <string name="geen">None</string>
+    <string name="kies_winkel">Select retailer</string>
+    <string name="klant">Customer</string>
+    <string name="aantal">Amount:</string>
+    <string name="spaarpunten_toevoegen">Add loyalty points</string>
+    <string name="advertentie_verzenden">Send advert</string>
+    <string name="boodschap">Message:</string>
+    <string name="verzend">Send</string>
+    <string name="acties">Actions</string>
+    <string name="log_out">Log out</string>
+    <string name="voeg_toe">Add</string>
+    <string name="info">Info</string>
+    <string name="aanbiedingen">Offers</string>
+
+
 </resources>
