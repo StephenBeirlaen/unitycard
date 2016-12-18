@@ -72,8 +72,8 @@ public class AddRetailerFragmentVM extends BaseObservable
                 DatabaseContract.RetailerColumns.COLUMN_TAGLINE,
                 DatabaseContract.RetailerColumns.COLUMN_CHAIN,
                 DatabaseContract.RetailerColumns.COLUMN_LOGOURL,
-                DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP,
-                DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT
+                DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP/*,
+                DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT*/
         };
 
         Cursor data = mContext.getContentResolver().query(RETAILERS_URI, columns, null, null, null);
@@ -97,8 +97,8 @@ public class AddRetailerFragmentVM extends BaseObservable
                             filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_TAGLINE)),
                             filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_CHAIN)) > 0,
                             filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOGOURL)),
-                            TimestampHelper.convertStringToDate(filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP))),
-                            filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT))
+                            TimestampHelper.convertStringToDate(filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP)))/*,
+                            filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT))*/
                     );
                 } catch (ParseException e) {
                     e.printStackTrace();

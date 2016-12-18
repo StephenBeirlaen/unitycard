@@ -131,12 +131,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     Date lastRetailerCategoriesSyncTimestamp;
                     Date lastAddedRetailersSyncTimestamp;
                     Date lastRetailerOffersSyncTimestamp;
+                    Date lastTotalLoyaltyPointsSyncTimestamp;
                     try {
                         lastLoyaltyCardSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_LOYALTY_CARD);
                         lastAddedRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_ADDEDRETAILERS);
                         lastRetailerCategoriesSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES);
                         lastRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
                         lastRetailerOffersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_OFFERS);
+                        lastTotalLoyaltyPointsSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_TOTAL_LOYALTY_POINTS);
                     } catch (ParseException e) {
                         handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
                         return;
@@ -287,6 +289,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         @Override
                         public void requestError(String error) {
                             handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
+                        }
+                    });
+
+                    apiRepo.getTotalLoyaltyPoints(accessToken, AuthHelper.getUserId(getContext()), lastTotalLoyaltyPointsSyncTimestamp, new ApiRepository.GetResultListener<Integer>() {
+                        @Override
+                        public void resultReceived(Integer result) {
+                            Log.d(LOG_TAG, "Gelukt");
+                        }
+
+                        @Override
+                        public void requestError(String error) {
+
                         }
                     });
                 }

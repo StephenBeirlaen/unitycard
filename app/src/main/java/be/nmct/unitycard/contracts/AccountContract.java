@@ -27,6 +27,7 @@ public class AccountContract {
     public static final String KEY_LAST_SYNC_TIMESTAMP_ADDEDRETAILERS = "be.nmct.unitycard.account.last_sync_timestamp.addedretailers";
     public static final String KEY_LAST_SYNC_TIMESTAMP_RETAILER_OFFERS = "be.nmct.unitycard.account.last_sync_timestamp.retaileroffers";
     public static final String KEY_LAST_SYNC_TIMESTAMP_RETAILER_LOCATIONS = "be.nmct.unitycard.account.last_sync_timestamp.retailerlocations";
+    public static final String KEY_LAST_SYNC_TIMESTAMP_TOTAL_LOYALTY_POINTS = "be.nmct.unitycard.account.last_sync_timestamp.totalloyaltypoints";
 
     public static final Integer POLICY_EMAIL_MIN_LENGTH = 6;
     public static final Integer POLICY_EMAIL_MAX_LENGTH = 100;

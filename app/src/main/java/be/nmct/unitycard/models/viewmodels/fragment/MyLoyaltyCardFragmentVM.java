@@ -25,6 +25,7 @@ import be.nmct.unitycard.models.LoyaltyCard;
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
 import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYCARDS_URI;
+import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYPOINTS_URI;
 
 /**
  * Created by Stephen on 9/11/2016.
@@ -42,6 +43,7 @@ public class MyLoyaltyCardFragmentVM extends BaseObservable {
         mBinding.setViewmodel(this);
 
         loadQRcode();
+        loadTotalPoints();
     }
 
     public class MyContentObserver extends ContentObserver {
@@ -59,6 +61,28 @@ public class MyLoyaltyCardFragmentVM extends BaseObservable {
             if (uri.equals(LOYALTYCARDS_URI)) {
                 loadQRcode();
             }
+            if(uri.equals(LOYALTYPOINTS_URI)){
+                loadTotalPoints();
+            }
+        }
+    }
+
+    private void loadTotalPoints(){
+        String[] loyaltypointsColumns = new String[]{
+                DatabaseContract.LoyaltyPointsColumns.COLUMN_LOYALTYCARD_ID,
+                DatabaseContract.LoyaltyPointsColumns.COLUMN_RETAILER_ID,
+                DatabaseContract.LoyaltyPointsColumns.COLUMN_POINTS,
+                DatabaseContract.LoyaltyPointsColumns.COLUMN_UPDATED_TIMESTAMP
+        };
+
+        Cursor data = mContext.getContentResolver().query(LOYALTYPOINTS_URI, loyaltypointsColumns, DatabaseContract.LoyaltyPointsColumns.COLUMN_LOYALTYCARD_ID + "=?", new String[] {"1"}, null);
+
+        if(data != null){
+            int total = 0;
+            while(data.moveToNext()){
+                total += data.getInt(data.getColumnIndex(DatabaseContract.LoyaltyPointsColumns.COLUMN_POINTS));
+            }
+            mBinding.textViewSpaarpuntenVerdiendValue.setText("" + total);
         }
     }
 

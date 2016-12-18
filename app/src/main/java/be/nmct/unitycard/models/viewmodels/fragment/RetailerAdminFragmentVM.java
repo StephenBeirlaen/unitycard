@@ -25,7 +25,7 @@ public class RetailerAdminFragmentVM extends BaseObservable {
     private RetailerAdminFragment.RetailerAdminFragmentListener mListener;
     private Context mContext;
 
-    public RetailerAdminFragmentVM(FragmentRetailerAdminBinding binding, final Context context, RetailerAdminFragment.RetailerAdminFragmentListener listener) {
+    public RetailerAdminFragmentVM(final FragmentRetailerAdminBinding binding, final Context context, RetailerAdminFragment.RetailerAdminFragmentListener listener) {
         this.mBinding = binding;
         this.mContext = context;
         this.mListener = listener;
@@ -52,7 +52,7 @@ public class RetailerAdminFragmentVM extends BaseObservable {
         mBinding.btnAwardLoyaltypoints.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // todo: implement
+                mBinding.txtLoyaltypointCount.setText("");
             }
         });
 
@@ -90,6 +90,9 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                         mListener.requestLogOut();
                     }
                 });
+
+                mBinding.txtAdvertisementDescription.setText("");
+
             }
         });
 

@@ -77,8 +77,8 @@ public class RetailerListFragmentVM extends BaseObservable
                 DatabaseContract.RetailerColumns.COLUMN_TAGLINE,
                 DatabaseContract.RetailerColumns.COLUMN_CHAIN,
                 DatabaseContract.RetailerColumns.COLUMN_LOGOURL,
-                DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP,
-                DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT
+                DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP/*,
+                DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT*/
         };
 
         String[] loyaltypointsColumns = new String[]{
@@ -90,10 +90,10 @@ public class RetailerListFragmentVM extends BaseObservable
 
         Cursor data = mContext.getContentResolver().query(ADDED_RETAILERS_URI, columns, null, null, null);
 
-        Cursor dataLoyaltypoints = mContext.getContentResolver().query(LOYALTYPOINTS_ITEM_URI, loyaltypointsColumns, DatabaseContract.LoyaltyPointsColumns.COLUMN_LOYALTYCARD_ID + "=?" + " AND " + DatabaseContract.LoyaltyPointsColumns.COLUMN_RETAILER_ID + "=?", new String[]{"1","1"}, null);
+        //Cursor dataLoyaltypoints = mContext.getContentResolver().query(LOYALTYPOINTS_ITEM_URI, loyaltypointsColumns, DatabaseContract.LoyaltyPointsColumns.COLUMN_LOYALTYCARD_ID + "=?", new String[]{"1"}, null);
 
         filterCursorWrapper = new FilterCursorWrapper(data, this);
-        filterCursorWrapperLoyaltyPoints = new FilterCursorWrapper(dataLoyaltypoints, this);
+        //filterCursorWrapperLoyaltyPoints = new FilterCursorWrapper(dataLoyaltypoints, this);
 
         updateRecyclerView();
     }
@@ -113,8 +113,8 @@ public class RetailerListFragmentVM extends BaseObservable
                             filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_TAGLINE)),
                             filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_CHAIN)) > 0,
                             filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOGOURL)),
-                            TimestampHelper.convertStringToDate(filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP))),
-                            filterCursorWrapperLoyaltyPoints.getInt(filterCursorWrapperLoyaltyPoints.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT))
+                            TimestampHelper.convertStringToDate(filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP)))/*,
+                            filterCursorWrapperLoyaltyPoints.getInt(filterCursorWrapperLoyaltyPoints.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT))*/
                     );
                 } catch (ParseException e){
                     e.printStackTrace();

@@ -33,7 +33,7 @@ public class Retailer {
     @SerializedName("LoyaltyPoint")
     private int loyaltyPoint;
 
-    public Retailer(int id, int retailerCategoryId, String name, String tagline, boolean chain, String logoUrl, Date updatedTimestamp, int loyaltyPoint) {
+    public Retailer(int id, int retailerCategoryId, String name, String tagline, boolean chain, String logoUrl, Date updatedTimestamp/*, int loyaltyPoint*/) {
         this.id = id;
         this.retailerCategoryId = retailerCategoryId;
         this.name = name;
@@ -41,7 +41,7 @@ public class Retailer {
         this.chain = chain;
         this.logoUrl = logoUrl;
         this.updatedTimestamp = updatedTimestamp;
-        this.loyaltyPoint = loyaltyPoint;
+        //this.loyaltyPoint = loyaltyPoint;
     }
 
     public int getId() {
