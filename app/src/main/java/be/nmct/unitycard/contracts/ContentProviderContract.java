@@ -32,6 +32,9 @@ public class ContentProviderContract {
     public static final Uri RETAILER_CATEGORIES_URI = Uri.parse("content://" + AUTHORITY + "/retailercategories");
     public static final Uri RETAILER_CATEGORIES_ITEM_URI = Uri.parse("content://" + AUTHORITY + "/retailercategories/");
 
+    public static final Uri TOTAL_LOYALTY_POINTS_URI = Uri.parse("content://" + AUTHORITY + "/totalloyaltypoints");
+    public static final Uri TOTAL_LOYALTY_POINTS_ITEM_URI = Uri.parse("content://" + AUTHORITY + "/totalloyaltypoints/");
+
     // MIME-types (vnd = vendor specific)
     public static final String RETAILERS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd.unitycard.retailer";
     public static final String RETAILERS_ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.unitycard.retailer";
@@ -51,6 +54,8 @@ public class ContentProviderContract {
     public static final String RETAILER_CATEGORIES_CONTENT_TYPE = "vnd.android.cursor.dir/vnd.unitycard.retailercategory";
     public static final String RETAILER_CATEGORIES_ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.unitycard.retailercategory";
 
+    public static final String TOTAL_LOYALTY_POINTS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd.unitycard.totalloyaltypoint";
+    public static final String TOTAL_LOYALTY_POINTS_ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.unitycard.totalloyaltypoint";
 
     public static void clearAllContent(Context context) {
         context.getContentResolver().delete(ContentProviderContract.RETAILERS_URI, null, null);
@@ -73,5 +78,8 @@ public class ContentProviderContract {
 
         context.getContentResolver().delete(ContentProviderContract.RETAILER_CATEGORIES_URI, null, null);
         context.getContentResolver().delete(ContentProviderContract.RETAILER_CATEGORIES_ITEM_URI, null, null);
+
+        context.getContentResolver().delete(ContentProviderContract.TOTAL_LOYALTY_POINTS_URI, null, null);
+        context.getContentResolver().delete(ContentProviderContract.TOTAL_LOYALTY_POINTS_ITEM_URI, null, null);
     }
 }

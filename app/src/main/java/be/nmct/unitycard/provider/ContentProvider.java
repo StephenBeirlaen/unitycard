@@ -38,6 +38,8 @@ public class ContentProvider extends android.content.ContentProvider {
     private static final int OFFERS_ID = 12;
     private static final int RETAILERCATEGORIES = 13;
     private static final int RETAILERCATEGORIES_ID = 14;
+    private static final int TOTALLOYALTYPOINTS = 15;
+    private static final int TOTALLOYALTYPOINTS_ID = 16;
 
     private static HashMap<String, String> UNITYCARD_PROJECTION_MAP;
 
@@ -73,6 +75,10 @@ public class ContentProvider extends android.content.ContentProvider {
         //RetailerCategories
         uriMatcher.addURI(ContentProviderContract.AUTHORITY, "retailercategories", RETAILERCATEGORIES);
         uriMatcher.addURI(ContentProviderContract.AUTHORITY, "retailercategories/#", RETAILERCATEGORIES_ID);
+
+        //TotalLoyaltyPoints
+        uriMatcher.addURI(ContentProviderContract.AUTHORITY, "totalloyaltypoints", TOTALLOYALTYPOINTS);
+        uriMatcher.addURI(ContentProviderContract.AUTHORITY, "totalloyaltypoints/#", TOTALLOYALTYPOINTS_ID);
     }
 
     @Override
@@ -143,6 +149,11 @@ public class ContentProvider extends android.content.ContentProvider {
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_NAME, DatabaseContract.RetailerCategoriesColumns.COLUMN_NAME);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerCategoriesColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseContract.RetailerCategoriesColumns.COLUMN_UPDATED_TIMESTAMP);
 
+        //inladen TotalLoyaltyPoints
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.TotalLoyaltyPointsColumns._ID, DatabaseContract.TotalLoyaltyPointsColumns._ID);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.TotalLoyaltyPointsColumns.COLUMN_USER_ID, DatabaseContract.TotalLoyaltyPointsColumns.COLUMN_USER_ID);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.TotalLoyaltyPointsColumns.COLUMN_POINTS, DatabaseContract.TotalLoyaltyPointsColumns.COLUMN_POINTS);
+
         return true;
     }
 
@@ -207,6 +218,14 @@ public class ContentProvider extends android.content.ContentProvider {
                 queryBuilder.setTables(DatabaseContract.RetailerCategoriesColumns.TABLE_NAME);
                 queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
                 break;
+            case TOTALLOYALTYPOINTS:
+                queryBuilder.setTables(DatabaseContract.TotalLoyaltyPointsColumns.TABLE_NAME);
+                queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
+                break;
+            case TOTALLOYALTYPOINTS_ID:
+                queryBuilder.setTables(DatabaseContract.TotalLoyaltyPointsColumns.TABLE_NAME);
+                queryBuilder.setProjectionMap(UNITYCARD_PROJECTION_MAP);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
@@ -262,6 +281,10 @@ public class ContentProvider extends android.content.ContentProvider {
                 return ContentProviderContract.RETAILER_CATEGORIES_CONTENT_TYPE;
             case RETAILERCATEGORIES_ID:
                 return ContentProviderContract.RETAILER_CATEGORIES_ITEM_CONTENT_TYPE;
+            case TOTALLOYALTYPOINTS:
+                return ContentProviderContract.TOTAL_LOYALTY_POINTS_CONTENT_TYPE;
+            case TOTALLOYALTYPOINTS_ID:
+                return ContentProviderContract.TOTAL_LOYALTY_POINTS_ITEM_CONTENT_TYPE;
             default:
                 throw new IllegalArgumentException("Unknown Uri: " + uri);
         }
@@ -343,6 +366,16 @@ public class ContentProvider extends android.content.ContentProvider {
                     Uri retailerCategoryItemUri = ContentUris.withAppendedId(ContentProviderContract.RETAILER_CATEGORIES_ITEM_URI, newRowId);
                     getContext().getContentResolver().notifyChange(ContentProviderContract.RETAILER_CATEGORIES_URI, null);
                     return retailerCategoryItemUri;
+                }
+                break;
+            case TOTALLOYALTYPOINTS:
+                newRowId = insertOrUpdate(db,
+                        DatabaseContract.TotalLoyaltyPointsDB.TABLE_NAME,
+                        DatabaseContract.TotalLoyaltyPointsDB.COLUMN_USER_ID, contentValues);
+                if(newRowId > 0){
+                    Uri totalLoyaltyPointsItemUri = ContentUris.withAppendedId(ContentProviderContract.TOTAL_LOYALTY_POINTS_ITEM_URI, newRowId);
+                    getContext().getContentResolver().notifyChange(ContentProviderContract.TOTAL_LOYALTY_POINTS_URI, null);
+                    return totalLoyaltyPointsItemUri;
                 }
                 break;
             default:
@@ -509,6 +542,25 @@ public class ContentProvider extends android.content.ContentProvider {
                         selection,
                         selectionArgs);
                 break;
+            case TOTALLOYALTYPOINTS:
+                count = db.delete(
+                        DatabaseContract.TotalLoyaltyPointsDB.TABLE_NAME,
+                        selection,
+                        selectionArgs);
+                break;
+            case TOTALLOYALTYPOINTS_ID:
+                String totalLoyaltyPointsItemId = uri.getPathSegments().get(1);
+                finalWhere = "Id = " + totalLoyaltyPointsItemId;
+
+                if(selection != null){
+                    finalWhere = DatabaseUtils.concatenateWhere(finalWhere, selection);
+                }
+
+                count = db.delete(
+                        DatabaseContract.TotalLoyaltyPointsDB.TABLE_NAME,
+                        selection,
+                        selectionArgs);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
@@ -672,6 +724,28 @@ public class ContentProvider extends android.content.ContentProvider {
 
                 count = db.update(
                         DatabaseContract.RetailerCategoriesDB.TABLE_NAME,
+                        contentValues,
+                        selection,
+                        selectionArgs);
+                break;
+            case TOTALLOYALTYPOINTS:
+                count = db.update(
+                        DatabaseContract.TotalLoyaltyPointsDB.TABLE_NAME,
+                        contentValues,
+                        selection,
+                        selectionArgs);
+                break;
+
+            case TOTALLOYALTYPOINTS_ID:
+                String totalLoyaltyPointsItemId = uri.getPathSegments().get(1);
+                finalWhere = "Id = " + totalLoyaltyPointsItemId;
+
+                if(selection != null){
+                    finalWhere = DatabaseUtils.concatenateWhere(finalWhere, selection);
+                }
+
+                count = db.update(
+                        DatabaseContract.TotalLoyaltyPointsDB.TABLE_NAME,
                         contentValues,
                         selection,
                         selectionArgs);

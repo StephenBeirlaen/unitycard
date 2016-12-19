@@ -187,4 +187,21 @@ public class DatabaseContract {
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
+
+    public interface TotalLoyaltyPointsColumns extends BaseColumns {
+        String TABLE_NAME = "TotalLoyaltyPoints";
+        String COLUMN_USER_ID = "UserId";
+        String COLUMN_POINTS = "Points";
+    }
+
+    public static abstract class TotalLoyaltyPointsDB implements TotalLoyaltyPointsColumns {
+        public static final String CREATE_TABLE = "create table "
+                + TABLE_NAME + "("
+                + _ID + " integer primary key autoincrement, "
+                + COLUMN_USER_ID + " text not null unique, "
+                + COLUMN_POINTS + " integer not null"
+                + ");";
+
+        public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    }
 }

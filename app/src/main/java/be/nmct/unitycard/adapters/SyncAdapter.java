@@ -133,14 +133,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     Date lastRetailerCategoriesSyncTimestamp;
                     Date lastAddedRetailersSyncTimestamp;
                     Date lastRetailerOffersSyncTimestamp;
-                    Date lastTotalLoyaltyPointsSyncTimestamp;
                     try {
                         lastLoyaltyCardSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_LOYALTY_CARD);
                         lastAddedRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_ADDEDRETAILERS);
                         lastRetailerCategoriesSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_CATEGORIES);
                         lastRetailersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILERS);
                         lastRetailerOffersSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_RETAILER_OFFERS);
-                        lastTotalLoyaltyPointsSyncTimestamp = AuthHelper.getLastSyncTimestamp(getContext(), account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_TOTAL_LOYALTY_POINTS);
                     } catch (ParseException e) {
                         handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
                         return;
@@ -299,15 +297,29 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         }
                     });
 
-                    apiRepo.getTotalLoyaltyPoints(accessToken, AuthHelper.getUserId(getContext()), lastTotalLoyaltyPointsSyncTimestamp, new ApiRepository.GetResultListener<Integer>() {
+                    apiRepo.getTotalLoyaltyPoints(accessToken, AuthHelper.getUserId(getContext()), new Date(0), new ApiRepository.GetResultListener<Integer>() {
                         @Override
-                        public void resultReceived(Integer result) {
-                            Log.d(LOG_TAG, "Gelukt");
+                        public void resultReceived(Integer totalLoyaltyPoints) {
+                            Log.d(LOG_TAG, "Received total loyalty points: " + totalLoyaltyPoints);
 
+                            // todo: temporary
+                            if (totalLoyaltyPoints != null) {
+                                ContentValues contentValues = new ContentValues();
+
+                                contentValues.put(DatabaseContract.TotalLoyaltyPointsColumns.COLUMN_USER_ID, AuthHelper.getUserId(getContext()));
+                                contentValues.put(DatabaseContract.TotalLoyaltyPointsColumns.COLUMN_POINTS, totalLoyaltyPoints);
+
+                                mContentResolver.insert(ContentProviderContract.TOTAL_LOYALTY_POINTS_URI, contentValues);
+                            }
+
+                            handleSyncSuccess(account, AccountContract.KEY_LAST_SYNC_TIMESTAMP_TOTAL_LOYALTY_POINTS, MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
                         }
 
                         @Override
                         public void requestError(String error) {
+                            // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
+                            AuthHelper.invalidateAccessToken(accessToken, getContext());
+
                             handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
                         }
                     });

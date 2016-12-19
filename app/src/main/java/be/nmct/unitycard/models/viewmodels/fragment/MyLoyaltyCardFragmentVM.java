@@ -7,7 +7,6 @@ import android.databinding.BaseObservable;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Handler;
-import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -15,24 +14,20 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 import java.text.ParseException;
-import java.util.Date;
 
 import be.nmct.unitycard.R;
-import be.nmct.unitycard.activities.customer.MainActivity;
-import be.nmct.unitycard.adapters.SyncAdapter;
-import be.nmct.unitycard.auth.AuthHelper;
-import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.contracts.DatabaseContract;
 import be.nmct.unitycard.contracts.LoyaltyCardContract;
 import be.nmct.unitycard.databinding.FragmentMyLoyaltyCardBinding;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.LoyaltyCard;
-import be.nmct.unitycard.repositories.ApiRepository;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
+import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYCARDS_ITEM_URI;
 import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYCARDS_URI;
-import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYPOINTS_URI;
+import static be.nmct.unitycard.contracts.ContentProviderContract.TOTAL_LOYALTY_POINTS_ITEM_URI;
+import static be.nmct.unitycard.contracts.ContentProviderContract.TOTAL_LOYALTY_POINTS_URI;
 
 /**
  * Created by Stephen on 9/11/2016.
@@ -50,7 +45,7 @@ public class MyLoyaltyCardFragmentVM extends BaseObservable {
         mBinding.setViewmodel(this);
 
         loadQRcode();
-        loadTotalPoints();
+        loadTotalLoyaltyPoints();
     }
 
     public class MyContentObserver extends ContentObserver {
@@ -68,49 +63,10 @@ public class MyLoyaltyCardFragmentVM extends BaseObservable {
             if (uri.equals(LOYALTYCARDS_URI)) {
                 loadQRcode();
             }
-            if(uri.equals(LOYALTYPOINTS_URI)){
-                loadTotalPoints();
+            if (uri.equals(TOTAL_LOYALTY_POINTS_URI)) {
+                loadTotalLoyaltyPoints();
             }
         }
-    }
-
-    private void loadTotalPoints(){
-
-        final ApiRepository apiRepository = new ApiRepository(mContext);
-
-
-        AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
-            @Override
-            public void tokenReceived(String accessToken) {
-                Date lastTotalLoyaltyPointsSyncTimestamp;
-
-                try{
-                    lastTotalLoyaltyPointsSyncTimestamp = AuthHelper.getLastSyncTimestamp(mContext, AuthHelper.getUser(mContext), AccountContract.KEY_LAST_SYNC_TIMESTAMP_TOTAL_LOYALTY_POINTS);
-                    apiRepository.getTotalLoyaltyPoints(accessToken, AuthHelper.getUserId(mContext), lastTotalLoyaltyPointsSyncTimestamp, new ApiRepository.GetResultListener<Integer>() {
-                        @Override
-                        public void resultReceived(Integer result) {
-                            mBinding.textViewSpaarpuntenVerdiendValue.setText("" + result);
-                        }
-
-                        @Override
-                        public void requestError(String error) {
-                            Log.d("Tag", "Did not get totalloyaltypoint");
-                        }
-                    });
-                }
-                catch (ParseException e){
-                    Log.d("Tag", "failed");
-                    return;
-                }
-
-
-            }
-
-            @Override
-            public void requestNewLogin() {
-
-            }
-        });
     }
 
     private void loadQRcode() {
@@ -155,6 +111,59 @@ public class MyLoyaltyCardFragmentVM extends BaseObservable {
         else {
             setQRbitmap(null);
         }
+    }
+
+    private void loadTotalLoyaltyPoints() {
+        String[] columns = new String[] {
+                DatabaseContract.TotalLoyaltyPointsColumns.COLUMN_USER_ID,
+                DatabaseContract.TotalLoyaltyPointsColumns.COLUMN_POINTS
+        };
+
+        Cursor data = mContext.getContentResolver().query(TOTAL_LOYALTY_POINTS_URI, columns, null, null, null);
+
+        if (data != null && data.moveToNext()) {
+            Integer totalLoyaltyPoints = data.getInt(data.getColumnIndex(DatabaseContract.TotalLoyaltyPointsColumns.COLUMN_POINTS));
+
+            mBinding.textViewSpaarpuntenVerdiendValue.setText("" + totalLoyaltyPoints);
+
+            data.close();
+        }
+        // todo: weg
+        /*final ApiRepository apiRepository = new ApiRepository(mContext);
+
+
+        AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
+            @Override
+            public void tokenReceived(String accessToken) {
+                Date lastTotalLoyaltyPointsSyncTimestamp;
+
+                try{
+                    lastTotalLoyaltyPointsSyncTimestamp = AuthHelper.getLastSyncTimestamp(mContext, AuthHelper.getUser(mContext), AccountContract.KEY_LAST_SYNC_TIMESTAMP_TOTAL_LOYALTY_POINTS);
+                    apiRepository.getTotalLoyaltyPoints(accessToken, AuthHelper.getUserId(mContext), lastTotalLoyaltyPointsSyncTimestamp, new ApiRepository.GetResultListener<Integer>() {
+                        @Override
+                        public void resultReceived(Integer result) {
+                            mBinding.textViewSpaarpuntenVerdiendValue.setText("" + result);
+                        }
+
+                        @Override
+                        public void requestError(String error) {
+                            Log.d("Tag", "Did not get totalloyaltypoint");
+                        }
+                    });
+                }
+                catch (ParseException e){
+                    Log.d("Tag", "failed");
+                    return;
+                }
+
+
+            }
+
+            @Override
+            public void requestNewLogin() {
+
+            }
+        });*/
     }
 
     // http://stackoverflow.com/questions/28232116/android-using-zxing-generate-qr-code

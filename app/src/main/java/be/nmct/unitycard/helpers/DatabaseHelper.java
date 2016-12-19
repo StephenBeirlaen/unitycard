@@ -66,6 +66,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DatabaseContract.RetailerLocationsDB.CREATE_TABLE);
         db.execSQL(DatabaseContract.OffersDB.CREATE_TABLE);
         db.execSQL(DatabaseContract.RetailerCategoriesDB.CREATE_TABLE);
+        db.execSQL(DatabaseContract.TotalLoyaltyPointsDB.CREATE_TABLE);
 
         /*db.execSQL(DatabaseContract.RetailersDB.DELETE_TABLE);
         db.execSQL(DatabaseContract.AddedRetailersDB.DELETE_TABLE);
@@ -73,6 +74,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(DatabaseContract.LoyaltyPointsDB.DELETE_TABLE);
         db.execSQL(DatabaseContract.RetailerLocationsDB.DELETE_TABLE);
         db.execSQL(DatabaseContract.OffersDB.DELETE_TABLE);
-        db.execSQL(DatabaseContract.RetailerCategoriesDB.DELETE_TABLE);*/
+        db.execSQL(DatabaseContract.RetailerCategoriesDB.DELETE_TABLE);
+        db.execSQL(DatabaseContract.TotalLoyaltyPointsDB.DELETE_TABLE);*/
     }
 }

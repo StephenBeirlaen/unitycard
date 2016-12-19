@@ -14,7 +14,9 @@ import be.nmct.unitycard.R;
 import be.nmct.unitycard.databinding.FragmentMyLoyaltyCardBinding;
 import be.nmct.unitycard.models.viewmodels.fragment.MyLoyaltyCardFragmentVM;
 
+import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYCARDS_ITEM_URI;
 import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYCARDS_URI;
+import static be.nmct.unitycard.contracts.ContentProviderContract.TOTAL_LOYALTY_POINTS_ITEM_URI;
 
 public class MyLoyaltyCardFragment extends Fragment {
 
@@ -51,7 +53,8 @@ public class MyLoyaltyCardFragment extends Fragment {
 
         // Listen for contentprovider changes
         myContentObserver = mMyLoyaltyCardFragmentVM.new MyContentObserver(new Handler());
-        getContext().getContentResolver().registerContentObserver(LOYALTYCARDS_URI, false, myContentObserver);
+        getContext().getContentResolver().registerContentObserver(LOYALTYCARDS_ITEM_URI, false, myContentObserver);
+        getContext().getContentResolver().registerContentObserver(TOTAL_LOYALTY_POINTS_ITEM_URI, false, myContentObserver);
     }
 
     @Override
