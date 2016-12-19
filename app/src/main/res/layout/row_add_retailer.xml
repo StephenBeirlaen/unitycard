@@ -82,10 +82,11 @@
             </LinearLayout>
 
             <Button
-                android:layout_width="wrap_content"
+                android:id="@+id/btnAddRetailer"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:text="@string/buttonToevoegen"
-                android:layout_marginLeft="150dp"
+                android:textAlignment="center"
                 style="@style/ButtonTheme"
                 />
 

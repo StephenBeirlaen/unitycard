@@ -320,7 +320,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     }
 
     private void handleSyncSuccess(Account account, String timestampTypeKey, String action, String syncResultType) {
-        AuthHelper.setLastSyncTimestamp(getContext(), account, timestampTypeKey, new Date()); // Date object has the current date and time on init
+        Date newTimeStamp = new Date(new Date().getTime() - 10000l); // -10 seconden voor precisie fouten te verhinderen
+        AuthHelper.setLastSyncTimestamp(getContext(), account, timestampTypeKey, newTimeStamp); // Date object has the current date and time on init
 
         getContext().sendBroadcast(new Intent(action)
                 .putExtra(syncResultType, RESULT_SYNC_SUCCESS));

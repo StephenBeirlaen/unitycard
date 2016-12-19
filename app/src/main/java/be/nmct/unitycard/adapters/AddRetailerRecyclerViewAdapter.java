@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.databinding.RowAddRetailerBinding;
+import be.nmct.unitycard.helpers.SyncHelper;
 import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.postmodels.AddLoyaltyCardRetailerBody;
 import be.nmct.unitycard.repositories.ApiRepository;
@@ -31,39 +32,39 @@ public class AddRetailerRecyclerViewAdapter
         this.mRetailers = retailers;
     }
 
-    class AddRetailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class AddRetailerViewHolder extends RecyclerView.ViewHolder {
         final RowAddRetailerBinding binding;
 
-        public AddRetailerViewHolder(RowAddRetailerBinding binding) {
+        public AddRetailerViewHolder(final RowAddRetailerBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
 
-            binding.getRoot().setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View view) {
-            final AddLoyaltyCardRetailerBody addLoyaltyCardRetailerBody = new AddLoyaltyCardRetailerBody(binding.getRetailer().getId());
-            final ApiRepository apiRepository = new ApiRepository(mContext);
-            AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
+            binding.btnAddRetailer.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void tokenReceived(String accessToken) {
-                    apiRepository.addLoyaltyCardRetailer(accessToken, AuthHelper.getUserId(mContext), addLoyaltyCardRetailerBody, new ApiRepository.GetResultListener<Void>() {
+                public void onClick(View view) {
+                    final AddLoyaltyCardRetailerBody addLoyaltyCardRetailerBody = new AddLoyaltyCardRetailerBody(binding.getRetailer().getId());
+                    final ApiRepository apiRepository = new ApiRepository(mContext);
+                    AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
                         @Override
-                        public void resultReceived(Void result) {
-                            Log.d("","");
+                        public void tokenReceived(String accessToken) {
+                            apiRepository.addLoyaltyCardRetailer(accessToken, AuthHelper.getUserId(mContext), addLoyaltyCardRetailerBody, new ApiRepository.GetResultListener<Void>() {
+                                @Override
+                                public void resultReceived(Void result) {
+                                    //SyncHelper.refreshCachedData(mContext); // we kiezen ervoor om te syncen tijdens pijltje terug
+                                }
+
+                                @Override
+                                public void requestError(String error) {
+
+                                }
+                            });
                         }
 
                         @Override
-                        public void requestError(String error) {
+                        public void requestNewLogin() {
 
                         }
                     });
-                }
-
-                @Override
-                public void requestNewLogin() {
-
                 }
             });
         }

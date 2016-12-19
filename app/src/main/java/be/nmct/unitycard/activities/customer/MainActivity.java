@@ -303,6 +303,9 @@ public class MainActivity extends AppCompatActivity
         } else {
             FragmentManager fragmentManager = getSupportFragmentManager();
 
+            //todo: check of we uit addretailerfragment komen. daarna syncen
+            //SyncHelper.refreshCachedData(mContext);
+
             if (fragmentManager.getBackStackEntryCount() == 0) {
                 // ik zit reeds in een top level fragment. We beëindigen de app.
                 super.onBackPressed();
