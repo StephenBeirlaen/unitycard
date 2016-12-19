@@ -11,7 +11,6 @@ public class DatabaseContract {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "unitycarddatabase.db";
 
-    // these columns are used for both RetailersDB
     public interface RetailerColumns extends BaseColumns {
         String TABLE_NAME_ALL_RETAILERS = "Retailers";
         String TABLE_NAME_ADDED_RETAILERS = "AddedRetailers";
@@ -22,7 +21,6 @@ public class DatabaseContract {
         String COLUMN_CHAIN = "Chain";
         String COLUMN_LOGOURL= "LogoUrl";
         String COLUMN_UPDATED_TIMESTAMP = "UpdatedTimestamp";
-        String COLUMN_LOYALTYPOINT = "LoyaltyPoint";
     }
 
     public static abstract class RetailersDB implements RetailerColumns {
@@ -35,14 +33,26 @@ public class DatabaseContract {
                 + COLUMN_TAGLINE + " text not null, "
                 + COLUMN_CHAIN + " real, "
                 + COLUMN_LOGOURL + " text not null, "
-                + COLUMN_UPDATED_TIMESTAMP + " text not null, "
-                + COLUMN_LOYALTYPOINT + " integer "
+                + COLUMN_UPDATED_TIMESTAMP + " text not null"
                 + ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME_ALL_RETAILERS;
     }
 
-    public static abstract class AddedRetailersDB implements RetailerColumns {
+    public interface AddedRetailerColumns extends BaseColumns {
+        String TABLE_NAME_ALL_RETAILERS = "AddedRetailers";
+        String TABLE_NAME_ADDED_RETAILERS = "AddedRetailers";
+        String COLUMN_SERVER_ID = "ServerId";
+        String COLUMN_RETAILER_CATEGORY_ID = "RetailerCategoryId";
+        String COLUMN_RETAILER_NAME = "RetailerName";
+        String COLUMN_TAGLINE = "Tagline";
+        String COLUMN_CHAIN = "Chain";
+        String COLUMN_LOGOURL= "LogoUrl";
+        String COLUMN_UPDATED_TIMESTAMP = "UpdatedTimestamp";
+        String COLUMN_LOYALTYPOINTS = "LoyaltyPoints";
+    }
+
+    public static abstract class AddedRetailersDB implements AddedRetailerColumns {
         public static final String CREATE_TABLE = "create table "
                 + TABLE_NAME_ADDED_RETAILERS + "("
                 + _ID + " integer primary key autoincrement, "
@@ -53,7 +63,7 @@ public class DatabaseContract {
                 + COLUMN_CHAIN + " real, "
                 + COLUMN_LOGOURL + " text not null, "
                 + COLUMN_UPDATED_TIMESTAMP + " text not null, "
-                + COLUMN_LOYALTYPOINT + " integer "
+                + COLUMN_LOYALTYPOINTS + " integer "
                 + ");";
 
         public static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME_ADDED_RETAILERS;

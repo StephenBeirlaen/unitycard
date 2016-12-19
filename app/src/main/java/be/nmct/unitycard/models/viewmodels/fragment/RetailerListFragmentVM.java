@@ -18,6 +18,7 @@ import be.nmct.unitycard.databinding.FragmentRetailerListBinding;
 import be.nmct.unitycard.filters.FilterCursorWrapper;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.Retailer;
+import be.nmct.unitycard.models.viewmodels.RetailerLoyaltyPointVM;
 
 import static be.nmct.unitycard.contracts.ContentProviderContract.ADDED_RETAILERS_URI;
 import static be.nmct.unitycard.contracts.ContentProviderContract.LOYALTYPOINTS_ITEM_URI;
@@ -33,7 +34,7 @@ public class RetailerListFragmentVM extends BaseObservable
     private Context mContext;
 
     @Bindable
-    private ObservableList<Retailer> addedRetailerList;
+    private ObservableList<RetailerLoyaltyPointVM> addedRetailerLoyaltyPointVMList;
 
     private FilterCursorWrapper filterCursorWrapper;
     private FilterCursorWrapper filterCursorWrapperLoyaltyPoints;
@@ -69,29 +70,19 @@ public class RetailerListFragmentVM extends BaseObservable
 
     private void loadAddedRetailers() {
         String[] columns = new String[] {
-                DatabaseContract.RetailerColumns.COLUMN_SERVER_ID,
-                DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID,
-                DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME,
-                DatabaseContract.RetailerColumns.COLUMN_TAGLINE,
-                DatabaseContract.RetailerColumns.COLUMN_CHAIN,
-                DatabaseContract.RetailerColumns.COLUMN_LOGOURL,
-                DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP/*,
-                DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT*/
-        };
-
-        String[] loyaltypointsColumns = new String[]{
-                DatabaseContract.LoyaltyPointsColumns.COLUMN_LOYALTYCARD_ID,
-                DatabaseContract.LoyaltyPointsColumns.COLUMN_RETAILER_ID,
-                DatabaseContract.LoyaltyPointsColumns.COLUMN_POINTS,
-                DatabaseContract.LoyaltyPointsColumns.COLUMN_UPDATED_TIMESTAMP
+                DatabaseContract.AddedRetailerColumns.COLUMN_SERVER_ID,
+                DatabaseContract.AddedRetailerColumns.COLUMN_RETAILER_CATEGORY_ID,
+                DatabaseContract.AddedRetailerColumns.COLUMN_RETAILER_NAME,
+                DatabaseContract.AddedRetailerColumns.COLUMN_TAGLINE,
+                DatabaseContract.AddedRetailerColumns.COLUMN_CHAIN,
+                DatabaseContract.AddedRetailerColumns.COLUMN_LOGOURL,
+                DatabaseContract.AddedRetailerColumns.COLUMN_UPDATED_TIMESTAMP,
+                DatabaseContract.AddedRetailerColumns.COLUMN_LOYALTYPOINTS
         };
 
         Cursor data = mContext.getContentResolver().query(ADDED_RETAILERS_URI, columns, null, null, null);
 
-        //Cursor dataLoyaltypoints = mContext.getContentResolver().query(LOYALTYPOINTS_ITEM_URI, loyaltypointsColumns, DatabaseContract.LoyaltyPointsColumns.COLUMN_LOYALTYCARD_ID + "=?", new String[]{"1"}, null);
-
         filterCursorWrapper = new FilterCursorWrapper(data, this);
-        //filterCursorWrapperLoyaltyPoints = new FilterCursorWrapper(dataLoyaltypoints, this);
 
         updateRecyclerView();
     }
@@ -100,30 +91,35 @@ public class RetailerListFragmentVM extends BaseObservable
         if (filterCursorWrapper != null) {
             filterCursorWrapper.filter();
 
-            addedRetailerList = new ObservableArrayList<>();
+            addedRetailerLoyaltyPointVMList = new ObservableArrayList<>();
             while (filterCursorWrapper.moveToNext()) {
                 Retailer retailer = null;
+                RetailerLoyaltyPointVM retailerLoyaltyPointVM = null;
                 try {
                     retailer = new Retailer(
-                            filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID)),
-                            filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID)),
-                            filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME)),
-                            filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_TAGLINE)),
-                            filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_CHAIN)) > 0,
-                            filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOGOURL)),
-                            TimestampHelper.convertStringToDate(filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP)))/*,
-                            filterCursorWrapperLoyaltyPoints.getInt(filterCursorWrapperLoyaltyPoints.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT))*/
+                            filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.AddedRetailerColumns.COLUMN_SERVER_ID)),
+                            filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.AddedRetailerColumns.COLUMN_RETAILER_CATEGORY_ID)),
+                            filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.AddedRetailerColumns.COLUMN_RETAILER_NAME)),
+                            filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.AddedRetailerColumns.COLUMN_TAGLINE)),
+                            filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.AddedRetailerColumns.COLUMN_CHAIN)) > 0,
+                            filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.AddedRetailerColumns.COLUMN_LOGOURL)),
+                            TimestampHelper.convertStringToDate(filterCursorWrapper.getString(filterCursorWrapper.getColumnIndex(DatabaseContract.AddedRetailerColumns.COLUMN_UPDATED_TIMESTAMP)))
+                    );
+
+                    retailerLoyaltyPointVM = new RetailerLoyaltyPointVM(
+                            retailer,
+                            filterCursorWrapper.getInt(filterCursorWrapper.getColumnIndex(DatabaseContract.AddedRetailerColumns.COLUMN_LOYALTYPOINTS))
                     );
                 } catch (ParseException e){
                     e.printStackTrace();
                 }
-                addedRetailerList.add(retailer);
+                addedRetailerLoyaltyPointVMList.add(retailerLoyaltyPointVM);
             }
-            mBinding.setRetailerList(addedRetailerList);
+            mBinding.setRetailerLoyaltyPointVMList(addedRetailerLoyaltyPointVMList);
             notifyPropertyChanged(BR.retailerList);
         }
         else {
-            mBinding.setRetailerList(null);
+            mBinding.setRetailerLoyaltyPointVMList(null);
             notifyPropertyChanged(BR.retailerList);
         }
     }

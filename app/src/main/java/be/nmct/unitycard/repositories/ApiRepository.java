@@ -20,6 +20,7 @@ import be.nmct.unitycard.models.RetailerCategory;
 import be.nmct.unitycard.models.RetailerLocation;
 import be.nmct.unitycard.models.postmodels.AddLoyaltyCardRetailerBody;
 import be.nmct.unitycard.models.postmodels.PushAdvertisementNotificationBody;
+import be.nmct.unitycard.models.viewmodels.RetailerLoyaltyPointVM;
 import okhttp3.ResponseBody;
 import retrofit2.Converter;
 import retrofit2.Response;
@@ -46,7 +47,7 @@ public class ApiRepository {
         subscribeApiCall(mRestClient.getApiService().getLoyaltyCard(RestClient.getAuthorizationHeader(accessToken), userId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
-    public void getLoyaltyCardRetailers(String accessToken, String userId, Date lastUpdatedTimestamp, final GetResultListener<List<Retailer>> callback) {
+    public void getLoyaltyCardRetailers(String accessToken, String userId, Date lastUpdatedTimestamp, final GetResultListener<List<RetailerLoyaltyPointVM>> callback) {
         subscribeApiCall(mRestClient.getApiService().getLoyaltyCardRetailers(RestClient.getAuthorizationHeader(accessToken), userId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 

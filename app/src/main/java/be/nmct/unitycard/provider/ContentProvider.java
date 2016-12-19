@@ -89,7 +89,17 @@ public class ContentProvider extends android.content.ContentProvider {
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, DatabaseContract.RetailerColumns.COLUMN_CHAIN);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, DatabaseContract.RetailerColumns.COLUMN_LOGOURL);
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP);
-        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT, DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT);
+
+        //inladen AddedRetailers
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.AddedRetailerColumns._ID, DatabaseContract.AddedRetailerColumns._ID);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.AddedRetailerColumns.COLUMN_SERVER_ID, DatabaseContract.AddedRetailerColumns.COLUMN_SERVER_ID);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.AddedRetailerColumns.COLUMN_RETAILER_CATEGORY_ID, DatabaseContract.AddedRetailerColumns.COLUMN_RETAILER_CATEGORY_ID);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.AddedRetailerColumns.COLUMN_RETAILER_NAME, DatabaseContract.AddedRetailerColumns.COLUMN_RETAILER_NAME);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.AddedRetailerColumns.COLUMN_TAGLINE, DatabaseContract.AddedRetailerColumns.COLUMN_TAGLINE);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.AddedRetailerColumns.COLUMN_CHAIN, DatabaseContract.AddedRetailerColumns.COLUMN_CHAIN);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.AddedRetailerColumns.COLUMN_LOGOURL, DatabaseContract.AddedRetailerColumns.COLUMN_LOGOURL);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.AddedRetailerColumns.COLUMN_UPDATED_TIMESTAMP, DatabaseContract.AddedRetailerColumns.COLUMN_UPDATED_TIMESTAMP);
+        UNITYCARD_PROJECTION_MAP.put(DatabaseContract.AddedRetailerColumns.COLUMN_LOYALTYPOINTS, DatabaseContract.AddedRetailerColumns.COLUMN_LOYALTYPOINTS);
 
         //inladen LoyaltyCards
         UNITYCARD_PROJECTION_MAP.put(DatabaseContract.LoyaltyCardColumns._ID, DatabaseContract.LoyaltyCardColumns._ID);

@@ -1,5 +1,7 @@
 package be.nmct.unitycard.models.viewmodels;
 
+import com.google.gson.annotations.SerializedName;
+
 import be.nmct.unitycard.models.LoyaltyPoint;
 import be.nmct.unitycard.models.Retailer;
 
@@ -8,20 +10,24 @@ import be.nmct.unitycard.models.Retailer;
  */
 
 public class RetailerLoyaltyPointVM {
+
+    @SerializedName("Retailer")
     private Retailer retailer;
-    private LoyaltyPoint loyaltyPoint;
 
-    public RetailerLoyaltyPointVM(Retailer retailer, LoyaltyPoint loyaltyPoint){
+    @SerializedName("LoyaltyPoints")
+    private int loyaltyPoints;
+
+    public RetailerLoyaltyPointVM(Retailer retailer, int loyaltyPoints){
         this.retailer = retailer;
-        this.loyaltyPoint = loyaltyPoint;
+        this.loyaltyPoints = loyaltyPoints;
     }
 
-    public LoyaltyPoint getLoyaltyPoint() {
-        return loyaltyPoint;
+    public int getLoyaltyPoints() {
+        return loyaltyPoints;
     }
 
-    public void setLoyaltyPoint(LoyaltyPoint loyaltyPoint) {
-        this.loyaltyPoint = loyaltyPoint;
+    public void setLoyaltyPoints(int loyaltyPoints) {
+        this.loyaltyPoints = loyaltyPoints;
     }
 
     public Retailer getRetailer() {

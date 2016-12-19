@@ -4,8 +4,8 @@
 
     <data>
         <variable
-            name="retailer"
-            type="be.nmct.unitycard.models.Retailer" />
+            name="retailerLoyaltyPointVM"
+            type="be.nmct.unitycard.models.viewmodels.RetailerLoyaltyPointVM" />
 
     </data>
 
@@ -30,7 +30,7 @@
             android:layout_height="60dp"
             android:id="@+id/imageViewLogoRetailer"
             android:layout_marginRight="5dp"
-            app:imageUrl="@{retailer.logoUrl}"/>
+            app:imageUrl="@{retailerLoyaltyPointVM.getRetailer().logoUrl}"/>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/textViewRetailerName"
-                    android:text="@{retailer.name}"
+                    android:text="@{retailerLoyaltyPointVM.getRetailer().name}"
                     android:textStyle="bold"/>
 
             </LinearLayout>
@@ -62,7 +62,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:id="@+id/textViewRetailerType"
-                    android:text="@{retailer.chain ? @string/winkelketen : @string/zelfstandig}" />
+                    android:text="@{retailerLoyaltyPointVM.getRetailer().chain ? @string/winkelketen : @string/zelfstandig}" />
 
             </LinearLayout>
 
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="150dp"
             android:id="@+id/textViewRetailerPoints"
-            android:text="@{String.valueOf(retailer.loyaltyPoint)}"
+            android:text="@{String.valueOf(retailerLoyaltyPointVM.loyaltyPoints)}"
             android:layout_gravity="center_vertical"/>
 
     </LinearLayout>

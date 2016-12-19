@@ -10,6 +10,7 @@ import be.nmct.unitycard.models.RetailerCategory;
 import be.nmct.unitycard.models.RetailerLocation;
 import be.nmct.unitycard.models.postmodels.AddLoyaltyCardRetailerBody;
 import be.nmct.unitycard.models.postmodels.PushAdvertisementNotificationBody;
+import be.nmct.unitycard.models.viewmodels.RetailerLoyaltyPointVM;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -30,7 +31,7 @@ public interface ApiService {
     );
 
     @GET("/api/loyaltycards/{userId}/retailers")
-    Observable<Response<List<Retailer>>> getLoyaltyCardRetailers(
+    Observable<Response<List<RetailerLoyaltyPointVM>>> getLoyaltyCardRetailers(
             @Header("Authorization") String authorizationHeader,
             @Path("userId") String userId,
             @Query("lastUpdatedTimestamp") Long lastUpdatedTimestamp

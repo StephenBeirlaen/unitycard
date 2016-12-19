@@ -13,6 +13,7 @@ import be.nmct.unitycard.R;
 import be.nmct.unitycard.activities.customer.RetailerActivity;
 import be.nmct.unitycard.databinding.RowRetailerBinding;
 import be.nmct.unitycard.models.Retailer;
+import be.nmct.unitycard.models.viewmodels.RetailerLoyaltyPointVM;
 
 /**
  * Created by lorenzvercoutere on 22/11/16.
@@ -21,13 +22,13 @@ import be.nmct.unitycard.models.Retailer;
 public class RetailerRecyclerViewAdapter
         extends RecyclerView.Adapter<RetailerRecyclerViewAdapter.RetailerViewHolder> {
 
-    private ObservableList<Retailer> mRetailers;
+    private ObservableList<RetailerLoyaltyPointVM> mRetailerLoyaltyPointVM;
     private Context mContext;
     public final static String EXTRA_RETAILER_ID = "RetailerID";
 
-    public RetailerRecyclerViewAdapter(Context context, ObservableList<Retailer> retailers){
+    public RetailerRecyclerViewAdapter(Context context, ObservableList<RetailerLoyaltyPointVM> retailerLoyaltyPointVM){
         this.mContext = context;
-        this.mRetailers = retailers;
+        this.mRetailerLoyaltyPointVM = retailerLoyaltyPointVM;
     }
 
     class RetailerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -44,7 +45,7 @@ public class RetailerRecyclerViewAdapter
         public void onClick(View view) {
             // TODO: Click on Retailer
             Intent retailerActivityIntent = new Intent(mContext, RetailerActivity.class);
-            retailerActivityIntent.putExtra(EXTRA_RETAILER_ID, binding.getRetailer().getId());
+            retailerActivityIntent.putExtra(EXTRA_RETAILER_ID, binding.getRetailerLoyaltyPointVM().getRetailer().getId());
             mContext.startActivity(retailerActivityIntent);
             //mListener.showRetailerInfo(binding.getRetailer());
             /*apiRepo = new ApiRepository(view.getContext());
@@ -90,12 +91,12 @@ public class RetailerRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(RetailerViewHolder holder, int position) {
-        Retailer retailer = mRetailers.get(position);
-        holder.getBinding().setRetailer(retailer);
+        RetailerLoyaltyPointVM retailerLoyaltyPointVM = mRetailerLoyaltyPointVM.get(position);
+        holder.getBinding().setRetailerLoyaltyPointVM(retailerLoyaltyPointVM);
     }
 
     @Override
     public int getItemCount() {
-        return mRetailers.size();
+        return mRetailerLoyaltyPointVM.size();
     }
 }

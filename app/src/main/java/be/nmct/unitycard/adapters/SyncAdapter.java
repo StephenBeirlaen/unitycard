@@ -27,6 +27,7 @@ import be.nmct.unitycard.models.Offer;
 import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.RetailerCategory;
 import be.nmct.unitycard.models.RetailerLocation;
+import be.nmct.unitycard.models.viewmodels.RetailerLoyaltyPointVM;
 import be.nmct.unitycard.repositories.ApiRepository;
 
 /**
@@ -143,6 +144,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
                         return;
                     }
+                    /*lastLoyaltyCardSyncTimestamp = new Date(0);
+                    lastAddedRetailersSyncTimestamp = new Date(0);
+                    lastRetailerCategoriesSyncTimestamp = new Date(0);
+                    lastRetailersSyncTimestamp = new Date(0);
+                    lastRetailerOffersSyncTimestamp = new Date(0);
+                    lastTotalLoyaltyPointsSyncTimestamp = new Date(0);*/
 
                     apiRepo.getLoyaltyCard(accessToken, AuthHelper.getUserId(getContext()), lastLoyaltyCardSyncTimestamp, new ApiRepository.GetResultListener<LoyaltyCard>() {
                         @Override
@@ -173,23 +180,23 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         }
                     });
 
-                    apiRepo.getLoyaltyCardRetailers(accessToken, AuthHelper.getUserId(getContext()), lastAddedRetailersSyncTimestamp, new ApiRepository.GetResultListener<List<Retailer>>() {
+                    apiRepo.getLoyaltyCardRetailers(accessToken, AuthHelper.getUserId(getContext()), lastAddedRetailersSyncTimestamp, new ApiRepository.GetResultListener<List<RetailerLoyaltyPointVM>>() {
                         @Override
-                        public void resultReceived(List<Retailer> retailers) {
-                            Log.d(LOG_TAG, "Received all retailers by loyaltycard: " + retailers);
+                        public void resultReceived(List<RetailerLoyaltyPointVM> retailerLoyaltyPointList) {
+                            Log.d(LOG_TAG, "Received all retailers by loyaltycard: " + retailerLoyaltyPointList);
 
                             // todo: temporary, met contentprovideroperation werken (batch access)
-                            for (Retailer retailer : retailers) {
+                            for (RetailerLoyaltyPointVM retailerLoyaltyPoint : retailerLoyaltyPointList) {
                                 ContentValues contentValues = new ContentValues();
 
-                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_SERVER_ID, retailer.getId());
-                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_CATEGORY_ID, retailer.getRetailerCategoryId());
-                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME, retailer.getName());
-                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_TAGLINE, retailer.getTagline());
-                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
-                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
-                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailer.getUpdatedTimestamp()));
-                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT, retailer.getLoyaltyPoint());
+                                contentValues.put(DatabaseContract.AddedRetailerColumns.COLUMN_SERVER_ID, retailerLoyaltyPoint.getRetailer().getId());
+                                contentValues.put(DatabaseContract.AddedRetailerColumns.COLUMN_RETAILER_CATEGORY_ID, retailerLoyaltyPoint.getRetailer().getRetailerCategoryId());
+                                contentValues.put(DatabaseContract.AddedRetailerColumns.COLUMN_RETAILER_NAME, retailerLoyaltyPoint.getRetailer().getName());
+                                contentValues.put(DatabaseContract.AddedRetailerColumns.COLUMN_TAGLINE, retailerLoyaltyPoint.getRetailer().getTagline());
+                                contentValues.put(DatabaseContract.AddedRetailerColumns.COLUMN_CHAIN, retailerLoyaltyPoint.getRetailer().isChain());
+                                contentValues.put(DatabaseContract.AddedRetailerColumns.COLUMN_LOGOURL, retailerLoyaltyPoint.getRetailer().getLogoUrl());
+                                contentValues.put(DatabaseContract.AddedRetailerColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailerLoyaltyPoint.getRetailer().getUpdatedTimestamp()));
+                                contentValues.put(DatabaseContract.AddedRetailerColumns.COLUMN_LOYALTYPOINTS, retailerLoyaltyPoint.getLoyaltyPoints());
 
                                 mContentResolver.insert(ContentProviderContract.ADDED_RETAILERS_URI, contentValues);
 
@@ -249,7 +256,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                                 contentValues.put(DatabaseContract.RetailerColumns.COLUMN_CHAIN, retailer.isChain());
                                 contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOGOURL, retailer.getLogoUrl());
                                 contentValues.put(DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP, TimestampHelper.convertDateToString(retailer.getUpdatedTimestamp()));
-                                contentValues.put(DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT, retailer.getLoyaltyPoint());
 
                                 mContentResolver.insert(ContentProviderContract.RETAILERS_URI, contentValues);
 
