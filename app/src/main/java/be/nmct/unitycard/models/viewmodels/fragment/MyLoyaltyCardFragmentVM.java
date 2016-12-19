@@ -7,6 +7,7 @@ import android.databinding.BaseObservable;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Handler;
+import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -14,13 +15,19 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 import java.text.ParseException;
+import java.util.Date;
 
 import be.nmct.unitycard.R;
+import be.nmct.unitycard.activities.customer.MainActivity;
+import be.nmct.unitycard.adapters.SyncAdapter;
+import be.nmct.unitycard.auth.AuthHelper;
+import be.nmct.unitycard.contracts.AccountContract;
 import be.nmct.unitycard.contracts.DatabaseContract;
 import be.nmct.unitycard.contracts.LoyaltyCardContract;
 import be.nmct.unitycard.databinding.FragmentMyLoyaltyCardBinding;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.LoyaltyCard;
+import be.nmct.unitycard.repositories.ApiRepository;
 
 import static android.graphics.Color.BLACK;
 import static android.graphics.Color.WHITE;
@@ -68,22 +75,42 @@ public class MyLoyaltyCardFragmentVM extends BaseObservable {
     }
 
     private void loadTotalPoints(){
-        String[] loyaltypointsColumns = new String[]{
-                DatabaseContract.LoyaltyPointsColumns.COLUMN_LOYALTYCARD_ID,
-                DatabaseContract.LoyaltyPointsColumns.COLUMN_RETAILER_ID,
-                DatabaseContract.LoyaltyPointsColumns.COLUMN_POINTS,
-                DatabaseContract.LoyaltyPointsColumns.COLUMN_UPDATED_TIMESTAMP
-        };
 
-        Cursor data = mContext.getContentResolver().query(LOYALTYPOINTS_URI, loyaltypointsColumns, DatabaseContract.LoyaltyPointsColumns.COLUMN_LOYALTYCARD_ID + "=?", new String[] {"1"}, null);
+        final ApiRepository apiRepository = new ApiRepository(mContext);
 
-        if(data != null){
-            int total = 0;
-            while(data.moveToNext()){
-                total += data.getInt(data.getColumnIndex(DatabaseContract.LoyaltyPointsColumns.COLUMN_POINTS));
+
+        AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
+            @Override
+            public void tokenReceived(String accessToken) {
+                Date lastTotalLoyaltyPointsSyncTimestamp;
+
+                try{
+                    lastTotalLoyaltyPointsSyncTimestamp = AuthHelper.getLastSyncTimestamp(mContext, AuthHelper.getUser(mContext), AccountContract.KEY_LAST_SYNC_TIMESTAMP_TOTAL_LOYALTY_POINTS);
+                    apiRepository.getTotalLoyaltyPoints(accessToken, AuthHelper.getUserId(mContext), lastTotalLoyaltyPointsSyncTimestamp, new ApiRepository.GetResultListener<Integer>() {
+                        @Override
+                        public void resultReceived(Integer result) {
+                            mBinding.textViewSpaarpuntenVerdiendValue.setText("" + result);
+                        }
+
+                        @Override
+                        public void requestError(String error) {
+                            Log.d("Tag", "Did not get totalloyaltypoint");
+                        }
+                    });
+                }
+                catch (ParseException e){
+                    Log.d("Tag", "failed");
+                    return;
+                }
+
+
             }
-            mBinding.textViewSpaarpuntenVerdiendValue.setText("" + total);
-        }
+
+            @Override
+            public void requestNewLogin() {
+
+            }
+        });
     }
 
     private void loadQRcode() {

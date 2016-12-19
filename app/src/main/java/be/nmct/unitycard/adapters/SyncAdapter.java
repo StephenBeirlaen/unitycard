@@ -28,6 +28,7 @@ import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.RetailerCategory;
 import be.nmct.unitycard.models.RetailerLocation;
 import be.nmct.unitycard.models.viewmodels.RetailerLoyaltyPointVM;
+import be.nmct.unitycard.provider.ContentProvider;
 import be.nmct.unitycard.repositories.ApiRepository;
 
 /**
@@ -302,11 +303,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                         @Override
                         public void resultReceived(Integer result) {
                             Log.d(LOG_TAG, "Gelukt");
+
                         }
 
                         @Override
                         public void requestError(String error) {
-
+                            handleSyncError(MainActivity.ACTION_FINISHED_SYNC, MainActivity.ACTION_FINISHED_SYNC_RESULT);
                         }
                     });
                 }
