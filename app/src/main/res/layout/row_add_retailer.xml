@@ -81,15 +81,22 @@
 
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btnAddRetailer"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:text="@string/buttonToevoegen"
-                android:textAlignment="center"
-                style="@style/ButtonTheme"
-                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+                <Button
+                    android:id="@+id/btnAddRetailer"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/buttonToevoegen"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textAlignment="center"
+                    style="@style/ButtonTheme"
+                    />
+
+            </RelativeLayout>
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
