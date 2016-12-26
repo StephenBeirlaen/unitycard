@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.databinding.FragmentRetailerAdminBinding;
+import be.nmct.unitycard.models.Retailer;
+import be.nmct.unitycard.models.viewmodels.fragment.RetailerAdminAddRetailerFragmentVM;
 import be.nmct.unitycard.models.viewmodels.fragment.RetailerAdminFragmentVM;
 
 public class RetailerAdminFragment extends Fragment {
@@ -19,6 +21,8 @@ public class RetailerAdminFragment extends Fragment {
     private RetailerAdminFragmentListener mListener;
     private FragmentRetailerAdminBinding mBinding;
     private RetailerAdminFragmentVM mRetailerAdminFragmentVM;
+
+    public static Retailer retailer = null;
 
     public RetailerAdminFragment() {
         // Required empty public constructor
@@ -44,6 +48,14 @@ public class RetailerAdminFragment extends Fragment {
     public interface RetailerAdminFragmentListener {
         void requestLogOut();
         void handleError(String error);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(retailer != null){
+            mBinding.txtRetailer.setText(retailer.getName());
+        }
     }
 
     @Override

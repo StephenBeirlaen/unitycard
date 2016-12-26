@@ -49,15 +49,12 @@
         <activity
             android:name=".activities.customer.AddRetailerActivity"
             android:label="@string/ActivityLabelAddRetailer" />
-
         <activity
             android:name=".activities.customer.RetailerActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activities.customer.SettingsActivity"
             android:label="@string/ActivityLabelSettings" />
-
         <activity
             android:name=".activities.customer.RetailerMapActivity"
             android:label="@string/ActivityLabelRetailerMap" />
@@ -87,7 +84,6 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
-
         <service android:name=".services.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -100,6 +96,7 @@
         </service>
 
         <activity android:name=".activities.login.ExternalAuthenticationActivity" />
+        <activity android:name=".activities.retailer.RetailerAdminAddRetailerActivity"></activity>
     </application>
 
 </manifest>

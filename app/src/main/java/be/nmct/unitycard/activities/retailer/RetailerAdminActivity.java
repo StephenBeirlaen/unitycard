@@ -1,7 +1,10 @@
 package be.nmct.unitycard.activities.retailer;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -64,11 +67,13 @@ public class RetailerAdminActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
     }
 
     private void showAccountActivity() {

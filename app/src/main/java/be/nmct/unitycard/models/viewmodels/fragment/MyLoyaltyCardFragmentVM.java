@@ -128,42 +128,6 @@ public class MyLoyaltyCardFragmentVM extends BaseObservable {
 
             data.close();
         }
-        // todo: weg
-        /*final ApiRepository apiRepository = new ApiRepository(mContext);
-
-
-        AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
-            @Override
-            public void tokenReceived(String accessToken) {
-                Date lastTotalLoyaltyPointsSyncTimestamp;
-
-                try{
-                    lastTotalLoyaltyPointsSyncTimestamp = AuthHelper.getLastSyncTimestamp(mContext, AuthHelper.getUser(mContext), AccountContract.KEY_LAST_SYNC_TIMESTAMP_TOTAL_LOYALTY_POINTS);
-                    apiRepository.getTotalLoyaltyPoints(accessToken, AuthHelper.getUserId(mContext), lastTotalLoyaltyPointsSyncTimestamp, new ApiRepository.GetResultListener<Integer>() {
-                        @Override
-                        public void resultReceived(Integer result) {
-                            mBinding.textViewSpaarpuntenVerdiendValue.setText("" + result);
-                        }
-
-                        @Override
-                        public void requestError(String error) {
-                            Log.d("Tag", "Did not get totalloyaltypoint");
-                        }
-                    });
-                }
-                catch (ParseException e){
-                    Log.d("Tag", "failed");
-                    return;
-                }
-
-
-            }
-
-            @Override
-            public void requestNewLogin() {
-
-            }
-        });*/
     }
 
     // http://stackoverflow.com/questions/28232116/android-using-zxing-generate-qr-code

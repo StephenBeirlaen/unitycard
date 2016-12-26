@@ -2,12 +2,15 @@ package be.nmct.unitycard.models.viewmodels.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.BaseObservable;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
+import be.nmct.unitycard.activities.retailer.RetailerAdminAddRetailerActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.databinding.FragmentRetailerAdminBinding;
 import be.nmct.unitycard.fragments.retailer.RetailerAdminFragment;
@@ -35,7 +38,8 @@ public class RetailerAdminFragmentVM extends BaseObservable {
         mBinding.btnChooseRetailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // todo: implement
+                Intent intent = new Intent(mContext, RetailerAdminAddRetailerActivity.class);
+                mContext.startActivity(intent);
             }
         });
 
@@ -103,4 +107,6 @@ public class RetailerAdminFragmentVM extends BaseObservable {
             }
         });
     }
+
+
 }
