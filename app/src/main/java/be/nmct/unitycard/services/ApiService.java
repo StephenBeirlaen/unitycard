@@ -9,6 +9,7 @@ import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.RetailerCategory;
 import be.nmct.unitycard.models.RetailerLocation;
 import be.nmct.unitycard.models.postmodels.AddLoyaltyCardRetailerBody;
+import be.nmct.unitycard.models.postmodels.AwardLoyaltyPointsBody;
 import be.nmct.unitycard.models.postmodels.PushAdvertisementNotificationBody;
 import be.nmct.unitycard.models.viewmodels.RetailerLoyaltyPointVM;
 import retrofit2.Response;
@@ -44,6 +45,12 @@ public interface ApiService {
             @Body AddLoyaltyCardRetailerBody body
     );
 
+    @GET("api/loyaltycards/{loyaltyCardId}")
+    Observable<Response<String>> getUserIdByLoyaltyCardId(
+            @Header("Authorization") String authorizationHeader,
+            @Path("loyaltyCardId") Integer loyaltyCardId
+    );
+
     // ----- LoyaltyPoints -----
 
     @GET("/api/loyaltypoints/{userId}")
@@ -59,6 +66,16 @@ public interface ApiService {
             @Path("userId") String userId,
             @Path("retailerId") Integer retailerId
     );
+
+    @POST("/api/loyaltypoints/{userId}/{retailerId}")
+    Observable<Response<Void>> awardLoyaltyPoints(
+            @Header("Authorization") String authorizationHeader,
+            @Path("userId") String userId,
+            @Path("retailerId") Integer retailerId,
+            @Body AwardLoyaltyPointsBody body
+    );
+
+
 
     // ----- Offers -----
 

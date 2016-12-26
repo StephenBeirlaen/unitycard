@@ -19,6 +19,7 @@ import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.RetailerCategory;
 import be.nmct.unitycard.models.RetailerLocation;
 import be.nmct.unitycard.models.postmodels.AddLoyaltyCardRetailerBody;
+import be.nmct.unitycard.models.postmodels.AwardLoyaltyPointsBody;
 import be.nmct.unitycard.models.postmodels.PushAdvertisementNotificationBody;
 import be.nmct.unitycard.models.viewmodels.RetailerLoyaltyPointVM;
 import okhttp3.ResponseBody;
@@ -55,14 +56,22 @@ public class ApiRepository {
         subscribeApiCall(mRestClient.getApiService().addLoyaltyCardRetailer(RestClient.getAuthorizationHeader(accessToken), userId, addLoyaltyCardRetailerBody), callback);
     }
 
+    public void getUserIdByLoyaltyCardId(String accessToken, int loyaltyCardId, final GetResultListener<String> callback){
+        subscribeApiCall(mRestClient.getApiService().getUserIdByLoyaltyCardId(RestClient.getAuthorizationHeader(accessToken), loyaltyCardId),callback);
+    }
+
     // ----- LoyaltyPoints -----
 
     public void getTotalLoyaltyPoints(String accessToken, String userId, Date lastUpdatedTimestamp, final GetResultListener<Integer> callback) {
         subscribeApiCall(mRestClient.getApiService().getTotalLoyaltyPoints(RestClient.getAuthorizationHeader(accessToken), userId, TimestampHelper.DateToUnixTimeStamp(lastUpdatedTimestamp)), callback);
     }
 
-    public void getLoyaltyPointByRetailer(String accesssToken, String userId, int retailerId, final GetResultListener<LoyaltyPoint> callback){
-        subscribeApiCall(mRestClient.getApiService().getLoyaltyPointByRetailer(RestClient.getAuthorizationHeader(accesssToken), userId, retailerId), callback);
+    public void getLoyaltyPointByRetailer(String accessToken, String userId, int retailerId, final GetResultListener<LoyaltyPoint> callback){
+        subscribeApiCall(mRestClient.getApiService().getLoyaltyPointByRetailer(RestClient.getAuthorizationHeader(accessToken), userId, retailerId), callback);
+    }
+
+    public void awardLoyaltyPoints(String accessToken, String userId, int retailerId, AwardLoyaltyPointsBody awardLoyaltyPointsBody, final GetResultListener<Void> callback){
+        subscribeApiCall(mRestClient.getApiService().awardLoyaltyPoints(RestClient.getAuthorizationHeader(accessToken), userId, retailerId, awardLoyaltyPointsBody), callback);
     }
 
     // ----- Offers -----

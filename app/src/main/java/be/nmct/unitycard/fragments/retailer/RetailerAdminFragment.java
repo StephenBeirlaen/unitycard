@@ -9,11 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.FileOutputStream;
+
 import be.nmct.unitycard.R;
+import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.databinding.FragmentRetailerAdminBinding;
 import be.nmct.unitycard.models.Retailer;
 import be.nmct.unitycard.models.viewmodels.fragment.RetailerAdminAddRetailerFragmentVM;
 import be.nmct.unitycard.models.viewmodels.fragment.RetailerAdminFragmentVM;
+import be.nmct.unitycard.repositories.ApiRepository;
 
 public class RetailerAdminFragment extends Fragment {
 
@@ -55,6 +59,7 @@ public class RetailerAdminFragment extends Fragment {
         super.onResume();
         if(retailer != null){
             mBinding.txtRetailer.setText(retailer.getName());
+            mRetailerAdminFragmentVM.retailer = retailer;
         }
     }
 
