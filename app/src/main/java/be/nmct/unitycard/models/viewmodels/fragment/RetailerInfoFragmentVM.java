@@ -31,6 +31,7 @@ public class RetailerInfoFragmentVM extends BaseObservable {
     private Context mContext;
 
     private Integer mRetailerId;
+    private Integer mLoyaltyPoints;
     public Integer getRetailerId() {
         return mRetailerId;
     }
@@ -45,11 +46,12 @@ public class RetailerInfoFragmentVM extends BaseObservable {
         return closestRetailerLocation;
     }
 
-    public RetailerInfoFragmentVM(FragmentRetailerInfoBinding binding, Context context, RetailerInfoFragment.RetailerInfoFragmentListener listener, Integer retailerId) {
+    public RetailerInfoFragmentVM(FragmentRetailerInfoBinding binding, Context context, RetailerInfoFragment.RetailerInfoFragmentListener listener, Integer retailerId, Integer loyaltyPoints) {
         this.mBinding = binding;
         this.mListener = listener;
         this.mContext = context;
         this.mRetailerId = retailerId;
+        this.mLoyaltyPoints = loyaltyPoints;
 
         mBinding.setViewmodel(this);
 
@@ -64,6 +66,8 @@ public class RetailerInfoFragmentVM extends BaseObservable {
                 }
             }
         });
+
+        mBinding.textViewRetailerInfoPunten.setText("U heeft " + mLoyaltyPoints + " punten verzameld");
 
         mBinding.buttonOpenKaart.setOnClickListener(new View.OnClickListener() {
             @Override

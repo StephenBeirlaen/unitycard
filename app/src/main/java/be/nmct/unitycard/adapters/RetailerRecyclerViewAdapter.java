@@ -25,6 +25,7 @@ public class RetailerRecyclerViewAdapter
     private ObservableList<RetailerLoyaltyPointVM> mRetailerLoyaltyPointVM;
     private Context mContext;
     public final static String EXTRA_RETAILER_ID = "RetailerID";
+    public final static String EXTRA_RETAILER_LOYALTY_POINTS = "LoyaltyPoints";
 
     public RetailerRecyclerViewAdapter(Context context, ObservableList<RetailerLoyaltyPointVM> retailerLoyaltyPointVM){
         this.mContext = context;
@@ -46,6 +47,7 @@ public class RetailerRecyclerViewAdapter
             // TODO: Click on Retailer
             Intent retailerActivityIntent = new Intent(mContext, RetailerActivity.class);
             retailerActivityIntent.putExtra(EXTRA_RETAILER_ID, binding.getRetailerLoyaltyPointVM().getRetailer().getId());
+            retailerActivityIntent.putExtra(EXTRA_RETAILER_LOYALTY_POINTS, binding.getRetailerLoyaltyPointVM().getLoyaltyPoints());
             mContext.startActivity(retailerActivityIntent);
             //mListener.showRetailerInfo(binding.getRetailer());
             /*apiRepo = new ApiRepository(view.getContext());

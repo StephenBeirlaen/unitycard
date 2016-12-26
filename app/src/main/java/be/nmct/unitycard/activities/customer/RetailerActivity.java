@@ -48,12 +48,14 @@ public class RetailerActivity extends AppCompatActivity
         }
 
         Integer retailerId = null;
+        Integer loyaltyPoints = null;
 
         Intent intent = getIntent();
         if(intent != null) {
             Bundle extras = intent.getExtras();
             if (extras != null && extras.containsKey(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID)){
                 retailerId = extras.getInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID);
+                loyaltyPoints = extras.getInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_LOYALTY_POINTS);
 
                 if (retailerId != null) {
                     Log.d(LOG_TAG, "showing retailer info, retailerid: " + retailerId);
@@ -73,7 +75,7 @@ public class RetailerActivity extends AppCompatActivity
             Log.d(LOG_TAG, "intent is null");
         }
 
-        RetailerActivityPagerAdapter pagerAdapter = new RetailerActivityPagerAdapter(getSupportFragmentManager(), retailerId, this);
+        RetailerActivityPagerAdapter pagerAdapter = new RetailerActivityPagerAdapter(getSupportFragmentManager(), retailerId, loyaltyPoints,this);
         mBinding.viewpager.setAdapter(pagerAdapter);
         mBinding.tablayout.setupWithViewPager(mBinding.viewpager); // tabs instellen, o.a. de labels
         mBinding.tablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

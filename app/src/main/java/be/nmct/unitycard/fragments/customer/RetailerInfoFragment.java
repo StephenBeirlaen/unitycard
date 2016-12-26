@@ -34,11 +34,12 @@ public class RetailerInfoFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static RetailerInfoFragment newInstance(int retailerId) {
+    public static RetailerInfoFragment newInstance(int retailerId, int loyaltyPoints) {
         RetailerInfoFragment retailerInfoFragment = new RetailerInfoFragment();
 
         Bundle args = new Bundle();
         args.putInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID, retailerId);
+        args.putInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_LOYALTY_POINTS, loyaltyPoints);
         retailerInfoFragment.setArguments(args);
 
         return retailerInfoFragment;
@@ -49,10 +50,12 @@ public class RetailerInfoFragment extends Fragment {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_retailer_info, container, false);
 
         Integer retailerId = null;
+        Integer loyaltyPoints = null;
 
         Bundle args = getArguments();
         if (args != null && args.containsKey(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID)){
             retailerId = args.getInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID);
+            loyaltyPoints = args.getInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_LOYALTY_POINTS);
 
             if (retailerId != null) {
                 Log.d(LOG_TAG, "showing retailer info, retailerid: " + retailerId);
@@ -65,7 +68,7 @@ public class RetailerInfoFragment extends Fragment {
             mListener.handleError("Extras is null or doesn't contains EXTRA_RETAILER_ID key");
         }
 
-        mRetailerInfoFragmentVM = new RetailerInfoFragmentVM(mBinding, getActivity(), mListener, retailerId);
+        mRetailerInfoFragmentVM = new RetailerInfoFragmentVM(mBinding, getActivity(), mListener, retailerId, loyaltyPoints);
 
         return mBinding.getRoot();
     }

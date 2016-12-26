@@ -32,7 +32,7 @@ public class RetailerAdminFragmentVM extends BaseObservable {
     private ApiRepository apiRepository;
     public Retailer retailer;
 
-    public RetailerAdminFragmentVM(final FragmentRetailerAdminBinding binding, final Context context, RetailerAdminFragment.RetailerAdminFragmentListener listener) {
+    public RetailerAdminFragmentVM(final FragmentRetailerAdminBinding binding, final Context context, final RetailerAdminFragment.RetailerAdminFragmentListener listener) {
         this.mBinding = binding;
         this.mContext = context;
         this.mListener = listener;

@@ -44,20 +44,27 @@
                     android:layout_height="150dp"
                     app:imageUrl="@{retailer.logoUrl}" />
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textViewRetailerInfoType"
-                    android:text="@{String.valueOf(retailer.retailerCategoryId)}"
-                    android:layout_marginRight="150dp"
+                    android:text="@{retailer.chain ? @string/winkelketen : @string/zelfstandig}"
+                    android:layout_marginLeft="50dp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textViewRetailerInfoPunten"
-                    android:text="@{String.valueOf(retailer.id)}"
-                    android:layout_marginRight="150dp" />
+                    android:layout_marginLeft="50dp" />
 
             </LinearLayout>
 
@@ -95,13 +102,20 @@
                         android:id="@+id/textViewRetailerInfoDichtsbijzijndeWinkelValue"
                         android:text="@{retailer.name}" />
                     <!-- @string/retailerDichtsbijzijndeWinkelValue -->
-                    <Button
+
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="200dp"
-                        android:text="@string/OpenKaart"
-                        android:id="@+id/buttonOpenKaart"
-                        style="@style/ButtonTheme" />
+                        android:layout_height="wrap_content">
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="120dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/OpenKaart"
+                            android:id="@+id/buttonOpenKaart"
+                            style="@style/ButtonTheme" />
+                    </RelativeLayout>
 
                 </LinearLayout>
 

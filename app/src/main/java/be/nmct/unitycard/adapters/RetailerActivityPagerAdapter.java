@@ -11,19 +11,21 @@ import be.nmct.unitycard.fragments.customer.RetailerOffersFragment;
 
 public class RetailerActivityPagerAdapter extends FragmentStatePagerAdapter {
     int mRetailerId;
+    int mLoyaltyPoints;
     Context mContext;
 
-    public RetailerActivityPagerAdapter(FragmentManager fm, int retailerId, Context context) {
+    public RetailerActivityPagerAdapter(FragmentManager fm, int retailerId, int loyaltyPoints, Context context) {
         super(fm);
         this.mRetailerId = retailerId;
         this.mContext = context;
+        this.mLoyaltyPoints = loyaltyPoints;
     }
 
     @Override
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return RetailerInfoFragment.newInstance(mRetailerId);
+                return RetailerInfoFragment.newInstance(mRetailerId, mLoyaltyPoints);
             case 1:
                 return RetailerOffersFragment.newInstance(mRetailerId);
             default:
