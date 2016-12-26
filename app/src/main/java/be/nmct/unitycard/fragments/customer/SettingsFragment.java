@@ -4,6 +4,9 @@ package be.nmct.unitycard.fragments.customer;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.preference.PreferenceFragmentCompat;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import be.nmct.unitycard.R;
 
@@ -21,6 +24,12 @@ public class SettingsFragment extends PreferenceFragmentCompat
     public static SettingsFragment newInstance() {
         return new SettingsFragment();
     }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {

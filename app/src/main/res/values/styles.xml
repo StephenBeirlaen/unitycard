@@ -46,4 +46,7 @@
         <item name="android:orientation">vertical</item>
     </style>
 
+    <style name="PreferenceTheme" parent="@style/AppTheme">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+    </style>
 </resources>

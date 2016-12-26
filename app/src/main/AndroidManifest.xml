@@ -54,6 +54,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.customer.SettingsActivity"
+            android:theme="@style/PreferenceTheme"
             android:label="@string/ActivityLabelSettings" />
         <activity
             android:name=".activities.customer.RetailerMapActivity"

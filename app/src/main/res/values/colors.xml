@@ -4,7 +4,7 @@
     <color name="colorPrimaryDark">#d78100</color>
     <color name="colorGray">#e6e6e6</color>
     <color name="colorWhite">#ffffff</color>
-    <color name="colorAccent">#ffffff</color>
+    <color name="colorAccent">#e6e6e6</color>
     <color name="facebookBlue">#415DAE</color>
     <color name="googleRed">#DD4B39</color>
 </resources>
