@@ -27,6 +27,7 @@ public class RetailerAdminFragment extends Fragment {
     private RetailerAdminFragmentVM mRetailerAdminFragmentVM;
 
     public static Retailer retailer = null;
+    public static int loyaltyCardId = 0;
 
     public RetailerAdminFragment() {
         // Required empty public constructor
@@ -60,6 +61,7 @@ public class RetailerAdminFragment extends Fragment {
         if(retailer != null){
             mBinding.txtRetailer.setText(retailer.getName());
             mRetailerAdminFragmentVM.retailer = retailer;
+            mRetailerAdminFragmentVM.mLoyaltyCardId = loyaltyCardId;
         }
     }
 

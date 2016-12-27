@@ -23,6 +23,7 @@ import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.databinding.ActivityRetailerAdminBinding;
 import be.nmct.unitycard.fragments.retailer.RetailerAdminFragment;
 import be.nmct.unitycard.models.viewmodels.activities.RetailerAdminActivityVM;
+import be.nmct.unitycard.models.viewmodels.fragment.RetailerAdminAddRetailerFragmentVM;
 
 public class RetailerAdminActivity extends AppCompatActivity
         implements
@@ -122,6 +123,12 @@ public class RetailerAdminActivity extends AppCompatActivity
         if (scanResult != null) {
             // Handle scan result
             handleError("Scanned Loyalty card: " + scanResult.getContents());
+            String cardData = scanResult.getContents();
+            String[] stukken = cardData.split(".");
+            int id = Integer.parseInt(stukken[4]);
+            RetailerAdminFragment retailerAdminFragment = new RetailerAdminFragment();
+            retailerAdminFragment.loyaltyCardId = id;
+
         }
         else {
             switch (requestCode) {

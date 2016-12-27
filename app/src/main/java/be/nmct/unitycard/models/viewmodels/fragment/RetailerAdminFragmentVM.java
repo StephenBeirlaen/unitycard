@@ -31,6 +31,7 @@ public class RetailerAdminFragmentVM extends BaseObservable {
     private Context mContext;
     private ApiRepository apiRepository;
     public Retailer retailer;
+    public int mLoyaltyCardId = 0;
 
     public RetailerAdminFragmentVM(final FragmentRetailerAdminBinding binding, final Context context, final RetailerAdminFragment.RetailerAdminFragmentListener listener) {
         this.mBinding = binding;
@@ -60,6 +61,7 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                 // https://github.com/zxing/zxing/wiki/Scanning-Via-Intent
                 IntentIntegrator integrator = new IntentIntegrator((Activity) mContext);
                 integrator.initiateScan();
+
             }
         });
 
@@ -72,7 +74,7 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                 AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
                     @Override
                     public void tokenReceived(final String accessToken) {
-                        apiRepository.getUserIdByLoyaltyCardId(accessToken, 16, new ApiRepository.GetResultListener<String>() {
+                        apiRepository.getUserIdByLoyaltyCardId(accessToken, mLoyaltyCardId, new ApiRepository.GetResultListener<String>() {
                             @Override
                             public void resultReceived(String userIdCustomer) {
                                 apiRepository.awardLoyaltyPoints(accessToken, userIdCustomer, retailer.getId(), awardLoyaltyPointsBody, new ApiRepository.GetResultListener<Void>() {
