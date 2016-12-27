@@ -121,7 +121,7 @@ public class RetailerAdminFragmentVM extends BaseObservable {
 
                         final ApiRepository apiRepo = new ApiRepository(mContext);
 
-                        apiRepo.pushAdvertisementNotification(accessToken, 2, body, // todo: momenteel nog hard coded retailerid
+                        apiRepo.pushAdvertisementNotification(accessToken, mLoyaltyCardId, body, // todo: momenteel nog hard coded retailerid
                                 new ApiRepository.GetResultListener<Void>() {
                                     @Override
                                     public void resultReceived(Void result) {
