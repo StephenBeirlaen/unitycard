@@ -68,13 +68,20 @@ public class RetailerAdminFragmentVM extends BaseObservable {
         mBinding.btnAwardLoyaltypoints.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int loyaltyPointsIncrementAmount = Integer.parseInt(mBinding.txtLoyaltypointCount.getText().toString());
+                final int loyaltyPointsIncrementAmount;
+                if(mBinding.txtLoyaltypointCount.getText().toString() != "") {
+                    loyaltyPointsIncrementAmount = Integer.parseInt(mBinding.txtLoyaltypointCount.getText().toString());
+                } else {
+                    loyaltyPointsIncrementAmount = 0;
+                    Log.d("Geef punten op", "");
+                }
+
                 final AwardLoyaltyPointsBody awardLoyaltyPointsBody = new AwardLoyaltyPointsBody(loyaltyPointsIncrementAmount);
 
                 AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
                     @Override
                     public void tokenReceived(final String accessToken) {
-                        if(mLoyaltyCardId != 0){
+                        if(mLoyaltyCardId != 0 && loyaltyPointsIncrementAmount != 0){
                             apiRepository.getUserIdByLoyaltyCardId(accessToken, mLoyaltyCardId, new ApiRepository.GetResultListener<String>() {
                                 @Override
                                 public void resultReceived(String userIdCustomer) {
