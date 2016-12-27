@@ -69,7 +69,8 @@ public class RetailerAdminFragmentVM extends BaseObservable {
             @Override
             public void onClick(View view) {
                 final int loyaltyPointsIncrementAmount;
-                if(mBinding.txtLoyaltypointCount.getText().toString() != "") {
+                String loyaltyPointsText = mBinding.txtLoyaltypointCount.getText().toString();
+                if(!loyaltyPointsText.equals("")) {
                     loyaltyPointsIncrementAmount = Integer.parseInt(mBinding.txtLoyaltypointCount.getText().toString());
                 } else {
                     loyaltyPointsIncrementAmount = 0;
