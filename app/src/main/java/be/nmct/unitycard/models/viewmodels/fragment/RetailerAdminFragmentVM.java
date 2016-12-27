@@ -94,6 +94,7 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                                         @Override
                                         public void requestError(String error) {
                                             Log.d("punten niet toegevoegd","");
+                                            return;
                                         }
                                     });
                                 }
@@ -101,11 +102,13 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                                 @Override
                                 public void requestError(String error) {
                                     Log.d("Geen token gekregen","");
+                                    return;
                                 }
                             });
                         }
                         else {
                             Log.d("Geen LoyaltyCardId", "");
+                            return;
                         }
                     }
 
@@ -149,6 +152,7 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                             );
                         } else {
                             Log.d("Geen LoyaltyCardId", "");
+                            return;
                         }
                     }
 
