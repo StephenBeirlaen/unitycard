@@ -8,7 +8,10 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 
+import com.google.zxing.common.StringUtils;
 import com.google.zxing.integration.android.IntentIntegrator;
+
+import org.abego.treelayout.internal.util.java.lang.string.StringUtil;
 
 import be.nmct.unitycard.activities.retailer.RetailerAdminAddRetailerActivity;
 import be.nmct.unitycard.auth.AuthHelper;
@@ -68,21 +71,27 @@ public class RetailerAdminFragmentVM extends BaseObservable {
         mBinding.btnAwardLoyaltypoints.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final int loyaltyPointsIncrementAmount;
+                int loyaltyPointsIncrementAmount = 0;
                 String loyaltyPointsText = mBinding.txtLoyaltypointCount.getText().toString();
                 if(!loyaltyPointsText.equals("")) {
-                    loyaltyPointsIncrementAmount = Integer.parseInt(mBinding.txtLoyaltypointCount.getText().toString());
+                    try {
+                        loyaltyPointsIncrementAmount = Integer.parseInt(loyaltyPointsText);
+                    } catch (NumberFormatException e){
+                        Log.d("loyaltyPoint NaN", "");
+                    }
+
                 } else {
-                    loyaltyPointsIncrementAmount = 0;
                     Log.d("Geef punten op", "");
                 }
 
                 final AwardLoyaltyPointsBody awardLoyaltyPointsBody = new AwardLoyaltyPointsBody(loyaltyPointsIncrementAmount);
 
+
+                final int loyaltyPoint = loyaltyPointsIncrementAmount;
                 AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
                     @Override
                     public void tokenReceived(final String accessToken) {
-                        if(mLoyaltyCardId != 0 && loyaltyPointsIncrementAmount != 0){
+                        if(mLoyaltyCardId != 0 && loyaltyPoint != 0){
                             apiRepository.getUserIdByLoyaltyCardId(accessToken, mLoyaltyCardId, new ApiRepository.GetResultListener<String>() {
                                 @Override
                                 public void resultReceived(String userIdCustomer) {
