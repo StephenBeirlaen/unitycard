@@ -74,27 +74,32 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                 AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
                     @Override
                     public void tokenReceived(final String accessToken) {
-                        apiRepository.getUserIdByLoyaltyCardId(accessToken, mLoyaltyCardId, new ApiRepository.GetResultListener<String>() {
-                            @Override
-                            public void resultReceived(String userIdCustomer) {
-                                apiRepository.awardLoyaltyPoints(accessToken, userIdCustomer, retailer.getId(), awardLoyaltyPointsBody, new ApiRepository.GetResultListener<Void>() {
-                                    @Override
-                                    public void resultReceived(Void result) {
-                                        Log.d("punten toegevoegd","");
-                                    }
+                        if(mLoyaltyCardId != 0){
+                            apiRepository.getUserIdByLoyaltyCardId(accessToken, mLoyaltyCardId, new ApiRepository.GetResultListener<String>() {
+                                @Override
+                                public void resultReceived(String userIdCustomer) {
+                                    apiRepository.awardLoyaltyPoints(accessToken, userIdCustomer, retailer.getId(), awardLoyaltyPointsBody, new ApiRepository.GetResultListener<Void>() {
+                                        @Override
+                                        public void resultReceived(Void result) {
+                                            Log.d("punten toegevoegd","");
+                                        }
 
-                                    @Override
-                                    public void requestError(String error) {
-                                        Log.d("punten niet toegevoegd","");
-                                    }
-                                });
-                            }
+                                        @Override
+                                        public void requestError(String error) {
+                                            Log.d("punten niet toegevoegd","");
+                                        }
+                                    });
+                                }
 
-                            @Override
-                            public void requestError(String error) {
-                                Log.d("Geen token gekregen","");
-                            }
-                        });
+                                @Override
+                                public void requestError(String error) {
+                                    Log.d("Geen token gekregen","");
+                                }
+                            });
+                        }
+                        else {
+                            Log.d("Geen LoyaltyCardId", "");
+                        }
                     }
 
                     @Override
@@ -119,21 +124,25 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                     public void tokenReceived(final String accessToken) {
                         Log.d(LOG_TAG, "Using access token: " + accessToken);
 
-                        final ApiRepository apiRepo = new ApiRepository(mContext);
+                        if(mLoyaltyCardId != 0){
+                            final ApiRepository apiRepo = new ApiRepository(mContext);
 
-                        apiRepo.pushAdvertisementNotification(accessToken, mLoyaltyCardId, body, // todo: momenteel nog hard coded retailerid
-                                new ApiRepository.GetResultListener<Void>() {
-                                    @Override
-                                    public void resultReceived(Void result) {
+                            apiRepo.pushAdvertisementNotification(accessToken, mLoyaltyCardId, body, // todo: momenteel nog hard coded retailerid
+                                    new ApiRepository.GetResultListener<Void>() {
+                                        @Override
+                                        public void resultReceived(Void result) {
 
+                                        }
+
+                                        @Override
+                                        public void requestError(String error) {
+
+                                        }
                                     }
-
-                                    @Override
-                                    public void requestError(String error) {
-
-                                    }
-                                }
-                        );
+                            );
+                        } else {
+                            Log.d("Geen LoyaltyCardId", "");
+                        }
                     }
 
                     @Override
