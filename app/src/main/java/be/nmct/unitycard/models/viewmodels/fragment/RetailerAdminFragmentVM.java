@@ -7,7 +7,10 @@ import android.databinding.BaseObservable;
 import android.util.Log;
 import android.view.View;
 
+import com.google.zxing.common.StringUtils;
 import com.google.zxing.integration.android.IntentIntegrator;
+
+import org.abego.treelayout.internal.util.java.lang.string.StringUtil;
 
 import be.nmct.unitycard.activities.retailer.RetailerAdminAddRetailerActivity;
 import be.nmct.unitycard.auth.AuthHelper;
@@ -107,6 +110,8 @@ public class RetailerAdminFragmentVM extends BaseObservable {
 
                 final AwardLoyaltyPointsBody awardLoyaltyPointsBody = new AwardLoyaltyPointsBody(loyaltyPointsIncrementAmount);
 
+
+                final int loyaltyPoint = loyaltyPointsIncrementAmount;
                 AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
                     @Override
                     public void tokenReceived(final String accessToken) {
