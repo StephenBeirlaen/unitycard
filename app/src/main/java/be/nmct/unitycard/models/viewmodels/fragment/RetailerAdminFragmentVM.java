@@ -110,8 +110,6 @@ public class RetailerAdminFragmentVM extends BaseObservable {
 
                 final AwardLoyaltyPointsBody awardLoyaltyPointsBody = new AwardLoyaltyPointsBody(loyaltyPointsIncrementAmount);
 
-
-                final int loyaltyPoint = loyaltyPointsIncrementAmount;
                 AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
                     @Override
                     public void tokenReceived(final String accessToken) {
