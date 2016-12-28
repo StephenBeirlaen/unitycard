@@ -9,7 +9,6 @@ import android.view.View;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
-import be.nmct.unitycard.activities.retailer.RetailerAdminActivity;
 import be.nmct.unitycard.activities.retailer.RetailerAdminAddRetailerActivity;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.databinding.FragmentRetailerAdminBinding;
