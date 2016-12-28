@@ -41,7 +41,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 // intent om de juiste activity te openen bij het klikken op de notification
                 Intent intent = new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                // todo: met de intent naar de pagina van de retailer gaan
+                // todo: met de intent naar de pagina van de mRetailer gaan
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                         PendingIntent.FLAG_ONE_SHOT);
 

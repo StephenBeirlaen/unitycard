@@ -1,13 +1,12 @@
 package be.nmct.unitycard.activities.retailer;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -20,10 +19,10 @@ import be.nmct.unitycard.R;
 import be.nmct.unitycard.activities.customer.MainActivity;
 import be.nmct.unitycard.activities.login.AccountActivity;
 import be.nmct.unitycard.auth.AuthHelper;
+import be.nmct.unitycard.contracts.LoyaltyCardContract;
 import be.nmct.unitycard.databinding.ActivityRetailerAdminBinding;
 import be.nmct.unitycard.fragments.retailer.RetailerAdminFragment;
 import be.nmct.unitycard.models.viewmodels.activities.RetailerAdminActivityVM;
-import be.nmct.unitycard.models.viewmodels.fragment.RetailerAdminAddRetailerFragmentVM;
 
 public class RetailerAdminActivity extends AppCompatActivity
         implements
@@ -69,13 +68,11 @@ public class RetailerAdminActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
     }
 
     private void showAccountActivity() {
@@ -122,13 +119,20 @@ public class RetailerAdminActivity extends AppCompatActivity
         IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (scanResult != null) {
             // Handle scan result
-            handleError("Scanned Loyalty card: " + scanResult.getContents());
-            String cardData = scanResult.getContents();
-            String[] stukken = cardData.split(".");
-            int id = Integer.parseInt(stukken[4]);
-            RetailerAdminFragment retailerAdminFragment = new RetailerAdminFragment();
-            retailerAdminFragment.loyaltyCardId = id;
+            String scanContent = scanResult.getContents();
+            handleError("Scanned Loyalty card: " + scanContent);
+            String cardId = scanContent.substring(LoyaltyCardContract.QR_CODE_CONTENT_PREFIX.length());
+            int id = Integer.parseInt(cardId);
 
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(RetailerAdminFragment.class.getSimpleName());
+            if (fragment != null) {
+                RetailerAdminFragment raf = (RetailerAdminFragment)fragment;
+                raf.getRetailerAdminFragmentVM().loyaltyCardIdParsed(id);
+            }
+            else {
+                handleError("Something went wrong, try again");
+            }
+            super.onActivityResult(requestCode, resultCode, data);
         }
         else {
             switch (requestCode) {

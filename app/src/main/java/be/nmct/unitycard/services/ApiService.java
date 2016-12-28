@@ -45,10 +45,10 @@ public interface ApiService {
             @Body AddLoyaltyCardRetailerBody body
     );
 
-    @GET("api/loyaltycards/{loyaltyCardId}")
+    @GET("api/loyaltycards/{mLoyaltyCardId}")
     Observable<Response<String>> getUserIdByLoyaltyCardId(
             @Header("Authorization") String authorizationHeader,
-            @Path("loyaltyCardId") Integer loyaltyCardId
+            @Path("mLoyaltyCardId") Integer loyaltyCardId
     );
 
     // ----- LoyaltyPoints -----

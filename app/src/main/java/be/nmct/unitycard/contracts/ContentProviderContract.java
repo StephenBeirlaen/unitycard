@@ -36,8 +36,8 @@ public class ContentProviderContract {
     public static final Uri TOTAL_LOYALTY_POINTS_ITEM_URI = Uri.parse("content://" + AUTHORITY + "/totalloyaltypoints/");
 
     // MIME-types (vnd = vendor specific)
-    public static final String RETAILERS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd.unitycard.retailer";
-    public static final String RETAILERS_ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.unitycard.retailer";
+    public static final String RETAILERS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd.unitycard.mRetailer";
+    public static final String RETAILERS_ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.unitycard.mRetailer";
 
     public static final String LOYALTYCARDS_CONTENT_TYPE = "vnd.android.cursor.dir/vnd.unitycard.loyaltycard";
     public static final String LOYALTYCARDS_ITEM_CONTENT_TYPE = "vnd.android.cursor.item/vnd.unitycard.loyaltycard";

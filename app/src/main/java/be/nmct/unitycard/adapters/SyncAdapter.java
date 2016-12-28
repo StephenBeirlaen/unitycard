@@ -97,7 +97,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     apiRepo.getRetailerLocations(accessToken, retailerId, new Date(0), new ApiRepository.GetResultListener<List<RetailerLocation>>() {
                         @Override
                         public void resultReceived(List<RetailerLocation> retailerLocations) {
-                            Log.d(LOG_TAG, "Received retailer locations: " + retailerLocations);
+                            Log.d(LOG_TAG, "Received mRetailer locations: " + retailerLocations);
 
                             for (RetailerLocation retailerLocation : retailerLocations) {
                                 ContentValues contentValues = new ContentValues();
@@ -214,7 +214,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     apiRepo.getAllRetailerCategories(lastRetailerCategoriesSyncTimestamp, new ApiRepository.GetResultListener<List<RetailerCategory>>() {
                         @Override
                         public void resultReceived(List<RetailerCategory> retailerCategories) {
-                            Log.d(LOG_TAG, "Received all retailer categories: " + retailerCategories);
+                            Log.d(LOG_TAG, "Received all mRetailer categories: " + retailerCategories);
 
                             // todo: temporary, met contentprovideroperation werken (batch access)
                             for (RetailerCategory retailerCategory : retailerCategories) {

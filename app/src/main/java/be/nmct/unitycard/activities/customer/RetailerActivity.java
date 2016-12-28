@@ -58,11 +58,11 @@ public class RetailerActivity extends AppCompatActivity
                 loyaltyPoints = extras.getInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_LOYALTY_POINTS);
 
                 if (retailerId != null) {
-                    Log.d(LOG_TAG, "showing retailer info, retailerid: " + retailerId);
+                    Log.d(LOG_TAG, "showing mRetailer info, retailerid: " + retailerId);
                 }
                 else {
                     finish();
-                    Log.d(LOG_TAG, "retailer is null");
+                    Log.d(LOG_TAG, "mRetailer is null");
                 }
             }
             else {

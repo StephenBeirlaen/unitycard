@@ -58,7 +58,7 @@ public class RetailerInfoFragment extends Fragment {
             loyaltyPoints = args.getInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_LOYALTY_POINTS);
 
             if (retailerId != null) {
-                Log.d(LOG_TAG, "showing retailer info, retailerid: " + retailerId);
+                Log.d(LOG_TAG, "showing mRetailer info, retailerid: " + retailerId);
             }
             else {
                 mListener.handleError("Retailer is null");
@@ -90,7 +90,7 @@ public class RetailerInfoFragment extends Fragment {
                 if (extras != null) {
                     int result = extras.getInt(ACTION_FINISHED_RETAILER_LOCATIONS_SYNC_RESULT, RESULT_SYNC_SUCCESS);
                     if (result == RESULT_SYNC_SUCCESS) { // als er geen error was
-                        // Update retailer location data
+                        // Update mRetailer location data
                         mRetailerInfoFragmentVM.updateRetailerLocationsInfo(mRetailerInfoFragmentVM.getRetailerId());
 
                         return;

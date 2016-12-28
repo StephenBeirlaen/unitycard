@@ -62,7 +62,7 @@ public class RetailerInfoFragmentVM extends BaseObservable {
                     mListener.showAllRetailersMap(retailerLocations);
                 }
                 else {
-                    mListener.handleError("No retailer locations found!");
+                    mListener.handleError("No mRetailer locations found!");
                 }
             }
         });
@@ -76,7 +76,7 @@ public class RetailerInfoFragmentVM extends BaseObservable {
                     mListener.showRetailerMap(closestRetailerLocation);
                 }
                 else {
-                    mListener.handleError("No closest retailer location found!");
+                    mListener.handleError("No closest mRetailer location found!");
                 }
             }
         });
@@ -122,7 +122,7 @@ public class RetailerInfoFragmentVM extends BaseObservable {
 
             updateRetailerLocationsInfo(retailer.getId());
 
-            // Refresh de cached retailer locations voor deze retailer
+            // Refresh de cached mRetailer locations voor deze mRetailer
             SyncHelper.refreshCachedRetailerLocations(mContext, mRetailerId);
 
             mListener.showRefreshingIndicator(true);

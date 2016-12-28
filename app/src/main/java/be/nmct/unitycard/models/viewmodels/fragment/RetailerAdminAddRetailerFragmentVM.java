@@ -130,7 +130,7 @@ public class RetailerAdminAddRetailerFragmentVM extends BaseObservable implement
         int colnr1 = cursor.getColumnIndex(DatabaseContract.RetailerColumns.COLUMN_RETAILER_NAME);
         String retailerName = cursor.getString(colnr1);
 
-        // Filteren op retailer naam, non containing return false
+        // Filteren op mRetailer naam, non containing return false
         if (!mSearchQuery.equals("")) {
             if (!retailerName.toLowerCase().contains(mSearchQuery.toLowerCase())) return false;
         }

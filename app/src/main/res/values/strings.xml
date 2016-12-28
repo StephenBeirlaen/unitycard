@@ -65,7 +65,7 @@
     <string name="characters">" characters"</string>
 
     <string name="no_internet_connection">No internet connection</string>
-    <string name="retailer_placed_new_offer">\" added a new offer\"</string>
+    <string name="retailer_placed_new_offer">" added a new offer"</string>
     <string name="retailerPoints">Points</string>
     <string name="scan_klantenkaart">Scan loyalty card</string>
     <string name="geselecteerde_winkel">Selected retailer</string>

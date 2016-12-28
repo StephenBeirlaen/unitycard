@@ -5,7 +5,8 @@ package be.nmct.unitycard.contracts;
  */
 
 public class LoyaltyCardContract {
+    public static final String QR_CODE_CONTENT_PREFIX = "be.nmct.unitycard.loyaltycard.";
     public static String getQRcodeContent(int id) {
-        return "be.nmct.unitycard.loyaltycard." + id;
+        return QR_CODE_CONTENT_PREFIX + id;
     }
 }

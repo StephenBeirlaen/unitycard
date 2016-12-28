@@ -50,7 +50,7 @@ public class RetailerOffersFragment extends Fragment {
             retailerId = args.getInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_ID);
 
             if (retailerId != null) {
-                Log.d(LOG_TAG, "showing retailer offers, retailerid: " + retailerId);
+                Log.d(LOG_TAG, "showing mRetailer offers, retailerid: " + retailerId);
 
 
             }

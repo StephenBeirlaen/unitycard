@@ -59,7 +59,7 @@ public class RetailerRecyclerViewAdapter
                         @Override
                         public void resultReceived(Retailer result) {
                             //TODO: ga naar retailerinfo en geef result mee
-                            //kan niet rechtstreeks naar de fragment retailer info gaan
+                            //kan niet rechtstreeks naar de fragment mRetailer info gaan
 
                         }
 

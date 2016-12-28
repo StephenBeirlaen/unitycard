@@ -9,15 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.io.FileOutputStream;
-
 import be.nmct.unitycard.R;
-import be.nmct.unitycard.auth.AuthHelper;
+import be.nmct.unitycard.activities.retailer.RetailerAdminActivity;
 import be.nmct.unitycard.databinding.FragmentRetailerAdminBinding;
 import be.nmct.unitycard.models.Retailer;
-import be.nmct.unitycard.models.viewmodels.fragment.RetailerAdminAddRetailerFragmentVM;
 import be.nmct.unitycard.models.viewmodels.fragment.RetailerAdminFragmentVM;
-import be.nmct.unitycard.repositories.ApiRepository;
 
 public class RetailerAdminFragment extends Fragment {
 
@@ -27,10 +23,14 @@ public class RetailerAdminFragment extends Fragment {
     private RetailerAdminFragmentVM mRetailerAdminFragmentVM;
 
     public static Retailer retailer = null;
-    public static int loyaltyCardId = 0;
+    public static int mLoyaltyCardId = 0;
 
     public RetailerAdminFragment() {
         // Required empty public constructor
+    }
+
+    public RetailerAdminFragmentVM getRetailerAdminFragmentVM() {
+        return mRetailerAdminFragmentVM;
     }
 
     public static RetailerAdminFragment newInstance() {
@@ -60,8 +60,7 @@ public class RetailerAdminFragment extends Fragment {
         super.onResume();
         if(retailer != null){
             mBinding.txtRetailer.setText(retailer.getName());
-            mRetailerAdminFragmentVM.retailer = retailer;
-            mRetailerAdminFragmentVM.mLoyaltyCardId = loyaltyCardId;
+            mRetailerAdminFragmentVM.mRetailer = retailer;
         }
     }
 
