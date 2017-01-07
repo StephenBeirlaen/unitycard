@@ -10,11 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Date;
+
 import be.nmct.unitycard.R;
 import be.nmct.unitycard.auth.AuthHelper;
 import be.nmct.unitycard.databinding.RowAddRetailerBinding;
 import be.nmct.unitycard.helpers.SyncHelper;
 import be.nmct.unitycard.models.Retailer;
+import be.nmct.unitycard.models.RetailerCategory;
 import be.nmct.unitycard.models.postmodels.AddLoyaltyCardRetailerBody;
 import be.nmct.unitycard.repositories.ApiRepository;
 
@@ -26,11 +29,13 @@ public class AddRetailerRecyclerViewAdapter
         extends RecyclerView.Adapter<AddRetailerRecyclerViewAdapter.AddRetailerViewHolder> {
 
     private ObservableList<Retailer> mRetailers;
+    private ObservableList<RetailerCategory> mRetailerCategories;
     private Context mContext;
 
-    public AddRetailerRecyclerViewAdapter(Context context, ObservableList<Retailer> retailers) {
+    public AddRetailerRecyclerViewAdapter(Context context, ObservableList<Retailer> retailers, ObservableList<RetailerCategory> retailerCategories) {
         this.mContext = context;
         this.mRetailers = retailers;
+        this.mRetailerCategories = retailerCategories;
     }
 
     class AddRetailerViewHolder extends RecyclerView.ViewHolder {
@@ -87,6 +92,15 @@ public class AddRetailerRecyclerViewAdapter
     public void onBindViewHolder(AddRetailerViewHolder holder, int position) {
         Retailer retailer = mRetailers.get(position);
         holder.getBinding().setRetailer(retailer);
+
+        for (RetailerCategory retailerCategory: mRetailerCategories) {
+            if (retailerCategory.getId() == retailer.getRetailerCategoryId()) {
+                holder.getBinding().setRetailerCategory(retailerCategory);
+                return;
+            }
+        }
+
+        holder.getBinding().setRetailerCategory(new RetailerCategory(-1, "Unknown category", new Date()));
     }
 
     @Override

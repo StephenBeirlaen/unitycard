@@ -11,10 +11,15 @@
         <import type="android.databinding.ObservableList" />
 
         <import type="be.nmct.unitycard.models.Retailer" />
+        <import type="be.nmct.unitycard.models.RetailerCategory" />
 
         <variable
             name="retailerList"
             type="ObservableList&lt;Retailer&gt;" />
+
+        <variable
+            name="retailerCategoryList"
+            type="ObservableList&lt;RetailerCategory&gt;" />
     </data>
 
     <android.support.v4.widget.NestedScrollView
@@ -26,7 +31,8 @@
             android:layout_height="match_parent"
             android:id="@+id/recyclerViewAddRetailerList"
             android:scrollbars="vertical"
-            app:itemsAddRetailer="@{retailerList}" />
+            app:itemsAddRetailer="@{retailerList}"
+            app:itemsRetailerCategories="@{retailerCategoryList}" />
 
     </android.support.v4.widget.NestedScrollView>
 

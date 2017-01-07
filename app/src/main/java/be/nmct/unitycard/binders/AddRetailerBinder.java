@@ -10,6 +10,7 @@ import com.squareup.picasso.Picasso;
 
 import be.nmct.unitycard.adapters.AddRetailerRecyclerViewAdapter;
 import be.nmct.unitycard.models.Retailer;
+import be.nmct.unitycard.models.RetailerCategory;
 
 /**
  * Created by Stephen on 8/11/2016.
@@ -17,10 +18,10 @@ import be.nmct.unitycard.models.Retailer;
 
 public class AddRetailerBinder {
     // This binds XML parameters to objects
-    @BindingAdapter("itemsAddRetailer")
-    public static void setItems(RecyclerView recyclerView, ObservableList<Retailer> retailers) {
+    @BindingAdapter({"itemsAddRetailer", "itemsRetailerCategories"})
+    public static void setItems(RecyclerView recyclerView, ObservableList<Retailer> retailers, ObservableList<RetailerCategory> retailerCategories) {
         if (retailers != null) {
-            AddRetailerRecyclerViewAdapter adapter = new AddRetailerRecyclerViewAdapter(recyclerView.getContext(), retailers);
+            AddRetailerRecyclerViewAdapter adapter = new AddRetailerRecyclerViewAdapter(recyclerView.getContext(), retailers, retailerCategories);
             recyclerView.setAdapter(adapter);
             adapter.notifyDataSetChanged();
         }

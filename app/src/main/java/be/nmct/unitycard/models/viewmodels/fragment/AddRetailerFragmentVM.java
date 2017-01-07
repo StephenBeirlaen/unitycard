@@ -18,8 +18,10 @@ import be.nmct.unitycard.databinding.FragmentAddRetailerBinding;
 import be.nmct.unitycard.filters.FilterCursorWrapper;
 import be.nmct.unitycard.helpers.TimestampHelper;
 import be.nmct.unitycard.models.Retailer;
+import be.nmct.unitycard.models.RetailerCategory;
 
 import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILERS_URI;
+import static be.nmct.unitycard.contracts.ContentProviderContract.RETAILER_CATEGORIES_URI;
 
 /**
  * Created by Stephen on 8/11/2016.
@@ -33,9 +35,12 @@ public class AddRetailerFragmentVM extends BaseObservable
 
     @Bindable
     private ObservableList<Retailer> retailerList;
+    @Bindable
+    private ObservableList<RetailerCategory> retailerCategoryList;
 
     private FilterCursorWrapper filterCursorWrapper;
     public String mSearchQuery = "";
+    private Cursor categoryData;
 
     public AddRetailerFragmentVM(FragmentAddRetailerBinding binding, Context context) {
         this.mBinding = binding;
@@ -75,10 +80,16 @@ public class AddRetailerFragmentVM extends BaseObservable
                 DatabaseContract.RetailerColumns.COLUMN_UPDATED_TIMESTAMP/*,
                 DatabaseContract.RetailerColumns.COLUMN_LOYALTYPOINT*/
         };
-
         Cursor data = mContext.getContentResolver().query(RETAILERS_URI, columns, null, null, null);
-
         filterCursorWrapper = new FilterCursorWrapper(data, this);
+
+        String[] categoryColumns = new String[] {
+                DatabaseContract.RetailerCategoriesColumns.COLUMN_SERVER_ID,
+                DatabaseContract.RetailerCategoriesColumns.COLUMN_NAME,
+                DatabaseContract.RetailerCategoriesColumns.COLUMN_UPDATED_TIMESTAMP
+        };
+        categoryData = mContext.getContentResolver().query(RETAILER_CATEGORIES_URI, categoryColumns, null, null, null);
+
         updateRecyclerView();
     }
 
@@ -108,7 +119,22 @@ public class AddRetailerFragmentVM extends BaseObservable
             mBinding.setRetailerList(retailerList);
             notifyPropertyChanged(BR.retailerList);
 
-
+            retailerCategoryList = new ObservableArrayList<>();
+            while (categoryData.moveToNext()) {
+                RetailerCategory retailerCategory = null;
+                try {
+                    retailerCategory = new RetailerCategory(
+                            categoryData.getInt(categoryData.getColumnIndex(DatabaseContract.RetailerCategoriesColumns.COLUMN_SERVER_ID)),
+                            categoryData.getString(categoryData.getColumnIndex(DatabaseContract.RetailerCategoriesColumns.COLUMN_NAME)),
+                            TimestampHelper.convertStringToDate(categoryData.getString(categoryData.getColumnIndex(DatabaseContract.RetailerCategoriesColumns.COLUMN_UPDATED_TIMESTAMP)))
+                    );
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                retailerCategoryList.add(retailerCategory);
+            }
+            mBinding.setRetailerCategoryList(retailerCategoryList);
+            notifyPropertyChanged(BR.retailerCategoryList);
         }
         else {
             mBinding.setRetailerList(null);

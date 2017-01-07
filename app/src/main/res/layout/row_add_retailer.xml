@@ -6,6 +6,9 @@
         <variable
             name="retailer"
             type="be.nmct.unitycard.models.Retailer" />
+        <variable
+            name="retailerCategory"
+            type="be.nmct.unitycard.models.RetailerCategory" />
     </data>
 
     <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
@@ -60,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="5dp"
                         android:id="@+id/textViewAddRetailerType"
-                        android:text="@{String.valueOf(retailer.retailerCategoryId)}" />
+                        android:text="@{String.valueOf(retailerCategory.name)}" />
 
                 </LinearLayout>
 

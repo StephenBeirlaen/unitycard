@@ -18,7 +18,8 @@ public class RetailerCategory {
     @SerializedName("UpdatedTimestamp")
     private Date updatedTimestamp;
 
-    public RetailerCategory(String name, Date updatedTimestamp) {
+    public RetailerCategory(int id, String name, Date updatedTimestamp) {
+        this.id = id;
         this.name = name;
         this.updatedTimestamp = updatedTimestamp;
     }
