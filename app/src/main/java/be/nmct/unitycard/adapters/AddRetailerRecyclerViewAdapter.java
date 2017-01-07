@@ -3,6 +3,7 @@ package be.nmct.unitycard.adapters;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableList;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,7 +42,7 @@ public class AddRetailerRecyclerViewAdapter
 
             binding.btnAddRetailer.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(final View view) {
                     final AddLoyaltyCardRetailerBody addLoyaltyCardRetailerBody = new AddLoyaltyCardRetailerBody(binding.getRetailer().getId());
                     final ApiRepository apiRepository = new ApiRepository(mContext);
                     AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
@@ -51,6 +52,7 @@ public class AddRetailerRecyclerViewAdapter
                                 @Override
                                 public void resultReceived(Void result) {
                                     //SyncHelper.refreshCachedData(mContext); // we kiezen ervoor om te syncen tijdens pijltje terug
+                                    Snackbar.make(view, R.string.added_retailer_to_card, Snackbar.LENGTH_LONG).show();
                                 }
 
                                 @Override

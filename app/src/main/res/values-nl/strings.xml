@@ -73,4 +73,7 @@
     <string name="voeg_toe">Voeg toe</string>
     <string name="aanbiedingen">Aanbiedingen</string>
     <string name="info">Info</string>
+    <string name="notificationsDisabled">Notificaties uitgeschakeld</string>
+    <string name="notificationsEnabled">Notificaties ingeschakeld</string>
+    <string name="added_retailer_to_card">Deze handelaar werd toegevoegd aan uw klantenkaart</string>
 </resources>
