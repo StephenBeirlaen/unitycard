@@ -66,19 +66,49 @@ public class RetailerMapFragment extends SupportMapFragment
         this.mGoogleMap = googleMap;
 
         GeoCodeRepository geoCodeRepository = new GeoCodeRepository(getContext());
-        try {
-            if (mClosestRetailerLocation != null) {
-                final String address = mClosestRetailerLocation.getStreet() + " "
-                        + mClosestRetailerLocation.getNumber() + " "
-                        + mClosestRetailerLocation.getZipcode() + " "
-                        + mClosestRetailerLocation.getCity() + " "
-                        + mClosestRetailerLocation.getCountry();
+        if (mClosestRetailerLocation != null) {
+            final String address = mClosestRetailerLocation.getStreet() + " "
+                    + mClosestRetailerLocation.getNumber() + " "
+                    + mClosestRetailerLocation.getZipcode() + " "
+                    + mClosestRetailerLocation.getCity() + " "
+                    + mClosestRetailerLocation.getCountry();
 
-                geoCodeRepository.requestLatLong(URLEncoder.encode(address, "utf-8"), new GeoCodeRepository.GeoCodeResponseListener() {
+            geoCodeRepository.requestLatLong(address, new GeoCodeRepository.GeoCodeResponseListener() {
+                @Override
+                public void latLongReceived(double lat, double lng) {
+                    toonLocatie(lat, lng, mClosestRetailerLocation.getName(), address, true);
+                    moveCamera(lat, lng);
+                }
+
+                @Override
+                public void geoCodeRequestError(String error) {
+                    mListener.handleError(error);
+                }
+            });
+        }
+        else if (mRetailerLocations != null && mRetailerLocations.size() > 0) {
+            final int locationCount = mRetailerLocations.size();
+
+            final LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
+
+            for (final RetailerLocation loc: mRetailerLocations) {
+                final String address = loc.getStreet() + " "
+                        + loc.getNumber() + " "
+                        + loc.getZipcode() + " "
+                        + loc.getCity() + " "
+                        + loc.getCountry();
+
+                geoCodeRepository.requestLatLong(address, new GeoCodeRepository.GeoCodeResponseListener() {
                     @Override
                     public void latLongReceived(double lat, double lng) {
-                        toonLocatie(lat, lng, mClosestRetailerLocation.getName(), address, true);
-                        moveCamera(lat, lng);
+                        toonLocatie(lat, lng, loc.getName(), address, false);
+                        boundsBuilder.include(new LatLng(lat, lng));
+
+                        // Is dit het laatste element in de lijst?
+                        if (mRetailerLocations.indexOf(loc) == locationCount - 1) {
+                            LatLngBounds bounds = boundsBuilder.build();
+                            moveCameraCenteredAroundBounds(bounds);
+                        }
                     }
 
                     @Override
@@ -87,43 +117,9 @@ public class RetailerMapFragment extends SupportMapFragment
                     }
                 });
             }
-            else if (mRetailerLocations != null && mRetailerLocations.size() > 0) {
-                final int locationCount = mRetailerLocations.size();
-
-                final LatLngBounds.Builder boundsBuilder = new LatLngBounds.Builder();
-
-                for (final RetailerLocation loc: mRetailerLocations) {
-                    final String address = loc.getStreet() + " "
-                            + loc.getNumber() + " "
-                            + loc.getZipcode() + " "
-                            + loc.getCity() + " "
-                            + loc.getCountry();
-
-                    geoCodeRepository.requestLatLong(URLEncoder.encode(address, "utf-8"), new GeoCodeRepository.GeoCodeResponseListener() {
-                        @Override
-                        public void latLongReceived(double lat, double lng) {
-                            toonLocatie(lat, lng, loc.getName(), address, false);
-                            boundsBuilder.include(new LatLng(lat, lng));
-
-                            // Is dit het laatste element in de lijst?
-                            if (mRetailerLocations.indexOf(loc) == locationCount - 1) {
-                                LatLngBounds bounds = boundsBuilder.build();
-                                moveCameraCenteredAroundBounds(bounds);
-                            }
-                        }
-
-                        @Override
-                        public void geoCodeRequestError(String error) {
-                            mListener.handleError(error);
-                        }
-                    });
-                }
-            }
-            else {
-                mListener.handleError("Error opening map!");
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        }
+        else {
+            mListener.handleError("Error opening map!");
         }
     }
 
