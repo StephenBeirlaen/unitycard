@@ -12,6 +12,8 @@
 
         <import type="be.nmct.unitycard.models.RetailerLocation" />
 
+        <import type="android.view.View" />
+
         <variable
             name="retailer"
             type="Retailer" />
@@ -80,6 +82,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/buttonToonAlleWinkels"
                     android:text="@string/toonAlleWinkels"
+                    android:visibility="@{viewmodel.retailerLocations.size() > 1 ? View.VISIBLE : View.GONE}"
                     style="@style/ButtonTheme" />
 
                 <TextView
