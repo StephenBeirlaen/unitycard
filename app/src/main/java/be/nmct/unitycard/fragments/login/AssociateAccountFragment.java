@@ -225,7 +225,10 @@ public class AssociateAccountFragment extends Fragment {
         }
         else {
             // De eventuele vorige account uitloggen
-            AuthHelper.logUserOff(activity, null);
+            AuthHelper.logUserOff(activity, new AuthHelper.LogUserOffListener() {
+                @Override
+                public void userLoggedOut() {}
+            });
 
             // Extra info vragen aan de user (suggesties worden meegegeven, moeten bevestigd worden)
             this.mBinding.txtEmail.setText(email);
