@@ -89,7 +89,7 @@ public class ExternalAuthenticationActivity extends AppCompatActivity {
                 }
 
                 if (url.contains("/api/Account/ExternalLoginSuccess")) {
-                    Log.d(LOG_TAG, "Social login flow: external user authenticated");
+                    //Log.d(LOG_TAG, "Social login flow: external user authenticated");
 
                     Intent intent = new Intent();
                     intent.putExtra(EXTERNAL_AUTHENTICATION_RESPONSE_URL, url);

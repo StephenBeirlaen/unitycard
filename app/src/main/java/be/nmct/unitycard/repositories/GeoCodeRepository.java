@@ -38,7 +38,7 @@ public class GeoCodeRepository {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(LOG_TAG, "Error while geocoding!");
+                        //Log.e(LOG_TAG, "Error while geocoding!");
                         callback.geoCodeRequestError("Error while geocoding!");
                     }
 
@@ -73,7 +73,7 @@ public class GeoCodeRepository {
                             callback.geoCodeRequestError("Error while geocoding!");
                         }
                         else {
-                            Log.e(LOG_TAG, "Error while geocoding!");
+                            //Log.e(LOG_TAG, "Error while geocoding!");
                             callback.geoCodeRequestError("Error while geocoding!");
                         }
                     }

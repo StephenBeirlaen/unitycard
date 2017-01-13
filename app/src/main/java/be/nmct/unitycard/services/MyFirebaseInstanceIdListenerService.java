@@ -26,7 +26,7 @@ public class MyFirebaseInstanceIdListenerService extends FirebaseInstanceIdServi
     public void onTokenRefresh() {
         // Get updated InstanceID token.
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(LOG_TAG, "Refreshed token: " + refreshedToken);
+        //Log.d(LOG_TAG, "Refreshed token: " + refreshedToken);
         // Send any registration to your app's servers.
         FcmTokenHelper.sendRegistrationToServer(refreshedToken, this);
     }

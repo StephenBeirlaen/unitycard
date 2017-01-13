@@ -218,12 +218,12 @@ public class AuthHelper {
                     result = future.getResult();
 
                     if (result == null) { // Should not happen
-                        Log.wtf(LOG_TAG, "AccountManager.getAuthToken result was empty!");
+                        //Log.wtf(LOG_TAG, "AccountManager.getAuthToken result was empty!");
                         callback.requestNewLogin();
                         return;
                     }
                 } catch (Exception e) {
-                    Log.e(LOG_TAG, "Error while retrieving auth token: " + e);
+                    //Log.e(LOG_TAG, "Error while retrieving auth token: " + e);
                     callback.requestNewLogin();
                     return;
                 }
@@ -234,7 +234,7 @@ public class AuthHelper {
                     if (result.containsKey(AccountManager.KEY_INTENT)) {
                         // Als het resultaat een intent bevat om de credentials te
                         // vernieuwen (opnieuw proberen), de accountactivity tonen
-                        Log.e(LOG_TAG, "Error: new login requested");
+                        //Log.e(LOG_TAG, "Error: new login requested");
                         callback.requestNewLogin();
                         return;
                     }
@@ -247,7 +247,7 @@ public class AuthHelper {
                 }
 
                 if (TextUtils.isEmpty(authToken)) {
-                    Log.e(LOG_TAG, "Got null auth token for type: " + AccountContract.TOKEN_ACCESS);
+                    //Log.e(LOG_TAG, "Got null auth token for type: " + AccountContract.TOKEN_ACCESS);
                     callback.requestNewLogin();
                     return;
                 }

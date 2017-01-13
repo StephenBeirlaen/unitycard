@@ -58,7 +58,7 @@ public class RetailerInfoFragment extends Fragment {
             loyaltyPoints = args.getInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_LOYALTY_POINTS);
 
             if (retailerId != null) {
-                Log.d(LOG_TAG, "showing mRetailer info, retailerid: " + retailerId);
+                //Log.d(LOG_TAG, "showing mRetailer info, retailerid: " + retailerId);
             }
             else {
                 mListener.handleError("Retailer is null");

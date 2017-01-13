@@ -75,12 +75,12 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                         loyaltyPointsIncrementAmount = Integer.parseInt(loyaltyPointCountInput);
                     }
                     catch (NumberFormatException e) {
-                        Log.d(LOG_TAG, "Geef een geldig aantal punten op");
+                        //Log.d(LOG_TAG, "Geef een geldig aantal punten op");
                         mListener.handleError("Geef een geldig aantal punten op");
                         return;
                     }
                 } else {
-                    Log.d(LOG_TAG, "Geef aantal punten op");
+                    //Log.d(LOG_TAG, "Geef aantal punten op");
                     mListener.handleError("Geef aantal punten op");
                     return;
                 }
@@ -92,18 +92,18 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                         loyaltyCardId = Integer.parseInt(loyaltyCardIdInput);
                     }
                     catch (NumberFormatException e) {
-                        Log.d(LOG_TAG, "Geef een geldige loyaltycard op");
+                        //Log.d(LOG_TAG, "Geef een geldige loyaltycard op");
                         mListener.handleError("Geef een geldige loyaltycard op");
                         return;
                     }
                 } else {
-                    Log.d(LOG_TAG, "Geef een loyaltycard op");
+                    //Log.d(LOG_TAG, "Geef een loyaltycard op");
                     mListener.handleError("Geef een loyaltycard op");
                     return;
                 }
 
                 if (mRetailer == null) {
-                    Log.d(LOG_TAG, "Kies een mRetailer");
+                    //Log.d(LOG_TAG, "Kies een mRetailer");
                     mListener.handleError("Kies een mRetailer");
                     return;
                 }
@@ -120,13 +120,13 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                                     apiRepository.awardLoyaltyPoints(accessToken, userIdCustomer, mRetailer.getId(), awardLoyaltyPointsBody, new ApiRepository.GetResultListener<Void>() {
                                         @Override
                                         public void resultReceived(Void result) {
-                                            Log.d(LOG_TAG, "Punten toegevoegd");
+                                            //Log.d(LOG_TAG, "Punten toegevoegd");
                                             mListener.handleError("Punten toegevoegd");
                                         }
 
                                         @Override
                                         public void requestError(String error) {
-                                            Log.d(LOG_TAG, "Punten niet toegevoegd");
+                                            //Log.d(LOG_TAG, "Punten niet toegevoegd");
                                             mListener.handleError("Punten niet toegevoegd");
                                         }
                                     });
@@ -134,20 +134,20 @@ public class RetailerAdminFragmentVM extends BaseObservable {
 
                                 @Override
                                 public void requestError(String error) {
-                                    Log.d(LOG_TAG, "Geen token gekregen");
+                                    //Log.d(LOG_TAG, "Geen token gekregen");
                                     mListener.handleError("Geen token gekregen");
                                 }
                             });
                         }
                         else {
-                            Log.d(LOG_TAG, "Geen LoyaltyCardId gekozen");
+                            //Log.d(LOG_TAG, "Geen LoyaltyCardId gekozen");
                             mListener.handleError("Geen LoyaltyCardId gekozen");
                         }
                     }
 
                     @Override
                     public void requestNewLogin() {
-                        Log.d(LOG_TAG, "Nieuwe login nodig");
+                        //Log.d(LOG_TAG, "Nieuwe login nodig");
                         mListener.handleError("Nieuwe login nodig");
                     }
                 });
@@ -161,13 +161,13 @@ public class RetailerAdminFragmentVM extends BaseObservable {
             public void onClick(View view) {
                 String title = mBinding.txtAdvertisementDescription.getText().toString();
                 if (title.equals("")) {
-                    Log.d(LOG_TAG, "Geef een advertentie op");
+                    //Log.d(LOG_TAG, "Geef een advertentie op");
                     mListener.handleError("Geef een advertentie op");
                     return;
                 }
 
                 if (mRetailer == null) {
-                    Log.d(LOG_TAG, "Kies een mRetailer");
+                    //Log.d(LOG_TAG, "Kies een mRetailer");
                     mListener.handleError("Kies een mRetailer");
                     return;
                 }
@@ -178,7 +178,7 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                 AuthHelper.getAccessToken(AuthHelper.getUser(mContext), mContext, new AuthHelper.GetAccessTokenListener() {
                     @Override
                     public void tokenReceived(final String accessToken) {
-                        Log.d(LOG_TAG, "Using access token: " + accessToken);
+                        //Log.d(LOG_TAG, "Using access token: " + accessToken);
 
                         final ApiRepository apiRepo = new ApiRepository(mContext);
 
@@ -186,13 +186,13 @@ public class RetailerAdminFragmentVM extends BaseObservable {
                                 new ApiRepository.GetResultListener<Void>() {
                                     @Override
                                     public void resultReceived(Void result) {
-                                        Log.d(LOG_TAG, "Advertentie verzonden");
+                                        //Log.d(LOG_TAG, "Advertentie verzonden");
                                         mListener.handleError("Advertentie verzonden");
                                     }
 
                                     @Override
                                     public void requestError(String error) {
-                                        Log.d(LOG_TAG, "Advertentie niet verzonden");
+                                        //Log.d(LOG_TAG, "Advertentie niet verzonden");
                                         mListener.handleError("Advertentie niet verzonden");
                                     }
                                 }

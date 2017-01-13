@@ -32,7 +32,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Map data = message.getData();
 
         if (data.size() > 0) {
-            Log.d(LOG_TAG, "Message data payload: " + data);
+            //Log.d(LOG_TAG, "Message data payload: " + data);
 
             if (data.containsKey("message") && data.containsKey("retailerName") && data.containsKey("title")) {
                 String msg = (String)data.get("message");

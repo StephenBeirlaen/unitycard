@@ -28,7 +28,7 @@ public class FcmTokenHelper {
 
                 @Override
                 public void requestNewLogin() {
-                    Log.e(LOG_TAG, "Token error!");
+                    //Log.e(LOG_TAG, "Token error!");
                 }
             });
         }
@@ -36,7 +36,7 @@ public class FcmTokenHelper {
 
     // voor het verwijderen
     private static void sendToServer(String fcmToken, final Context context, final String accessToken) {
-        Log.d(LOG_TAG, "Using access token: " + accessToken);
+        //Log.d(LOG_TAG, "Using access token: " + accessToken);
 
         final AuthRepository authRepo = new AuthRepository(context);
 
@@ -45,7 +45,7 @@ public class FcmTokenHelper {
         authRepo.changeUserFcmToken(accessToken, changeFcmTokenBody, new AuthRepository.ChangeFcmTokenResponseListener() {
             @Override
             public void fcmTokenChanged() {
-                Log.d(LOG_TAG, "Updated FCM token");
+                //Log.d(LOG_TAG, "Updated FCM token");
             }
 
             @Override
@@ -53,7 +53,7 @@ public class FcmTokenHelper {
                 // Invalideer het gebruikte access token, het is niet meer geldig (anders zou er geen error zijn)
                 AuthHelper.invalidateAccessToken(accessToken, context);
 
-                Log.e(LOG_TAG, "Token error!");
+                //Log.e(LOG_TAG, "Token error!");
             }
         });
     }

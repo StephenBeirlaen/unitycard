@@ -31,7 +31,7 @@ public class FilterCursorWrapper extends CursorWrapper {
         mRowToRowMap.clear();
         if (filterer == null)
         {
-            Log.e(LOG_TAG, "filterer has no value, filtering not allowed, empty result");
+            //Log.e(LOG_TAG, "filterer has no value, filtering not allowed, empty result");
             return;
         }
 

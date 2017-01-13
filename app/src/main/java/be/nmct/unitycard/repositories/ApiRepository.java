@@ -123,7 +123,7 @@ public class ApiRepository {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(LOG_TAG, "An error occurred");
+                        //Log.e(LOG_TAG, "An error occurred");
                         callback.requestError("An error occurred");
                     }
 
@@ -143,7 +143,7 @@ public class ApiRepository {
 
                                 String error = "Error: " + errorResponse.getMessage();
                                 callback.requestError(error);
-                                Log.e(LOG_TAG, error);
+                                //Log.e(LOG_TAG, error);
                             } catch (Exception e) {
                                 callback.requestError("An error occurred");
                             }

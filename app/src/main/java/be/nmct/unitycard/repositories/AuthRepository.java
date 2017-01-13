@@ -59,7 +59,7 @@ public class AuthRepository {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(LOG_TAG, "Error requesting new access token!");
+                        //Log.e(LOG_TAG, "Error requesting new access token!");
                         callback.tokenRequestError("Error requesting new access token!");
                     }
 
@@ -72,7 +72,7 @@ public class AuthRepository {
                                 callback.tokenRequestError("Invalid login");
                             }
                             else { // OK
-                                Log.d(LOG_TAG, "Received new access token: " + getTokenResponse.getAccessToken());
+                                //Log.d(LOG_TAG, "Received new access token: " + getTokenResponse.getAccessToken());
                                 callback.tokenReceived(getTokenResponse);
                             }
                         }
@@ -87,7 +87,7 @@ public class AuthRepository {
                                         + " occurred while requesting access token: "
                                         + errorResponse.getErrorDescription();
                                 callback.tokenRequestError(error);
-                                Log.e(LOG_TAG, error);
+                                //Log.e(LOG_TAG, error);
 
                             } catch (Exception e) {
                                 callback.tokenRequestError("Error requesting new access token and couldn't parse error!");
@@ -114,7 +114,7 @@ public class AuthRepository {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(LOG_TAG, "Error registering user!");
+                        //Log.e(LOG_TAG, "Error registering user!");
                         callback.registerRequestError("Error registering user!");
                     }
 
@@ -139,7 +139,7 @@ public class AuthRepository {
                                 }
 
                                 callback.registerRequestError(error);
-                                Log.e(LOG_TAG, error);
+                                //Log.e(LOG_TAG, error);
 
                             } catch (Exception e) {
                                 callback.registerRequestError("Error registering and couldn't parse error!");
@@ -166,7 +166,7 @@ public class AuthRepository {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(LOG_TAG, "Error updating FCM token!");
+                        //Log.e(LOG_TAG, "Error updating FCM token!");
                         callback.fcmTokenChangeRequestError("Error updating FCM token!");
                     }
 
@@ -176,7 +176,7 @@ public class AuthRepository {
                             callback.fcmTokenChanged();
                         }
                         else {
-                            Log.e(LOG_TAG, "Error updating FCM token!");
+                            //Log.e(LOG_TAG, "Error updating FCM token!");
                             callback.fcmTokenChangeRequestError("Error updating FCM token!");
                         }
                     }
@@ -200,7 +200,7 @@ public class AuthRepository {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(LOG_TAG, "Error obtaining local access token");
+                        //Log.e(LOG_TAG, "Error obtaining local access token");
                         callback.tokenRequestError("Error obtaining local access token");
                     }
 
@@ -213,12 +213,12 @@ public class AuthRepository {
                                 callback.tokenRequestError("Invalid login");
                             }
                             else { // OK
-                                Log.d(LOG_TAG, "Received new access token: " + getTokenResponse.getAccessToken());
+                                //Log.d(LOG_TAG, "Received new access token: " + getTokenResponse.getAccessToken());
                                 callback.tokenReceived(getTokenResponse);
                             }
                         }
                         else {
-                            Log.e(LOG_TAG, "Error obtaining local access token");
+                            //Log.e(LOG_TAG, "Error obtaining local access token");
                             callback.tokenRequestError("Error obtaining local access token");
                         }
                     }
@@ -237,7 +237,7 @@ public class AuthRepository {
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.e(LOG_TAG, "Error associating external user!");
+                        //Log.e(LOG_TAG, "Error associating external user!");
                         callback.tokenRequestError("Error associating external user!");
                     }
 
@@ -250,12 +250,12 @@ public class AuthRepository {
                                 callback.tokenRequestError("Invalid login");
                             }
                             else { // OK
-                                Log.d(LOG_TAG, "Received new access token: " + getTokenResponse.getAccessToken());
+                                //Log.d(LOG_TAG, "Received new access token: " + getTokenResponse.getAccessToken());
                                 callback.tokenReceived(getTokenResponse);
                             }
                         }
                         else {
-                            Log.e(LOG_TAG, "Error associating external user!");
+                            //Log.e(LOG_TAG, "Error associating external user!");
                             callback.tokenRequestError("Error associating external user!");
                         }
                     }

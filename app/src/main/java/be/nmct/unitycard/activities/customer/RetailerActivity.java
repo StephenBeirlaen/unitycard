@@ -58,21 +58,21 @@ public class RetailerActivity extends AppCompatActivity
                 loyaltyPoints = extras.getInt(RetailerRecyclerViewAdapter.EXTRA_RETAILER_LOYALTY_POINTS);
 
                 if (retailerId != null) {
-                    Log.d(LOG_TAG, "showing mRetailer info, retailerid: " + retailerId);
+                    //Log.d(LOG_TAG, "showing mRetailer info, retailerid: " + retailerId);
                 }
                 else {
                     finish();
-                    Log.d(LOG_TAG, "mRetailer is null");
+                    //Log.d(LOG_TAG, "mRetailer is null");
                 }
             }
             else {
                 finish();
-                Log.d(LOG_TAG, "extras is null or doesn't contains EXTRA_RETAILER_ID key");
+                //Log.d(LOG_TAG, "extras is null or doesn't contains EXTRA_RETAILER_ID key");
             }
         }
         else {
             finish();
-            Log.d(LOG_TAG, "intent is null");
+            //Log.d(LOG_TAG, "intent is null");
         }
 
         RetailerActivityPagerAdapter pagerAdapter = new RetailerActivityPagerAdapter(getSupportFragmentManager(), retailerId, loyaltyPoints,this);

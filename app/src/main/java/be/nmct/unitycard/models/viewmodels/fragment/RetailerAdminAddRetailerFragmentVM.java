@@ -72,7 +72,7 @@ public class RetailerAdminAddRetailerFragmentVM extends BaseObservable implement
 
                     @Override
                     public void requestError(String error) {
-                        Log.d("","");
+                        //Log.d("","");
                     }
                 });
             }

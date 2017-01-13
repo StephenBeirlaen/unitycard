@@ -81,13 +81,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         //android.os.Debug.waitForDebugger();
 
         // When the framework is ready to sync your application's data, this gets run
-        Log.d(LOG_TAG, "Synchronisation started");
+        //Log.d(LOG_TAG, "Synchronisation started");
 
         // Get access token
         AuthHelper.getAccessToken(account, getContext(), new AuthHelper.GetAccessTokenListener() {
             @Override
             public void tokenReceived(final String accessToken) {
-                Log.d(LOG_TAG, "Using access token: " + accessToken);
+                //Log.d(LOG_TAG, "Using access token: " + accessToken);
 
                 final ApiRepository apiRepo = new ApiRepository(getContext());
 
@@ -97,7 +97,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     apiRepo.getRetailerLocations(accessToken, retailerId, new Date(0), new ApiRepository.GetResultListener<List<RetailerLocation>>() {
                         @Override
                         public void resultReceived(List<RetailerLocation> retailerLocations) {
-                            Log.d(LOG_TAG, "Received mRetailer locations: " + retailerLocations);
+                            //Log.d(LOG_TAG, "Received mRetailer locations: " + retailerLocations);
 
                             for (RetailerLocation retailerLocation : retailerLocations) {
                                 ContentValues contentValues = new ContentValues();
@@ -153,7 +153,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     apiRepo.getLoyaltyCard(accessToken, AuthHelper.getUserId(getContext()), lastLoyaltyCardSyncTimestamp, new ApiRepository.GetResultListener<LoyaltyCard>() {
                         @Override
                         public void resultReceived(LoyaltyCard loyaltyCard) {
-                            Log.d(LOG_TAG, "Received loyalty card: " + loyaltyCard);
+                            //Log.d(LOG_TAG, "Received loyalty card: " + loyaltyCard);
 
                             // todo: temporary
                             if (loyaltyCard != null) {
@@ -182,7 +182,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     apiRepo.getLoyaltyCardRetailers(accessToken, AuthHelper.getUserId(getContext()), lastAddedRetailersSyncTimestamp, new ApiRepository.GetResultListener<List<RetailerLoyaltyPointVM>>() {
                         @Override
                         public void resultReceived(List<RetailerLoyaltyPointVM> retailerLoyaltyPointList) {
-                            Log.d(LOG_TAG, "Received all retailers by loyaltycard: " + retailerLoyaltyPointList);
+                            //Log.d(LOG_TAG, "Received all retailers by loyaltycard: " + retailerLoyaltyPointList);
 
                             // todo: temporary, met contentprovideroperation werken (batch access)
                             for (RetailerLoyaltyPointVM retailerLoyaltyPoint : retailerLoyaltyPointList) {
@@ -214,7 +214,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     apiRepo.getAllRetailerCategories(lastRetailerCategoriesSyncTimestamp, new ApiRepository.GetResultListener<List<RetailerCategory>>() {
                         @Override
                         public void resultReceived(List<RetailerCategory> retailerCategories) {
-                            Log.d(LOG_TAG, "Received all mRetailer categories: " + retailerCategories);
+                            //Log.d(LOG_TAG, "Received all mRetailer categories: " + retailerCategories);
 
                             // todo: temporary, met contentprovideroperation werken (batch access)
                             for (RetailerCategory retailerCategory : retailerCategories) {
@@ -242,7 +242,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     apiRepo.getAllRetailers(accessToken, lastRetailersSyncTimestamp, new ApiRepository.GetResultListener<List<Retailer>>() {
                         @Override
                         public void resultReceived(List<Retailer> retailers) {
-                            Log.d(LOG_TAG, "Received all retailers: " + retailers);
+                            //Log.d(LOG_TAG, "Received all retailers: " + retailers);
 
                             // todo: temporary, met contentprovideroperation werken (batch access)
                             for (Retailer retailer : retailers) {
@@ -274,7 +274,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     apiRepo.getAllRetailerOffers(accessToken, AuthHelper.getUserId(getContext()), lastRetailerOffersSyncTimestamp, new ApiRepository.GetResultListener<List<Offer>>() {
                         @Override
                         public void resultReceived(List<Offer> offers) {
-                            Log.d(LOG_TAG, "Received all offers: " + offers);
+                            //Log.d(LOG_TAG, "Received all offers: " + offers);
 
                             for(Offer offer : offers){
                                 ContentValues contentValues = new ContentValues();
@@ -300,7 +300,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
                     apiRepo.getTotalLoyaltyPoints(accessToken, AuthHelper.getUserId(getContext()), new Date(0), new ApiRepository.GetResultListener<Integer>() {
                         @Override
                         public void resultReceived(Integer totalLoyaltyPoints) {
-                            Log.d(LOG_TAG, "Received total loyalty points: " + totalLoyaltyPoints);
+                            //Log.d(LOG_TAG, "Received total loyalty points: " + totalLoyaltyPoints);
 
                             // todo: temporary
                             if (totalLoyaltyPoints != null) {
